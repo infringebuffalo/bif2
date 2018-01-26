@@ -4,7 +4,7 @@
 
 
 {% if user.is_authenticated %}
-    <p>Welcome, {{ user }}. Thanks for logging in.</p>
+    <p>Welcome, {{ user }}. Thanks for signing in.</p>
 {% if prop_list %}
     <ul>
     {% for p in prop_list %}
@@ -15,7 +15,7 @@
     <p>There are no proposals.</p>
 {% endif %}
 {% else %}
-    <p>Welcome. Please log in, or fill out a proposal.</p>
+    <p>Welcome. Please sign in, or fill out a proposal.</p>
 {% endif %}
 
 <h2>Submit a proposal</h2>
