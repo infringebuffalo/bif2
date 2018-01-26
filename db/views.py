@@ -56,9 +56,16 @@ def newAccount(request):
 from django.contrib.auth.models import User
 
 def createAccount(request):
+    from django.db.utils import IntegrityError
     email = request.POST['email']
     password = request.POST['password']
-    djuser = User.objects.create_user(email, email, password)
+    try:
+        djuser = User.objects.create_user(email, email, password)
+    except IntegrityError:
+        err = "An account '%s' already exists" % email
+        return render(request, 'db/new_account.html', { 'error': err })
+    except:
+        return render(request, 'db/new_account.html', { 'error': 'Failed to create account.' })
     bifuser = BIFUser.objects.create(user=djuser, phone='555-1212')
     login(request, authenticate(username=email,password=password))
     return redirect('index')
