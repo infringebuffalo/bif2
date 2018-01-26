@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block scripts %}
+<script type="text/javascript">
+function validateForm()
+{
+var f = document.forms["accountform"];
+var fields = ["email", "password", "passwordconfirm", "name" ];
+var okay = true;
+for (i=0; i < fields.length; i++)
+    if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
+        okay = false;
+if (!okay)
+    {
+    alert("All fields must be filled out to create your account");
+    return false;
+    }
+else if (f["password"].value != f["passwordconfirm"].value)
+    {
+    alert("The passwords did not match");
+    return false;
+    }
+else
+    return true;
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Create an account</h1>
+
+<form method="POST" action="{% url 'createAccount' %}" name="accountform" onsubmit="return validateForm()">
+{% csrf_token %}
+
+<table cellpadding=3>
+  <tr><th>E-mail address:</th><td> <input type="text" name="email" value="" /> </td></tr>
+  <tr><th>Password:</th><td> <input type="password" name="password" value="" /> </td></tr>
+  <tr><th>Confirm password:</th><td> <input type="password" name="passwordconfirm" value="" /> </td></tr>
+  <tr><th>Full name:</th><td> <input type="text" name="name" value="" /> </td></tr>
+</table>
+
+<input type="Submit" name="submit" value="Create account" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'login' %}">Cancel</a>
+</p>
+</form>
+{% endblock %}

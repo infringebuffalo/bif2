@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<title>Buffalo Infringement Festival Music Proposal</title>
+<script src="{% static 'bif/jquery.min.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+function validateForm()
+{
+var f = document.forms["musicform"];
+var fields = ["title", "website", "description_short", "description_long", "numberperformers", "contactname", "contactemail", "contactphone", "contactaddress", "volunteer"];
+var okay = true;
+for (i=0; i < fields.length; i++)
+    if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
+        okay = false;
+if (!okay)
+    {
+    alert("All fields must be filled out before this proposal can be submitted");
+    return false;
+    }
+else
+    return true;
+}
+
+function hoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeIn()
+  }
+
+function unhoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeOut()
+  }
+
+function readyFunc()
+  {
+  $(".questionmark").hover(hoverFunc,unhoverFunc)
+  $(".questionmark").parent().find(".helptext").fadeOut()
+  }
+$(document).ready(readyFunc)
+</script>
+</head>
+<body>
+<h2>Music proposal </h2>
+
+<div style="background:#f88; text-align:center">Note: all fields must be filled in before this form is submitted.</div>
+
+<form method="POST" action="{% url 'submit' %}" name="musicform" onsubmit="return validateForm()">
+{% csrf_token %}
+
+<input type="hidden" name="type" value="music" />
+
+<div class="contact">
+<h3>Contact info</h3>
+<table cellpadding=3 id="contactinputs">
+  <tr><th width="20%">Proposer / primary contact</th><td> <input type="text" name="contactname" value="" /> </td></tr>
+  <tr><th>E-mail</th><td> <input type="text" name="contactemail" value="" /> </td></tr>
+  <tr><th>Phone</th><td> <input type="text" name="contactphone" value="" /> </td></tr>
+  <tr><th>Zip code</th><td> <input type="text" name="contactaddress" value="" /> </td></tr>
+  <tr><th>Facebook address</th><td><input type="text" name="contactfacebook" /></td></tr>
+  <tr><th>Best method to contact you</th><td> <select name="bestcontactmethod"> <option value="phone">phone</option> <option value="email">email</option> <option value="facebook">facebook</option> </select> </td></tr>
+</table>
+<table>
+  <tr><th width="20%">Secondary contact name</th><td><input type="text" name="secondcontactname"></td></tr>
+  <tr><th>E-mail</th><td><input type="text" name="secondcontactemail"></td></tr>
+  <tr><th>Phone (including area code)</th><td><input type="text" name="secondcontactphone"></td></tr>
+</table>
+
+<div class="projectForm">
+<h3>Project</h3>
+<table cellpadding=3>
+
+<tr>
+<th width="25%">Band name / title</th>
+<td><input type="text" name="title" size="60" /></td>
+</tr>
+<tr>
+<th>Website (not Facebook)</th>
+<td><input type="text" name="website" size="60" /></td>
+</tr>
+<tr>
+<th>Facebook URL</th>
+<td><input type="text" name="facebook" size="60" /></td>
+</tr>
+<tr>
+<th>Short description (140 chars)<br>
+<img src="{% static 'bif/questionmark.png' %}" class="questionmark" />
+<div class="helptext">
+Give us a basic description of your project.  Include any information that may help us to find the best venue and times for your shows.  This is <em>not</em> the description that will be published in the festival schedule - it is only for internal use.
+</div>
+</th>
+<td><textarea name="description_short" rows="2" cols="60"></textarea></td>
+</tr>
+<tr>
+<th>Long description (for website &amp; press releases)</th>
+<td><textarea name="description_long" rows="6" cols="60"></textarea></td>
+</tr>
+
+<tr>
+<th> Affiliations? Part of a collective? Y/N if so what group...</th>
+<td><textarea name="affiliations" rows="2" cols="60"></textarea></td>
+</tr>
+<tr>
+<th> Are you based within 60 miles of Buffalo Area? (Yes, No)</th>
+<td> <select name="within60miles"><option value="Y">Yes</option><option value="N">No</option></select> </td>
+</tr>
+<tr>
+<th> Would you like to be scheduled for outdoor performances (sidewalks,
+    porches, backyards, front yards, parking lots. Street Closings? (Yes,
+    No). If yes, what percentage of shows do you want outside as opposed to
+    inside. (#)%</th>
+<td><input type="text" name="outdoorperformances" size="60" /></td>
+</tr>
+<tr>
+<th>Is everyone in proposal over 21? (Yes, No)</th>
+<td> <select name="over21"><option value="Y">Yes</option><option value="N">No</option></select> </td>
+</tr>
+<tr>
+<th>Are you willing to perform as part of opening or closing ceremonies?
+    These are the only two events that money collected goes to the fest. (Yes, No)</th>
+<td><input type="text" name="openingclosing" size="60" /></td>
+</tr>
+<tr>
+<th>Ideal venue?</th>
+<td><input type="text" name="idealvenue" size="60" /></td>
+</tr>
+<tr>
+<th>Prearranged venue?</th>
+<td><input type="text" name="prearrangedvenue" size="60" /></td>
+</tr>
+<tr>
+<th>The Collaboration question (ask david how its worded)</th>
+<td><input type="text" name="collaboration" size="60" /></td>
+</tr>
+
+<tr>
+<td>Availability  (click all boxes that apply for each day.)</td>
+<td>TBD [Day 1: July 28th 2017 (Thursday)
+
+8am-12pm, 12pm-4pm, 4pm-8pm, 8pm-12am, after midnight till 4am, Not Avail,
+All Day, Ideal Time: (#)]
+</td>
+</tr>
+</table>
+</div>
+
+<div class="projectForm">
+<h3>Music specifics</h3>
+
+<table cellpadding=3>
+
+<tr>
+<th width="25%">Length of performance: (in minutes)</th>
+<td><input type="text" name="showlength" size="60" /></td>
+</tr>
+<tr>
+<th>Is this flexible? (Y/N)</th>
+<td><input type="text" name="showlengthflexible" size="60" /></td>
+</tr>
+<tr>
+<th>Desired number of performances
+<img src="{% static 'bif/questionmark.png' %}" class="questionmark" />
+<div class="helptext">
+We will do our best to fulfill all requests, but cannot guarantee to give you as many performances as you ask for.  The actual number will depend on venue availability.
+</div>
+</th>
+<td>
+<select name="numberperformances">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+</tr>
+<tr>
+<th>Do you want more than one performance per day? (Y/N)</th>
+<td> <select name="morethan1perday"><option value="Y">Yes</option><option value="N">No</option></select> </td>
+</tr>
+<tr>
+<th>How many members in proposal? (#)</th>
+<td><input type="text" name="numberperformers" size="60" /></td>
+</tr>
+<tr>
+<th>Who are they and what do they do?</th>
+<td><textarea name="membersinfo" rows="6" cols="60"></textarea></td>
+</tr>
+<tr>
+<th>Are any of your members in other proposals? Explain.</th>
+<td><textarea name="proposaloverlap" rows="2" cols="60"></textarea></td>
+</tr>
+<tr>
+<th>Setup time (in minutes)</th>
+<td><input type="text" name="setuptime" size="60" /></td>
+</tr>
+<tr>
+<th>Teardown time (in minutes)</th>
+<td><input type="text" name="teardowntime" size="60" /></td>
+</tr>
+<tr>
+<th>Physical space requirements</th>
+<td><input type="text" name="physicalspace" size="60" /></td>
+</tr>
+
+<tr>
+<th>Do you require microphones to perform (Y/N)? If so, how many? Do you own your own mics?  Share?</th>
+<td><input type="text" name="hasmics" size="60" /></td>
+</tr>
+<tr>
+<th>Do you own your own PA?  Share?</th>
+<td><input type="text" name="haspa" size="60" /></td>
+</tr>
+<tr>
+<th>Does your proposal involve a computer or electronic component (ipod, laptop, cd player, projector, other)?  If yes, explain.</th>
+<td><input type="text" name="electronics" size="60" /></td>
+</tr>
+<tr>
+<th>Drum kit?  Share?</th>
+<td><input type="text" name="hasdrum" size="60" /></td>
+</tr>
+<tr>
+<th> Can you play acoustic, without amps and mics? Preferred?</th>
+<td><input type="text" name="acoustic" size="60" /></td>
+</tr>
+<tr>
+<th> Volume on a scale from 1-10</th>
+<td><input type="text" name="volume" size="60" /></td>
+</tr>
+
+<tr>
+<th>Primary genre</th>
+<td><select name="genre">
+<option value="rock">rock</option>
+<option value="metal">metal</option>
+<option value="punk">punk</option>
+<option value="electronic">electronic</option>
+<option value="hip hop">hip hop</option>
+<option value="alternative">alternative</option>
+<option value="jam">jam</option>
+<option value="jazz">jazz</option>
+<option value="blues">blues</option>
+<option value="soul">soul</option>
+<option value="noise">noise</option>
+<option value="avant garde">avant garde</option>
+<option value="acoustic">acoustic</option>
+<option value="americana">americana</option>
+<option value="classical">classical</option>
+<option value="dance">dance</option>
+<option value="pop">pop</option>
+<option value="other">other</option>
+</td>
+</tr>
+
+<tr>
+<th>Secondary genre</th>
+<td><select name="genre2">
+<option value="rock">rock</option>
+<option value="metal">metal</option>
+<option value="punk">punk</option>
+<option value="electronic">electronic</option>
+<option value="hip hop">hip hop</option>
+<option value="alternative">alternative</option>
+<option value="jam">jam</option>
+<option value="jazz">jazz</option>
+<option value="blues">blues</option>
+<option value="soul">soul</option>
+<option value="noise">noise</option>
+<option value="avant garde">avant garde</option>
+<option value="acoustic">acoustic</option>
+<option value="americana">americana</option>
+<option value="classical">classical</option>
+<option value="dance">dance</option>
+<option value="pop">pop</option>
+<option value="other">other</option>
+</td>
+</tr>
+
+<tr>
+<th>Tertiary genre</th>
+<td><select name="genre3">
+<option value="rock">rock</option>
+<option value="metal">metal</option>
+<option value="punk">punk</option>
+<option value="electronic">electronic</option>
+<option value="hip hop">hip hop</option>
+<option value="alternative">alternative</option>
+<option value="jam">jam</option>
+<option value="jazz">jazz</option>
+<option value="blues">blues</option>
+<option value="soul">soul</option>
+<option value="noise">noise</option>
+<option value="avant garde">avant garde</option>
+<option value="acoustic">acoustic</option>
+<option value="americana">americana</option>
+<option value="classical">classical</option>
+<option value="dance">dance</option>
+<option value="pop">pop</option>
+<option value="other">other</option>
+</td>
+</tr>
+
+<tr>
+<th>Are you willing to volunteer?</th>
+<td><input type="text" name="volunteer" size="60" /></td>
+</tr>
+<tr>
+<th>Anything else we need to know?</th>
+<td><input type="text" name="anythingelse" size="60" /></td>
+</tr>
+<tr>
+<th>Any questions?</th>
+<td><input type="text" name="questions" size="60" /></td>
+</tr>
+</table>
+</div>
+
+<input type="Submit" name="submit" value="Submit" />
+</p>
+</form>
+
+</body>
+</html>

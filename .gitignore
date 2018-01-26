@@ -1,0 +1,13 @@
+settings.py
+*.sqlite
+*.sqlite3
+__pycache__/
+*.py[cod]
+*$py.class
+*~
+*.bak
+tmp/
+*.swp
+*.tar
+*.tgz
+.htaccess

@@ -1,0 +1,19 @@
+Hello,
+
+We have received the following proposal for a show at the 2018 Buffalo Infringement Festival.
+{% if prop %}
+To confirm the proposal, please click on this link: http://bif18.xyz/db/confirm/{{prop.id}}/
+
+
+Title: {{ prop.title }}
+
+{% for key,value in prop_info.items %}
+{{ key }}:
+  {{ value }}
+
+{% endfor %}
+
+{% else %}
+Yikes! No proposal data found!
+If you believe you really did fill out the proposal form, please contact Dave Pape (depape@buffalo.edu) to investigate the problem.
+{% endif %}
