@@ -106,6 +106,12 @@ def addToBatch(request,batchid,memberid):
     logInfo("Added %d to batch %d"%(memberid,batchid))
     return redirect('entity',id=batchid)
 
+@login_required
+def addToBatchForm(request):
+    batchid = int(request.POST['batch'])
+    memberid = int(request.POST['show'])
+    return addToBatch(request,batchid,memberid)
+
 
 @login_required
 def entity(request,id):
@@ -120,7 +126,9 @@ def entity(request,id):
 def proposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
-    context = {'prop':prop, 'prop_info':infodict}
+    inbatches = prop.batches.all()
+    batches = Batch.objects.all()
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches}
     return render(request,'db/proposal.html', context)
 
 
@@ -130,7 +138,8 @@ def batch(request,id):
     memberlist = []
     for e in b.members.all():
         memberlist.append({'id':e.id,'name':entityName(e)})
-    context = {'batch':b, 'members':memberlist}
+    props = Proposal.objects.all()
+    context = {'batch':b, 'members':memberlist, 'proposals':props}
     return render(request,'db/batch.html', context)
 
 
