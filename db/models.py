@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Entity(Model):
     entityType = CharField(max_length=256)
-
+    permissions = ManyToManyField('BIFUser', through='UserPermission')
 
 
 class BIFUser(Entity):
@@ -67,6 +67,19 @@ class Note(Entity):
     notetext = TextField()
     timestamp = DateTimeField(auto_now=True)
     attachedTo = ManyToManyField('Entity', related_name='notes')
+
+
+class UserPermission(Model):
+    NONE = 0
+    VIEW = 1
+    EDIT = 2
+    OWNER = 3
+    CONTACT = 4
+    SCHEDULE = 5
+    entity = ForeignKey('Entity', on_delete=CASCADE, related_name='permit_who')
+    bifuser = ForeignKey('BIFUser', on_delete=CASCADE, related_name='permit_what')
+    permission = IntegerField(default=NONE, choices=((NONE, 'none'), (VIEW, 'view'), (EDIT, 'edit'), (OWNER, 'owner'), (CONTACT, 'festival contact'), (SCHEDULE, 'can schedule')))
+
 
 
 from django.db.models.signals import post_init
