@@ -28,6 +28,8 @@ class Proposal(Entity):
     status = IntegerField(default=WAITING, choices=((WAITING, 'waiting'),(ACCEPTED, 'accepted'),(DELETED,'deleted')))
     info = TextField()
     festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
+    class Meta:
+        permissions = (("can_schedule", "Schedule shows"),)
 
 
 class Venue(Entity):
