@@ -21,8 +21,10 @@
   <ul class="sidebar-nav" style="list-style-type:none">
   <li><a href="{% url 'index' %}">Home</a></li>
   {% if user.is_authenticated %}
+  {% if perms.db.can_schedule %}
     <li><a href="{% url 'batches' %}">Batches</a></li>
     <li><a href="{% url 'newBatch' %}">New batch</a></li>
+  {% endif %}
     <li>&nbsp;
     <li>User: {{ user.get_username }}</li>
     <li><a href="{% url 'password_change'%}?next={% url 'index' %}">Change password</a></li>   

@@ -5,7 +5,7 @@
 
 {% if user.is_authenticated %}
   <p>Welcome, {{ user }}. Thanks for signing in.</p>
-{% if perms.proposal.can_schedule %}
+{% if perms.db.can_schedule %}
 {% if prop_list %}
     <ul>
     {% for p in prop_list %}
