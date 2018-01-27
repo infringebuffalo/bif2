@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,authenticate
 from django.template import loader
 from django.core.mail import EmailMultiAlternatives
-from django.contrib.auth.decorators import permission_required
 
 from .models import *
 
