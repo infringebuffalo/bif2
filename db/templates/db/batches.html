@@ -2,9 +2,13 @@
 
 {% block content %}
 
-
 {% if user.is_authenticated %}
-    <p>Welcome, {{ user }}. Thanks for signing in.</p>
+{% if perms.db.can_schedule %}
+
+<p>
+<a href="{% url 'newBatch' %}">Create new batch</a>
+</p>
+
 {% if batchlist %}
     <ul>
     {% for b in batchlist %}
@@ -13,6 +17,8 @@
     </ul>
 {% else %}
     <p>There are no batches.</p>
+{% endif %}
+
 {% endif %}
 {% else %}
     <p>Welcome. Please sign in.</p>

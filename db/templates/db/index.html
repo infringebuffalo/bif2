@@ -14,15 +14,13 @@
 </ul>
 {% endif %}
 {% if perms.db.can_schedule %}
-<h2>all proposals</h2>
 {% if prop_list %}
+<h2>all proposals</h2>
     <ul>
     {% for p in prop_list %}
         <li><a href="/db/{{ p.id }}/">{{ p.title }}</a> ({{ p.status }})</li>
     {% endfor %}
     </ul>
-{% else %}
-    <p>There are no proposals.</p>
 {% endif %}
 {% endif %}
 {% else %}

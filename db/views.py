@@ -9,12 +9,16 @@ from .models import *
 import json
 
 def index(request):
-    props = Proposal.objects.all()
     if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
         owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER)
     else:
         owned = None
-    return render(request,'db/index.html', { 'prop_list' : props, 'owned':owned })
+    return render(request,'db/index.html', { 'owned':owned })
+
+
+def allProposals(request):
+    props = Proposal.objects.all()
+    return render(request,'db/index.html', { 'prop_list' : props })
 
 
 def batches(request):

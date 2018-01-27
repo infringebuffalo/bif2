@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('newaccount/', views.newAccount, name='newAccount'),
     path('createaccount/', views.createAccount, name='createAccount'),
+    path('allproposals/', views.allProposals, name='allProposals'),
     path('newbatch/', views.newBatch, name='newBatch'),
     path('createbatch/', views.createBatch, name='createBatch'),
     path('batches/', views.batches, name='batches'),
