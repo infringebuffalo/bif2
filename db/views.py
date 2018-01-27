@@ -10,7 +10,7 @@ import json
 
 def index(request):
     props = Proposal.objects.all()
-    if request and request.user:
+    if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
         owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER)
     else:
         owned = None
@@ -32,7 +32,7 @@ def submit(request):
     infojson = json.dumps(infodict)
     prop = Proposal(title=request.POST["title"],info=infojson,status=Proposal.WAITING)
     prop.save()
-    logInfo("saved proposal %d ('%s')" % (prop.id,prop.title))
+    logInfo("saved proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
 
     mail_to = infodict["contactemail"]
     from django.core.validators import validate_email
@@ -59,7 +59,7 @@ def confirmProposal(request,id):
     except:
         pass
     prop.save()
-    logInfo("confirmed proposal %d" % id, request)
+    logInfo("confirmed proposal {ID:%d}" % id, request)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
 
 
@@ -80,15 +80,15 @@ def createAccount(request):
     try:
         djuser = User.objects.create_user(email, email, password)
     except IntegrityError:
-        logError("Tried to create duplicate account '%s'"%email)
+        logError("Tried to create duplicate account '%s'"%email, request)
         err = "An account '%s' already exists" % email
         return render(request, 'db/new_account.html', { 'error': err })
     except:
-        logError("Unknown error creating account '%s'"%email)
+        logError("Unknown error creating account '%s'"%email, request)
         return render(request, 'db/new_account.html', { 'error': 'Failed to create account.' })
     bifuser = BIFUser.objects.create(user=djuser, phone='555-1212')
     login(request, authenticate(username=email,password=password))
-    logInfo("Created new account '%s'"%email)
+    logInfo("Created new account '%s'"%email, request)
     return redirect('index')
 
 
@@ -102,10 +102,10 @@ def createBatch(request):
     try:
         batch = Batch(name=name, description=description, festival=None)
     except:
-        logError("Unknown error creating batch '%s'"%name)
+        logError("Unknown error creating batch '%s'"%name, request)
         return render(request, 'db/new_batch.html', { 'error': 'Failed to create batch.' })
     batch.save()
-    logInfo("Created new batch '%s'"%name)
+    logInfo("Created new batch {ID:%d} '%s'"%(batch.id,name), request)
     return redirect('index')
 
 
@@ -114,7 +114,7 @@ def addToBatch(request,batchid,memberid):
     b = get_object_or_404(Batch, pk=batchid)
     m = get_object_or_404(Entity, pk=memberid)
     b.members.add(m)
-    logInfo("Added %d to batch %d"%(memberid,batchid))
+    logInfo("Added {ID:%d} to batch {ID:%d}"%(memberid,batchid), request)
     return redirect('entity',id=batchid)
 
 @login_required
@@ -180,7 +180,7 @@ def logError(message,request=None):
 def logMessage(message,request=None):
     from datetime import datetime
     username = 'anonymous-user'
-    if request and request.user and request.user.username and request.user.username != '':
+    if request and hasattr(request,'user') and hasattr(request.user,'username') and request.user.username != '':
         username = request.user.username
     ipaddr = 'ip-unknown'
     if request:
