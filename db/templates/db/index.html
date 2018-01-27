@@ -5,7 +5,16 @@
 
 {% if user.is_authenticated %}
   <p>Welcome, {{ user }}. Thanks for signing in.</p>
+{% if owned %}
+<h2>my proposals</h2>
+<ul>
+{% for p in owned %}
+<li><a href="/db/{{ p.entity.id }}/">{{ p.entity.proposal.title }}</a>
+{% endfor %}
+</ul>
+{% endif %}
 {% if perms.db.can_schedule %}
+<h2>all proposals</h2>
 {% if prop_list %}
     <ul>
     {% for p in prop_list %}

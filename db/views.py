@@ -10,7 +10,11 @@ import json
 
 def index(request):
     props = Proposal.objects.all()
-    return render(request,'db/index.html', { 'prop_list' : props })
+    if request and request.user:
+        owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER)
+    else:
+        owned = None
+    return render(request,'db/index.html', { 'prop_list' : props, 'owned':owned })
 
 
 def batches(request):
@@ -47,6 +51,13 @@ def submit(request):
 def confirmProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.ACCEPTED     # Note that this will also undelete a deleted proposal - will leave it that way for now
+    propinfodict = json.loads(prop.info)
+    try:
+        owner = User.objects.get(username=propinfodict["contactemail"])
+        permit = UserPermission(entity=prop, bifuser = owner.bifuser, permission=UserPermission.OWNER)
+        permit.save()
+    except:
+        pass
     prop.save()
     logInfo("confirmed proposal %d" % id, request)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
