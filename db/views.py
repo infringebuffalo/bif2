@@ -13,6 +13,11 @@ def index(request):
     return render(request,'db/index.html', { 'prop_list' : props })
 
 
+def batches(request):
+    batchlist = Batch.objects.all()
+    return render(request,'db/batches.html', { 'batchlist' : batchlist })
+
+
 def submit(request):
     infodict = {}
     infodict = request.POST.copy()
@@ -23,6 +28,7 @@ def submit(request):
     infojson = json.dumps(infodict)
     prop = Proposal(title=request.POST["title"],info=infojson,status=Proposal.WAITING)
     prop.save()
+    logInfo("saved proposal %d ('%s')" % (prop.id,prop.title))
 
     mail_to = infodict["contactemail"]
     from django.core.validators import validate_email
@@ -75,12 +81,68 @@ def createAccount(request):
     return redirect('index')
 
 
+def newBatch(request):
+    return render(request,'db/new_batch.html', {})
+
+
+def createBatch(request):
+    name = request.POST['name']
+    description = request.POST['description']
+    try:
+        batch = Batch(name=name, description=description, festival=None)
+    except:
+        logError("Unknown error creating batch '%s'"%name)
+        return render(request, 'db/new_batch.html', { 'error': 'Failed to create batch.' })
+    batch.save()
+    logInfo("Created new batch '%s'"%name)
+    return redirect('index')
+
+
+@login_required
+def addToBatch(request,batchid,memberid):
+    b = get_object_or_404(Batch, pk=batchid)
+    m = get_object_or_404(Entity, pk=memberid)
+    b.members.add(m)
+    logInfo("Added %d to batch %d"%(memberid,batchid))
+    return redirect('entity',id=batchid)
+
+
+@login_required
+def entity(request,id):
+    e = get_object_or_404(Entity, pk=id)
+    if e.entityType == 'proposal':
+        return proposal(request,id)
+    elif e.entityType == 'batch':
+        return batch(request,id)
+
+
 @login_required
 def proposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
     context = {'prop':prop, 'prop_info':infodict}
     return render(request,'db/proposal.html', context)
+
+
+@login_required
+def batch(request,id):
+    b = get_object_or_404(Batch, pk=id)
+    memberlist = []
+    for e in b.members.all():
+        memberlist.append({'id':e.id,'name':entityName(e)})
+    context = {'batch':b, 'members':memberlist}
+    return render(request,'db/batch.html', context)
+
+
+def entityName(e):
+    if e.entityType == 'proposal':
+        return e.proposal.title
+    elif e.entityType == 'batch':
+        return e.batch.name
+    elif e.entityType == 'venue':
+        return e.venue.name
+    else:
+        return "%s %d" % (e.entityType,e.id)
 
 
 import logging

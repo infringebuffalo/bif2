@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user }}. Thanks for signing in.</p>
+{% if batchlist %}
+    <ul>
+    {% for b in batchlist %}
+        <li><a href="/db/{{ b.id }}/">{{ b.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no batches.</p>
+{% endif %}
+{% else %}
+    <p>Welcome. Please sign in.</p>
+{% endif %}
+
+{% endblock %}

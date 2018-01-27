@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+{% if batch %}
+<h1>{{ batch.name }}</h1>
+<p>{{ batch.description }}</p>
+<table>
+{% for e in members %}
+<tr><th><a href="/db/{{ e.id }}">{{ e.name }}</td></tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No batch found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}
