@@ -2,6 +2,7 @@ settings.py
 *.log
 *.sqlite
 *.sqlite3
+migrations/
 __pycache__/
 *.py[cod]
 *$py.class
