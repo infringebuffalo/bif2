@@ -52,14 +52,20 @@ def submit(request):
     return render(request,'db/proposal_submit.html', {})
 
 
+def setEntityOwner(e,u):
+# need to: check if already owned by someone else, and change it (if allowed)
+    if UserPermission.objects.filter(entity=e,bifuser=u).count() == 0:
+        permit = UserPermission(entity=e, bifuser = u, permission=UserPermission.OWNER)
+        permit.save()
+
+
 def confirmProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.ACCEPTED     # Note that this will also undelete a deleted proposal - will leave it that way for now
     propinfodict = json.loads(prop.info)
     try:
         owner = User.objects.get(username=propinfodict["contactemail"])
-        permit = UserPermission(entity=prop, bifuser = owner.bifuser, permission=UserPermission.OWNER)
-        permit.save()
+        setEntityOwner(prop, owner.bifuser)
     except:
         pass
     prop.save()
@@ -68,7 +74,10 @@ def confirmProposal(request,id):
 
 
 def musicForm(request):
-    return render(request,'db/music_form.html', {})
+    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+    times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
+    context = {'daylist':days, 'timelist':times}
+    return render(request,'db/music_form.html', context)
 
 
 def newAccount(request):
