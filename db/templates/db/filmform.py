@@ -32,7 +32,7 @@ textarea("Your equipment details (what equipment you bring, plus any unusual or 
 print("</table></div>")
 
 print("<div class='projectForm'>\n<h3>Final details</h3>\n<table class='alternategrey'>\n")
-textInput("Are you willing to volunteer?", "volunteer")
+textarea("In what ways are you willing to volunteer?", "volunteer", 2, placeholder="equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other")
 textInput("Anything else we need to know?", "anythingelse")
 textInput("Any questions?", "questions")
 print("</table></div>")

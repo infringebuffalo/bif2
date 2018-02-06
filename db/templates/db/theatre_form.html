@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Buffalo Infringement Festival Music Proposal{% endblock %}
+{% block title %}Buffalo Infringement Festival Theatre Proposal{% endblock %}
 
 {% block style %}
 <style>
@@ -18,6 +18,7 @@ function validateForm()
 {
 var f = document.forms["proposalform"];
 var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short", "organization", "work_samples_website", "numberperformers", "membersinfo", "out_of_town", "proposaloverlap", "agesensitive" ];
+];
 var okay = true;
 for (i=0; i < fields.length; i++)
     if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
@@ -56,14 +57,14 @@ $(document).ready(readyFunc)
 {% load static %}
 
 <h1>{{ prop }}</h1>
-<h2>Music proposal </h2>
+<h2>Theatre proposal </h2>
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
 <form method="POST" action="{% url 'submit' %}" name="proposalform" onsubmit="return validateForm()">
 {% csrf_token %}
 
-<input type="hidden" name="type" value="music" />
+<input type="hidden" name="type" value="theatre" />
 
 <div class="contact">
 <h3>Contact info</h3>
@@ -117,11 +118,11 @@ $(document).ready(readyFunc)
 <h3>Project</h3>
 <table class='alternategrey'>
 <tr>
-<th width='25%'>* Band name / title</th>
+<th width='25%'>* Performance title</th>
 <td><input type='text' name='title' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>* Affiliations? Part of a collective? if so what group...</th>
+<th width='25%'>* Organization / production company</th>
 <td><input type='text' name='organization' size='60' placeholder=''/></td>
 </tr>
 <tr>
@@ -161,7 +162,7 @@ $(document).ready(readyFunc)
 <td><textarea name='proposaloverlap' rows='2' cols='60' placeholder=''></textarea></td>
 </tr>
 <tr>
-<th width='25%'>Is everyone in the proposal over 21?</th>
+<th width='25%'>Is everyone in proposal over 21?</th>
 <td><select name='over21'><option value='Y' selected>Yes</option><option value='N'>No</option></select></td>
 </tr>
 <tr>
@@ -179,19 +180,17 @@ $(document).ready(readyFunc)
 </select></td>
 </tr>
 <tr>
-<th width='25%'>Are you willing to perform as part of opening or closing ceremonies? (Money collected from these two events goes to the festival.)</th>
-<td><select name='openingclosing'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>
-</tr>
-<tr>
 <th width='25%'>Desired number of performances</th>
 <td><select name='numberperformances'>
 <option value='1'>1</option>
 <option value='2'>2</option>
 <option value='3'>3</option>
+<option value='4'>4</option>
+<option value='5'>5</option>
 </select></td>
 </tr>
 <tr>
-<th width='25%'>Are you open to having more than one performance per day?</th>
+<th width='25%'>Do you want more than one performance per day?</th>
 <td><select name='morethan1perday'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>
 </tr>
 <tr>
@@ -211,6 +210,10 @@ $(document).ready(readyFunc)
 <td><input type='text' name='teardowntime' size='60' placeholder=''/></td>
 </tr>
 <tr>
+<th width='25%'>Physical space requirements</th>
+<td><input type='text' name='physicalspace' size='60' placeholder=''/></td>
+</tr>
+<tr>
 <th width='25%'>Do you have a prearranged venue?</th>
 <td><input type='text' name='prearrangedvenue' size='60' placeholder=''/></td>
 </tr>
@@ -228,7 +231,7 @@ $(document).ready(readyFunc)
 </tr>
 <tr>
 <th width='25%'>Proposal secondary categories, if any:</th>
-<td><input type='text' name='secondary_category' size='60' placeholder='theatre, dance, visual art, literary, film/video, workshop'/></td>
+<td><input type='text' name='secondary_category' size='60' placeholder='music, dance, visual art, literary, film/video, workshop'/></td>
 </tr>
 <tr>
 <th width='25%'>Are you interested in collaborating (performing in combination with another proposal of the same or different category)?</th>
@@ -258,165 +261,86 @@ $(document).ready(readyFunc)
 </div>
 
 <div class='projectForm'>
-<h3>Music specifics</h3>
-<table class='alternategrey'>
+<h3>Theatre specifics</h3>
+<table>
 
 <tr>
-<th width='25%'>Equipment detail - describe your gear</th>
-<td><textarea name='equipment_detail' rows='4' cols='60' placeholder=''></textarea></td>
+<th width='25%'>Do you require audio amplification or playback (Y/N)? If so, please give details.</th>
+<td><input type='text' name='audio' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Do you own your own PA?  Will you share it for a group show?</th>
-<td><input type='text' name='haspa' size='60' placeholder=''/></td>
+<th width='25%'>Do you require chairs for the audience?</th>
+<td><input type='text' name='chairs' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Do you require microphones to perform (Y/N)? If so, how many? Do you own your own mics?  Share?</th>
-<td><input type='text' name='hasmics' size='60' placeholder=''/></td>
+<th width='25%'>Does your proposal require a projector/screen?  If yes, explain.</th>
+<td><input type='text' name='projector' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Does your proposal involve a computer or electronic component (ipod, laptop, cd player, projector, other)?  If yes, explain.</th>
-<td><input type='text' name='electronics' size='60' placeholder=''/></td>
+<th width='25%'>Does your proposal require a professional dance stage?</th>
+<td><input type='text' name='dancestage' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Do you have a drum kit?  Share?</th>
-<td><input type='text' name='hasdrum' size='60' placeholder=''/></td>
+<th width='25%'>Does your proposal require professional lighting?</th>
+<td><input type='text' name='lighting' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Can you play acoustic, without amps and mics? Preferred?</th>
-<td><input type='text' name='acoustic' size='60' placeholder=''/></td>
+<th width='25%'>Does your proposal require AC power?</th>
+<td><input type='text' name='acpower' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Volume on a scale from 1-10</th>
-<td><input type='text' name='volume' size='60' placeholder=''/></td>
+<th width='25%'>Your equipment details (what equipment you bring, plus any unusual or unusually large setups)</th>
+<td><textarea name='equipment' rows='4' cols='60' placeholder=''></textarea></td>
 </tr>
 <tr>
-<th width='25%'>Primary genre</th>
+<th width='25%'>What genre best describes your act?</th>
 <td><select name='genre'>
-<option value='acoustic'>acoustic</option>
-<option value='americana'>americana</option>
-<option value='avant garde'>avant garde</option>
-<option value='blues'>blues</option>
-<option value='choral'>choral</option>
-<option value='classical'>classical</option>
-<option value='country'>country</option>
-<option value='dance'>dance</option>
-<option value='disco'>disco</option>
-<option value='easy listening'>easy listening</option>
-<option value='EDM'>EDM</option>
-<option value='electronic'>electronic</option>
-<option value='electronic'>electronic</option>
-<option value='folk'>folk</option>
-<option value='funk'>funk</option>
-<option value='hardcore'>hardcore</option>
-<option value='hip hop'>hip hop</option>
-<option value='improv'>improv</option>
-<option value='industrial'>industrial</option>
-<option value='inspirational - christian & gospel'>inspirational - christian & gospel</option>
-<option value='instrumental'>instrumental</option>
-<option value='jam'>jam</option>
-<option value='jazz'>jazz</option>
-<option value='latin'>latin</option>
-<option value='lo-fi'>lo-fi</option>
-<option value='metal'>metal</option>
-<option value='noise'>noise</option>
-<option value='pop'>pop</option>
-<option value='progressive'>progressive</option>
-<option value='punk'>punk</option>
-<option value='rap'>rap</option>
-<option value='reggae'>reggae</option>
-<option value='retro'>retro</option>
-<option value='rock'>rock</option>
-<option value='singer/songwriter'>singer/songwriter</option>
-<option value='soul'>soul</option>
-<option value='synth'>synth</option>
-<option value='world'>world</option>
+<option value='Dinner Theatre'>Dinner Theatre</option>
+<option value='Musical'>Musical</option>
+<option value='Opera'>Opera</option>
+<option value='Revue'>Revue</option>
+<option value='Repertory Theatre'>Repertory Theatre</option>
+<option value='Variety Show'>Variety Show</option>
+<option value='Vaudeville'>Vaudeville</option>
+<option value='Drama'>Drama</option>
+<option value='Comedy'>Comedy</option>
+<option value='Black Comedy'>Black Comedy</option>
+<option value='Farce'>Farce</option>
+<option value='Improvisational Theatre'>Improvisational Theatre</option>
+<option value='Tragedy'>Tragedy</option>
+<option value='In-Your-Face Theatre'>In-Your-Face Theatre</option>
+<option value='Experimental (avant garde)'>Experimental (avant garde)</option>
+<option value='Other'>Other</option>
 </select></td>
 </tr>
 <tr>
-<th width='25%'>Secondary genre</th>
+<th width='25%'>What other genre best describes your act?</th>
 <td><select name='genre2'>
-<option value='acoustic'>acoustic</option>
-<option value='americana'>americana</option>
-<option value='avant garde'>avant garde</option>
-<option value='blues'>blues</option>
-<option value='choral'>choral</option>
-<option value='classical'>classical</option>
-<option value='country'>country</option>
-<option value='dance'>dance</option>
-<option value='disco'>disco</option>
-<option value='easy listening'>easy listening</option>
-<option value='EDM'>EDM</option>
-<option value='electronic'>electronic</option>
-<option value='electronic'>electronic</option>
-<option value='folk'>folk</option>
-<option value='funk'>funk</option>
-<option value='hardcore'>hardcore</option>
-<option value='hip hop'>hip hop</option>
-<option value='improv'>improv</option>
-<option value='industrial'>industrial</option>
-<option value='inspirational - christian & gospel'>inspirational - christian & gospel</option>
-<option value='instrumental'>instrumental</option>
-<option value='jam'>jam</option>
-<option value='jazz'>jazz</option>
-<option value='latin'>latin</option>
-<option value='lo-fi'>lo-fi</option>
-<option value='metal'>metal</option>
-<option value='noise'>noise</option>
-<option value='pop'>pop</option>
-<option value='progressive'>progressive</option>
-<option value='punk'>punk</option>
-<option value='rap'>rap</option>
-<option value='reggae'>reggae</option>
-<option value='retro'>retro</option>
-<option value='rock'>rock</option>
-<option value='singer/songwriter'>singer/songwriter</option>
-<option value='soul'>soul</option>
-<option value='synth'>synth</option>
-<option value='world'>world</option>
+<option value='Dinner Theatre'>Dinner Theatre</option>
+<option value='Musical'>Musical</option>
+<option value='Opera'>Opera</option>
+<option value='Revue'>Revue</option>
+<option value='Repertory Theatre'>Repertory Theatre</option>
+<option value='Variety Show'>Variety Show</option>
+<option value='Vaudeville'>Vaudeville</option>
+<option value='Drama'>Drama</option>
+<option value='Comedy'>Comedy</option>
+<option value='Black Comedy'>Black Comedy</option>
+<option value='Farce'>Farce</option>
+<option value='Improvisational Theatre'>Improvisational Theatre</option>
+<option value='Tragedy'>Tragedy</option>
+<option value='In-Your-Face Theatre'>In-Your-Face Theatre</option>
+<option value='Experimental (avant garde)'>Experimental (avant garde)</option>
+<option value='Other'>Other</option>
 </select></td>
 </tr>
 <tr>
-<th width='25%'>Tertiary genre</th>
-<td><select name='genre3'>
-<option value='acoustic'>acoustic</option>
-<option value='americana'>americana</option>
-<option value='avant garde'>avant garde</option>
-<option value='blues'>blues</option>
-<option value='choral'>choral</option>
-<option value='classical'>classical</option>
-<option value='country'>country</option>
-<option value='dance'>dance</option>
-<option value='disco'>disco</option>
-<option value='easy listening'>easy listening</option>
-<option value='EDM'>EDM</option>
-<option value='electronic'>electronic</option>
-<option value='electronic'>electronic</option>
-<option value='folk'>folk</option>
-<option value='funk'>funk</option>
-<option value='hardcore'>hardcore</option>
-<option value='hip hop'>hip hop</option>
-<option value='improv'>improv</option>
-<option value='industrial'>industrial</option>
-<option value='inspirational - christian & gospel'>inspirational - christian & gospel</option>
-<option value='instrumental'>instrumental</option>
-<option value='jam'>jam</option>
-<option value='jazz'>jazz</option>
-<option value='latin'>latin</option>
-<option value='lo-fi'>lo-fi</option>
-<option value='metal'>metal</option>
-<option value='noise'>noise</option>
-<option value='pop'>pop</option>
-<option value='progressive'>progressive</option>
-<option value='punk'>punk</option>
-<option value='rap'>rap</option>
-<option value='reggae'>reggae</option>
-<option value='retro'>retro</option>
-<option value='rock'>rock</option>
-<option value='singer/songwriter'>singer/songwriter</option>
-<option value='soul'>soul</option>
-<option value='synth'>synth</option>
-<option value='world'>world</option>
-<option value='other'>other</option>
+<th width='25%'>Ideally, we'd prefer:</th>
+<td><select name='stagetype'>
+<option value='black box'>black box</option>
+<option value='traditional stage'>traditional stage</option>
+<option value='alternative'>alternative</option>
+<option value='outdoor'>outdoor</option>
 </select></td>
 </tr>
 </table></div>
@@ -425,8 +349,8 @@ $(document).ready(readyFunc)
 <table class='alternategrey'>
 
 <tr>
-<th width='25%'>In what ways are you willing to volunteer?</th>
-<td><textarea name='volunteer' rows='2' cols='60' placeholder='equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other'></textarea></td>
+<th width='25%'>Are you willing to volunteer?</th>
+<td><input type='text' name='volunteer' size='60' placeholder=''/></td>
 </tr>
 <tr>
 <th width='25%'>Anything else we need to know?</th>

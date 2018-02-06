@@ -2,7 +2,7 @@
 
 from formtools import *
 
-startPage("Theatre")
+startPage("Theatre","theatre",requiredfields=["organization","work_samples_website","numberperformers","membersinfo","out_of_town","proposaloverlap","agesensitive"])
 textInput("Performance title", "title")
 textInput("Organization / production company", "organization")
 textInput("Website (not Facebook)", "website")
@@ -23,7 +23,6 @@ textInput("Length of performance: (in minutes)", "showlength")
 yesnoInput("Is this flexible?", "showlengthflexible")
 textInput("Setup time (in minutes)", "setuptime")
 textInput("Teardown time (in minutes)", "teardowntime")
-textInput("Physical space requirements", "physicalspace")
 textInput("Do you have a prearranged venue?", "prearrangedvenue")
 textInput("Do you have an ideal venue in mind?", "idealvenue")
 textarea("What requirements do you have for your venue?", "venuerequirements")
@@ -51,7 +50,7 @@ print("</table></div>")
 
 
 print("<div class='projectForm'>\n<h3>Final details</h3>\n<table class='alternategrey'>\n")
-textInput("Are you willing to volunteer?", "volunteer")
+textarea("In what ways are you willing to volunteer?", "volunteer", 2, placeholder="equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other")
 textInput("Anything else we need to know?", "anythingelse")
 textInput("Any questions?", "questions")
 print("</table></div>")

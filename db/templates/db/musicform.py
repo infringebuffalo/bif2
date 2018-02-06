@@ -2,7 +2,7 @@
 
 from formtools import *
 
-startPage("Music")
+startPage("Music",formtype="music",requiredfields=["organization","work_samples_website","numberperformers","membersinfo","out_of_town","proposaloverlap","agesensitive"])
 textInput("Band name / title", "title")
 textInput("Affiliations? Part of a collective? if so what group...", "organization")
 textInput("Website (not Facebook)", "website")
@@ -19,12 +19,11 @@ yesnoInput("Would you like to be scheduled for outdoor performances (sidewalks, 
 menuInput("Where do prefer to be scheduled?", "street_preferred", ["all indoor", "mostly indoor", "either indoor or outdoor", "mostly outdoor", "all outdoor"])
 yesnoInput("Are you willing to perform as part of opening or closing ceremonies? (Money collected from these two events goes to the festival.)", "openingclosing", default='n')
 menuInput("Desired number of performances", "numberperformances", [1,2,3])
-yesnoInput("Do you want more than one performance per day?", "morethan1perday", default='n')
+yesnoInput("Are you open to having more than one performance per day?", "morethan1perday", default='n')
 textInput("Length of performance: (in minutes)", "showlength")
 yesnoInput("Is this flexible?", "showlengthflexible")
 textInput("Setup time (in minutes)", "setuptime")
 textInput("Teardown time (in minutes)", "teardowntime")
-textInput("Physical space requirements", "physicalspace")
 textInput("Do you have a prearranged venue?", "prearrangedvenue")
 textInput("Do you have an ideal venue in mind?", "idealvenue")
 textarea("What requirements do you have for your venue?", "venuerequirements")
@@ -44,14 +43,15 @@ textInput("Does your proposal involve a computer or electronic component (ipod, 
 textInput("Do you have a drum kit?  Share?", "hasdrum")
 textInput("Can you play acoustic, without amps and mics? Preferred?", "acoustic")
 textInput("Volume on a scale from 1-10", "volume")
-genreMenu = [ "rock", "metal", "punk", "electronic", "hip hop", "alternative", "jam", "jazz", "blues", "soul", "noise", "avant garde", "acoustic", "americana", "classical", "dance", "pop", "other" ]
+genreMenu = [ "americana", "blues", "classical", "jazz", "reggae", "country", "electronic", "folk", "rock", "punk", "metal", "hip hop", "rap", "soul", "funk" , "disco", "electronic", "dance", "acoustic", "singer/songwriter", "noise", "world", "pop", "progressive", "hardcore", "avant garde", "synth", "retro", "improv", "jam", "EDM", "industrial", "easy listening", "inspirational - christian & gospel", "instrumental", "choral", "lo-fi", "latin" ]
+genreMenu.sort(key=str.lower)
 menuInput("Primary genre", "genre", genreMenu)
 menuInput("Secondary genre", "genre2", genreMenu)
-menuInput("Tertiary genre", "genre3", genreMenu)
+menuInput("Tertiary genre", "genre3", genreMenu + ["other"])
 print("</table></div>")
 
 print("<div class='projectForm'>\n<h3>Final details</h3>\n<table class='alternategrey'>\n")
-textInput("Are you willing to volunteer?", "volunteer")
+textarea("In what ways are you willing to volunteer?", "volunteer", 2, placeholder="equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other")
 textInput("Anything else we need to know?", "anythingelse")
 textInput("Any questions?", "questions")
 print("</table></div>")

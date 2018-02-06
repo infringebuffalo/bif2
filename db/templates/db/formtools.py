@@ -1,9 +1,14 @@
 #!/usr/bin/python
 
+all_required_fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short" ]
 
-def startPage(formtitle,formtype=None):
+def startPage(formtitle,formtype=None,requiredfields=None):
+    global all_required_fields
     if not formtype:
         formtype = formtitle.lower()
+    if requiredfields:
+        all_required_fields += requiredfields
+    requiredfields_str = ', '.join(map(lambda x:'"%s"'%x,all_required_fields))
     print("""{%% extends "base_generic.html" %%}
 
 {%% block title %%}Buffalo Infringement Festival %s Proposal{%% endblock %%}
@@ -12,6 +17,8 @@ def startPage(formtitle,formtype=None):
 <style>
 .avail td { padding: 10px }
 .avail tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey td { padding-top: 6px; padding-bottom: 6px }
 </style>
 {%% endblock %%}
 
@@ -21,14 +28,14 @@ def startPage(formtitle,formtype=None):
 function validateForm()
 {
 var f = document.forms["proposalform"];
-var fields = ["title", "website", "description_short", "description_long", "contactname", "contactemail", "contactphone", "contactaddress", "volunteer"];
+var fields = [ %s ];
 var okay = true;
 for (i=0; i < fields.length; i++)
     if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
         okay = false;
 if (!okay)
     {
-    alert("All fields must be filled out before this proposal can be submitted");
+    alert("All fields marked with * must be filled out before this proposal can be submitted");
     return false;
     }
 else
@@ -62,7 +69,7 @@ $(document).ready(readyFunc)
 <h1>{{ prop }}</h1>
 <h2>%s proposal </h2>
 
-<div style="background:#f88; text-align:center">Note: all fields must be filled in before this form is submitted.</div>
+<div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
 <form method="POST" action="{%% url 'submit' %%}" name="proposalform" onsubmit="return validateForm()">
 {%% csrf_token %%}
@@ -71,24 +78,19 @@ $(document).ready(readyFunc)
 
 <div class="contact">
 <h3>Contact info</h3>
-<table id="contactinputs">
-  <tr><th width="20%%">Proposer / primary contact</th><td> <input type="text" name="contactname" value="" /> </td></tr>
-  <tr><th>E-mail</th><td> <input type="text" name="contactemail" value="" /> </td></tr>
-  <tr><th>Phone</th><td> <input type="text" name="contactphone" value="" /> </td></tr>
-  <tr><th>Zip code</th><td> <input type="text" name="contactaddress" value="" /> </td></tr>
-  <tr><th>Facebook address</th><td><input type="text" name="contactfacebook" /></td></tr>
-  <tr><th>Best method to contact you</th><td> <select name="bestcontactmethod"> <option value="phone">phone</option> <option value="email">email</option> <option value="facebook">facebook</option> </select> </td></tr>
-</table>
-<table>
-  <tr><th width="20%%">Secondary contact name</th><td><input type="text" name="secondcontactname"></td></tr>
-  <tr><th>E-mail</th><td><input type="text" name="secondcontactemail"></td></tr>
-  <tr><th>Phone (including area code)</th><td><input type="text" name="secondcontactphone"></td></tr>
-</table>
+<table id="contactinputs">""" % (formtitle, requiredfields_str, formtitle, formtype))
+    textInput("Proposer / primary contact", "contactname")
+    textInput("E-mail", "contactemail")
+    textInput("Phone (including area code)", "contactphone")
+    textInput("Zip code", "contactaddress")
+    textInput("Social media address(es)", "contactfacebook", placeholder="facebook / instagram / twitter")
+    menuInput("Best method to contact you", "bestcontactmethod", ["phone", "email", "facebook"])
+    print("</table>\n<br>\n<table>")
+    textInput("Secondary contact name", "secondcontactname")
+    textInput("E-mail", "secondcontactemail")
+    textInput("Phone (including area code)", "secondcontactphone")
+    print("</table>\n\n<div class='projectForm'>\n<h3>Project</h3>\n<table class='alternategrey'>")
 
-<div class="projectForm">
-<h3>Project</h3>
-<table>
-""" % (formtitle, formtitle, formtype))
 
 def availabilitySection():
     print("""<div class="projectForm">
@@ -125,28 +127,39 @@ def checkName(name):
     formnames.append(name)
 
     
-def textInput(label,name):
+def textInput(label,name,placeholder=''):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
     checkName(name)
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
-    print("<td><input type='text' name='%s' size='60' /></td>" % name)
+    print("<td><input type='text' name='%s' size='60' placeholder='%s'/></td>" % (name,placeholder))
     print("</tr>")
 
-def textarea(label,name,rows=4,cols=60):
+def textarea(label,name,rows=4,placeholder=''):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
     checkName(name)
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
-    print("<td><textarea name='%s' rows='%d' cols='%d'></textarea></td>" % (name,rows,cols))
+    print("<td><textarea name='%s' rows='%d' cols='60' placeholder='%s'></textarea></td>" % (name,rows,placeholder))
     print("</tr>")
 
-def yesnoInput(label,name):
+def yesnoInput(label,name,default='y'):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
     checkName(name)
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
-    print("<td><select name='%s'><option value='Y'>Yes</option><option value='N'>No</option></select></td>" % name)
+    if default.lower() in ('y', 'yes'):
+        print("<td><select name='%s'><option value='Y' selected>Yes</option><option value='N'>No</option></select></td>" % name)
+    else:
+        print("<td><select name='%s'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>" % name)
     print("</tr>")
 
 def menuInput(label,name,options):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
     checkName(name)
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
