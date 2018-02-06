@@ -73,11 +73,30 @@ def confirmProposal(request,id):
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
 
 
-def musicForm(request):
+def proposalForm(request, template):
     days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times}
-    return render(request,'db/music_form.html', context)
+    return render(request, template, context)
+
+
+def musicForm(request):
+    return proposalForm(request, 'db/music_form.html')
+
+def theatreForm(request):
+    return proposalForm(request, 'db/theatre_form.html')
+
+def visualartForm(request):
+    return proposalForm(request, 'db/visualart_form.html')
+
+def danceForm(request):
+    return proposalForm(request, 'db/dance_form.html')
+
+def literaryForm(request):
+    return proposalForm(request, 'db/literary_form.html')
+
+def filmForm(request):
+    return proposalForm(request, 'db/film_form.html')
 
 
 def newAccount(request):
