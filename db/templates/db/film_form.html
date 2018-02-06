@@ -17,14 +17,14 @@
 function validateForm()
 {
 var f = document.forms["proposalform"];
-var fields = ["title", "website", "description_short", "description_long", "contactname", "contactemail", "contactphone", "contactaddress", "volunteer"];
+var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short" ];
 var okay = true;
 for (i=0; i < fields.length; i++)
     if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
         okay = false;
 if (!okay)
     {
-    alert("All fields must be filled out before this proposal can be submitted");
+    alert("All fields marked with * must be filled out before this proposal can be submitted");
     return false;
     }
 else
@@ -58,7 +58,7 @@ $(document).ready(readyFunc)
 <h1>{{ prop }}</h1>
 <h2>Film/Video proposal </h2>
 
-<div style="background:#f88; text-align:center">Note: all fields must be filled in before this form is submitted.</div>
+<div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
 <form method="POST" action="{% url 'submit' %}" name="proposalform" onsubmit="return validateForm()">
 {% csrf_token %}
@@ -69,24 +69,24 @@ $(document).ready(readyFunc)
 <h3>Contact info</h3>
 <table id="contactinputs">
 <tr>
-<th width='25%'>Proposer / primary contact</th>
+<th width='25%'>* Proposer / primary contact</th>
 <td><input type='text' name='contactname' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>E-mail</th>
+<th width='25%'>* E-mail</th>
 <td><input type='text' name='contactemail' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Phone (including area code)</th>
+<th width='25%'>* Phone (including area code)</th>
 <td><input type='text' name='contactphone' size='60' placeholder=''/></td>
 </tr>
 <tr>
-<th width='25%'>Zip code</th>
+<th width='25%'>* Zip code</th>
 <td><input type='text' name='contactaddress' size='60' placeholder=''/></td>
 </tr>
 <tr>
 <th width='25%'>Social media address(es)</th>
-<td><input type='text' name='contactfacebook' size='60' placeholder=''/></td>
+<td><input type='text' name='contactfacebook' size='60' placeholder='facebook / instagram / twitter'/></td>
 </tr>
 <tr>
 <th width='25%'>Best method to contact you</th>
@@ -117,7 +117,7 @@ $(document).ready(readyFunc)
 <h3>Project</h3>
 <table class='alternategrey'>
 <tr>
-<th width='25%'>Title</th>
+<th width='25%'>* Title</th>
 <td><input type='text' name='title' size='60' placeholder=''/></td>
 </tr>
 <tr>
@@ -137,7 +137,7 @@ $(document).ready(readyFunc)
 <td><input type='text' name='work_samples_website' size='60' placeholder='a good link will answer most of our questions, to program you effectively'/></td>
 </tr>
 <tr>
-<th width='25%'>Short description (140 chars)</th>
+<th width='25%'>* Short description (140 chars)</th>
 <td><textarea name='description_short' rows='2' cols='60' placeholder=''></textarea></td>
 </tr>
 <tr>
@@ -241,8 +241,8 @@ $(document).ready(readyFunc)
 <table class='alternategrey'>
 
 <tr>
-<th width='25%'>Are you willing to volunteer?</th>
-<td><input type='text' name='volunteer' size='60' placeholder=''/></td>
+<th width='25%'>In what ways are you willing to volunteer?</th>
+<td><textarea name='volunteer' rows='2' cols='60' placeholder='equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other'></textarea></td>
 </tr>
 <tr>
 <th width='25%'>Anything else we need to know?</th>
@@ -253,6 +253,8 @@ $(document).ready(readyFunc)
 <td><input type='text' name='questions' size='60' placeholder=''/></td>
 </tr>
 </table></div>
-<input type='Submit' name='submit' value='Submit' />
+<input type="Submit" name="submit" value="Submit" />
+</p>
 </form>
+
 {% endblock %}

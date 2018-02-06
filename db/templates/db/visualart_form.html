@@ -18,7 +18,6 @@ function validateForm()
 {
 var f = document.forms["proposalform"];
 var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short", "work_samples_website", "numberperformers", "membersinfo", "out_of_town", "proposaloverlap", "agesensitive" ];
-];
 var okay = true;
 for (i=0; i < fields.length; i++)
     if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
@@ -87,7 +86,7 @@ $(document).ready(readyFunc)
 </tr>
 <tr>
 <th width='25%'>Social media address(es)</th>
-<td><input type='text' name='contactfacebook' size='60' placeholder=''/></td>
+<td><input type='text' name='contactfacebook' size='60' placeholder='facebook / instagram / twitter'/></td>
 </tr>
 <tr>
 <th width='25%'>Best method to contact you</th>
@@ -244,8 +243,8 @@ $(document).ready(readyFunc)
 <table class='alternategrey'>
 
 <tr>
-<th width='25%'>Are you willing to volunteer?</th>
-<td><input type='text' name='volunteer' size='60' placeholder=''/></td>
+<th width='25%'>In what ways are you willing to volunteer?</th>
+<td><textarea name='volunteer' rows='2' cols='60' placeholder='equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other'></textarea></td>
 </tr>
 <tr>
 <th width='25%'>Anything else we need to know?</th>
@@ -256,6 +255,8 @@ $(document).ready(readyFunc)
 <td><input type='text' name='questions' size='60' placeholder=''/></td>
 </tr>
 </table></div>
-<input type='Submit' name='submit' value='Submit' />
+<input type="Submit" name="submit" value="Submit" />
+</p>
 </form>
+
 {% endblock %}
