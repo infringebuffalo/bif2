@@ -120,3 +120,7 @@ def setEntityTypeListing(sender,instance,**kwargs):
 def setEntityTypeNote(sender,instance,**kwargs):
     instance.entityType='note'
 
+@receiver(post_init,sender=FormInfo)
+def setEntityTypeFormInfo(sender,instance,**kwargs):
+    instance.entityType='forminfo'
+
