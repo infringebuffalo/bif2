@@ -44,6 +44,7 @@ def submit(request):
     try:
         validate_email( mail_to )
     except ValidationError:
+        logInfo("email '%s' is invalid" % mail_to)
         return render(request,'db/proposal_email_fail.html', {'address':mail_to})
     context = {'prop':prop, 'prop_info':infodict}
     mail_subject = "Buffalo Infringement Festival proposal '%s'" % prop.title
