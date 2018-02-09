@@ -33,6 +33,16 @@ def submit(request):
         if k in infodict.keys():
             del infodict[k]
 
+    defaultContact = None
+    defaultBatch = None
+    if 'type' in infodict.keys():
+        try:
+            formInfo = FormInfo.objects.get(showType=infodict['type'])
+            defaultContact = formInfo.defaultContact
+            defaultBatch = formInfo.defaultBatch
+        except:
+            pass
+
     infojson = json.dumps(infodict)
     prop = Proposal(title=request.POST["title"],info=infojson,status=Proposal.WAITING)
     prop.save()
@@ -49,7 +59,14 @@ def submit(request):
     context = {'prop':prop, 'prop_info':infodict}
     mail_subject = "Buffalo Infringement Festival proposal '%s'" % prop.title
     mail_body = loader.render_to_string('db/submit_email.txt', context)
-    EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to]).send()
+    if defaultContact:
+        cc_list = [ defaultContact.user.email ]
+    else:
+        cc_list = None
+    EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to], cc=cc_list).send()
+    if defaultBatch:
+        defaultBatch.members.add(prop)
+        logInfo("Added {ID:%d} to batch {ID:%d}"%(prop.id,defaultBatch.id), request)
     return render(request,'db/proposal_submit.html', {})
 
 
