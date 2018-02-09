@@ -85,7 +85,7 @@ class UserPermission(Model):
 class FormInfo(Entity):
     showType = CharField(max_length=256)
     description = TextField()
-    organizerContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
+    defaultContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
     defaultBatch = ForeignKey('Batch', on_delete=SET_NULL, null=True)
 
 
