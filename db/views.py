@@ -72,9 +72,13 @@ def submit(request):
 
 def setEntityOwner(e,u):
 # need to: check if already owned by someone else, and change it (if allowed)
+# note: this if-statement tries to prevent redundant entries, but if the user has some other permission (like VIEW), it will prevent changing ownership - must fix this
     if UserPermission.objects.filter(entity=e,bifuser=u).count() == 0:
         permit = UserPermission(entity=e, bifuser = u, permission=UserPermission.OWNER)
         permit.save()
+        logInfo("set owner of {ID:%d} to user {ID:%d}" % (e.id, u.id))
+    else:
+        logInfo("tried to set owner of {ID:%d} to user {ID:%d} redundantly" % (e.id, u.id))
 
 
 def confirmProposal(request,id):
@@ -85,7 +89,7 @@ def confirmProposal(request,id):
         owner = User.objects.get(username=propinfodict["contactemail"])
         setEntityOwner(prop, owner.bifuser)
     except:
-        pass
+        logInfo("exception while trying to setEntityOwner on {ID:%s}" % prop.id)
     prop.save()
     logInfo("confirmed proposal {ID:%d}" % id, request)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
