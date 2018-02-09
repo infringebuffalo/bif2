@@ -27,7 +27,8 @@ class Proposal(Entity):
     DELETED = 2
     status = IntegerField(default=WAITING, choices=((WAITING, 'waiting'),(ACCEPTED, 'accepted'),(DELETED,'deleted')))
     info = TextField()
-    festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
+    festival = ForeignKey('FestivalInfo', on_delete=SET_NULL, null=True)
+    orgContact = ForeignKey('BIFUser' on_delete=SET_NULL, null=True)
     class Meta:
         permissions = (("can_schedule", "Schedule shows"),)
 
@@ -80,6 +81,12 @@ class UserPermission(Model):
     bifuser = ForeignKey('BIFUser', on_delete=CASCADE, related_name='permit_what')
     permission = IntegerField(default=NONE, choices=((NONE, 'none'), (VIEW, 'view'), (EDIT, 'edit'), (OWNER, 'owner'), (CONTACT, 'festival contact'), (SCHEDULE, 'can schedule')))
 
+
+class FormInfo(Entity):
+    showType = CharField(maxlength=256)
+    description = TextField()
+    organizerContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
+    defaultBatch = ForeignKey('Batch', on_delete=SET_NULL, null=True)
 
 
 from django.db.models.signals import post_init
