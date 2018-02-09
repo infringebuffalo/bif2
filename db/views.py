@@ -127,8 +127,9 @@ def createAccount(request):
     from django.db.utils import IntegrityError
     email = request.POST['email']
     password = request.POST['password']
+    name = request.POST['name']
     try:
-        djuser = User.objects.create_user(email, email, password)
+        djuser = User.objects.create_user(email, email, password, first_name=name)
     except IntegrityError:
         logError("Tried to create duplicate account '%s'"%email, request)
         err = "An account '%s' already exists" % email
@@ -137,9 +138,19 @@ def createAccount(request):
         logError("Unknown error creating account '%s'"%email, request)
         return render(request, 'db/new_account.html', { 'error': 'Failed to create account.' })
     bifuser = BIFUser.objects.create(user=djuser, phone='555-1212')
+    claimProposals(bifuser)
     login(request, authenticate(username=email,password=password))
     logInfo("Created new account '%s'"%email, request)
     return redirect('index')
+
+
+def claimProposals(bifuser):
+    email = bifuser.user.email.casefold()
+    props = Proposal.objects.filter(info__icontains=email)
+    for p in props:
+        infodict = json.loads(p.info)
+        if ('contactemail' in infodict.keys()) and (infodict['contactemail'].casefold() == email) and (not p.permit_who.filter(permission=UserPermission.OWNER)):
+            setEntityOwner(p, bifuser)
 
 
 def newBatch(request):
