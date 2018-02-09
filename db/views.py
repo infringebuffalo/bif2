@@ -164,6 +164,8 @@ def entity(request,id):
         return proposal(request,id)
     elif e.entityType == 'batch':
         return batch(request,id)
+    else:
+        return render(request, 'db/entity_error.html', { 'type': e.entityType })
 
 
 @login_required
