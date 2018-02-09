@@ -28,7 +28,7 @@ class Proposal(Entity):
     status = IntegerField(default=WAITING, choices=((WAITING, 'waiting'),(ACCEPTED, 'accepted'),(DELETED,'deleted')))
     info = TextField()
     festival = ForeignKey('FestivalInfo', on_delete=SET_NULL, null=True)
-    orgContact = ForeignKey('BIFUser' on_delete=SET_NULL, null=True)
+    orgContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
     class Meta:
         permissions = (("can_schedule", "Schedule shows"),)
 
@@ -83,7 +83,7 @@ class UserPermission(Model):
 
 
 class FormInfo(Entity):
-    showType = CharField(maxlength=256)
+    showType = CharField(max_length=256)
     description = TextField()
     organizerContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
     defaultBatch = ForeignKey('Batch', on_delete=SET_NULL, null=True)
