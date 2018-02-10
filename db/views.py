@@ -32,6 +32,7 @@ def submit(request):
     for k in ['title','csrfmiddlewaretoken']:
         if k in infodict.keys():
             del infodict[k]
+    infodict["contactemail"] = infodict["contactemail"].strip()
 
     defaultContact = None
     defaultBatch = None
@@ -129,7 +130,7 @@ from django.contrib.auth.models import User
 
 def createAccount(request):
     from django.db.utils import IntegrityError
-    email = request.POST['email']
+    email = request.POST['email'].strip()
     password = request.POST['password']
     name = request.POST['name']
     try:
