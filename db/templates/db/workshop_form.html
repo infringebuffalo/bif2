@@ -1,0 +1,296 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Buffalo Infringement Festival Workshop Proposal{% endblock %}
+
+{% block style %}
+<style>
+.avail td { padding: 10px }
+.avail tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey td { padding-top: 6px; padding-bottom: 6px }
+</style>
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+function validateForm()
+{
+var f = document.forms["proposalform"];
+var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short" ];
+var okay = true;
+for (i=0; i < fields.length; i++)
+    if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
+        okay = false;
+if (!okay)
+    {
+    alert("All fields marked with * must be filled out before this proposal can be submitted");
+    return false;
+    }
+else
+    return true;
+}
+
+function hoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeIn()
+  }
+
+function unhoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeOut()
+  }
+
+function readyFunc()
+  {
+  $(".questionmark").hover(hoverFunc,unhoverFunc)
+  $(".questionmark").parent().find(".helptext").fadeOut()
+  }
+$(document).ready(readyFunc)
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<h1>{{ prop }}</h1>
+<h2>Workshop proposal </h2>
+
+<div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
+
+<form method="POST" action="{% url 'submit' %}" name="proposalform" onsubmit="return validateForm()">
+{% csrf_token %}
+
+<input type="hidden" name="type" value="workshop" />
+
+<div class="contact">
+<h3>Contact info</h3>
+<table id="contactinputs">
+<tr>
+<th width='25%'>* Proposer / primary contact</th>
+<td><input type='text' name='contactname' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>* E-mail</th>
+<td><input type='text' name='contactemail' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>* Phone (including area code)</th>
+<td><input type='text' name='contactphone' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>* Zip code</th>
+<td><input type='text' name='contactaddress' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Social media address(es)</th>
+<td><input type='text' name='contactfacebook' size='60' placeholder='facebook / instagram / twitter'/></td>
+</tr>
+<tr>
+<th width='25%'>Best method to contact you</th>
+<td><select name='bestcontactmethod'>
+<option value='phone'>phone</option>
+<option value='email'>email</option>
+<option value='facebook'>facebook</option>
+</select></td>
+</tr>
+</table>
+<br>
+<table>
+<tr>
+<th width='25%'>Secondary contact name</th>
+<td><input type='text' name='secondcontactname' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>E-mail</th>
+<td><input type='text' name='secondcontactemail' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Phone (including area code)</th>
+<td><input type='text' name='secondcontactphone' size='60' placeholder=''/></td>
+</tr>
+</table>
+
+<div class='projectForm'>
+<h3>Project</h3>
+<table class='alternategrey'>
+<tr>
+<th width='25%'>* Title</th>
+<td><input type='text' name='title' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Organization</th>
+<td><input type='text' name='organization' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Website (not Facebook)</th>
+<td><input type='text' name='website' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Social media address(es)</th>
+<td><input type='text' name='facebook' size='60' placeholder='facebook / instagram / twitter'/></td>
+</tr>
+<tr>
+<th width='25%'>Web link to best example of what you plan to do</th>
+<td><input type='text' name='work_samples_website' size='60' placeholder='a good link will answer most of our questions, to program you effectively'/></td>
+</tr>
+<tr>
+<th width='25%'>* Short description (140 chars)</th>
+<td><textarea name='description_short' rows='2' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Long description (for website &amp; press releases)</th>
+<td><textarea name='description_long' rows='6' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>How many people will be teaching/running the workshop? (#)</th>
+<td><input type='text' name='numberperformers' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Who are they and what are their roles?</th>
+<td><textarea name='membersinfo' rows='6' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Are you based within 60 miles of Buffalo area? Will you need help with housing?</th>
+<td><input type='text' name='out_of_town' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Are any of your group members in other proposals? Explain.</th>
+<td><textarea name='proposaloverlap' rows='2' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Is everyone in proposal over 21?</th>
+<td><select name='over21'><option value='Y' selected>Yes</option><option value='N'>No</option></select></td>
+</tr>
+<tr>
+<th width='25%'>Would you like to be scheduled outdoors (sidewalks, porches, yards, parking lots, etc)?</th>
+<td><select name='outdoorperformaces'><option value='Y' selected>Yes</option><option value='N'>No</option></select></td>
+</tr>
+<tr>
+<th width='25%'>Where do prefer to be scheduled?</th>
+<td><select name='street_preferred'>
+<option value='all indoor'>all indoor</option>
+<option value='mostly indoor'>mostly indoor</option>
+<option value='either indoor or outdoor'>either indoor or outdoor</option>
+<option value='mostly outdoor'>mostly outdoor</option>
+<option value='all outdoor'>all outdoor</option>
+</select></td>
+</tr>
+<tr>
+<th width='25%'>Desired number of workshops</th>
+<td><select name='numberperformances'>
+<option value='1'>1</option>
+<option value='2'>2</option>
+<option value='3'>3</option>
+<option value='4'>4</option>
+<option value='5'>5</option>
+</select></td>
+</tr>
+<tr>
+<th width='25%'>Length of workshop: (in minutes)</th>
+<td><input type='text' name='showlength' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Setup time (in minutes)</th>
+<td><input type='text' name='setuptime' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Teardown time (in minutes)</th>
+<td><input type='text' name='teardowntime' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Do you have a prearranged venue?</th>
+<td><input type='text' name='prearrangedvenue' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Do you have an ideal venue in mind?</th>
+<td><input type='text' name='idealvenue' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Is the workshop kid-friendly, or does it have age-sensitive content, or neither?</th>
+<td><input type='text' name='agesensitive' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Proposal secondary categories, if any:</th>
+<td><input type='text' name='secondary_category' size='60' placeholder='theatre, dance, visual art, literary, music, film/video'/></td>
+</tr>
+<tr>
+<th width='25%'>Are you interested in collaborating (performing in combination with another proposal of the same or different category)?</th>
+<td><select name='collaboration'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>
+</tr>
+<tr>
+<th width='25%'>If yes, describe the kinds of proposals that might work, and any other info to guide us.</th>
+<td><textarea name='collaboration_details' rows='4' cols='60' placeholder=''></textarea></td>
+</tr>
+</table></div>
+<div class="projectForm">
+<h3>Availability  (click all boxes that apply for each day.)</h3>
+<table class="avail">
+{% for d in daylist %}
+<tr>
+<th>{{ d }}</th>
+{% for name,text in timelist %}
+<td>
+<input type="hidden" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="no">
+<input type="checkbox" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="yes">
+<label for="available_day{{forloop.parentloop.counter}}_{{name}}">{{text}}</label>
+</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+</div>
+
+<div class='projectForm'>
+<h3>Workshop specifics</h3>
+<table class='alternategrey'>
+
+<tr>
+<th width='25%'>Outline of workshop schedule (list of activities and how long each will take)</th>
+<td><textarea name='workshop_schedule' rows='4' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Your equipment details (what equipment you bring, plus any unusual or unusually large setups)</th>
+<td><textarea name='equipment_detail' rows='4' cols='60' placeholder=''></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Do you require audio amplification or playback (Y/N)? If so, please give details.</th>
+<td><input type='text' name='audio' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Do you require a projector/screen?</th>
+<td><input type='text' name='projector' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Do you require chairs for the audience?</th>
+<td><input type='text' name='chairs' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Will you need internet access?</th>
+<td><input type='text' name='internet' size='60' placeholder=''/></td>
+</tr>
+</table></div>
+<div class='projectForm'>
+<h3>Final details</h3>
+<table class='alternategrey'>
+
+<tr>
+<th width='25%'>In what ways are you willing to volunteer?</th>
+<td><textarea name='volunteer' rows='2' cols='60' placeholder='equipment gopher, tech (audio/video/stage/etc), PR distribution, videography/photography, other'></textarea></td>
+</tr>
+<tr>
+<th width='25%'>Anything else we need to know?</th>
+<td><input type='text' name='anythingelse' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Any questions?</th>
+<td><input type='text' name='questions' size='60' placeholder=''/></td>
+</tr>
+</table></div>
+<input type="Submit" name="submit" value="Submit" />
+</p>
+</form>
+
+{% endblock %}
