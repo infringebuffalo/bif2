@@ -2,7 +2,7 @@
 
 from formtools import *
 
-startPage("Workshop","workshop")
+startPage("Education/Workshop","workshop")
 textInput("Title", "title")
 textInput("Organization", "organization")
 textInput("Website (not Facebook)", "website")
@@ -25,15 +25,15 @@ textInput("Do you have a prearranged venue?", "prearrangedvenue")
 textInput("Do you have an ideal venue in mind?", "idealvenue")
 textInput("Is the workshop kid-friendly, or does it have age-sensitive content, or neither?", "agesensitive")
 textInput("Proposal secondary categories, if any:", "secondary_category", placeholder="theatre, dance, visual art, literary, music, film/video")
-yesnoInput("Are you interested in collaborating (performing in combination with another proposal of the same or different category)?", "collaboration", default='n')
-textarea("If yes, describe the kinds of proposals that might work, and any other info to guide us.", "collaboration_details")
 print("</table></div>")
 
 availabilitySection()
 
 print("<div class='projectForm'>\n<h3>Workshop specifics</h3>\n<table class='alternategrey'>\n")
 textarea("Outline of workshop schedule (list of activities and how long each will take)", "workshop_schedule")
-textarea("Your equipment details (what equipment you bring, plus any unusual or unusually large setups)", "equipment_detail")
+textInput("What is the maximum number of participants you can have?", "maxparticipants")
+textInput("Will you be charging an admission fee? How much? (Infringement requires that admission fees be no more than $10)", "admission")
+textarea("What equipment will you be bringing? (include details on any unusual or unusually large setups)", "equipment_detail")
 textInput("Do you require audio amplification or playback (Y/N)? If so, please give details.", "audio")
 textInput("Do you require a projector/screen?", "projector")
 textInput("Do you require chairs for the audience?", "chairs")

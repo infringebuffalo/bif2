@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Buffalo Infringement Festival Workshop Proposal{% endblock %}
+{% block title %}Buffalo Infringement Festival Education/Workshop Proposal{% endblock %}
 
 {% block style %}
 <style>
@@ -56,7 +56,7 @@ $(document).ready(readyFunc)
 {% load static %}
 
 <h1>{{ prop }}</h1>
-<h2>Workshop proposal </h2>
+<h2>Education/Workshop proposal </h2>
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
@@ -216,14 +216,6 @@ $(document).ready(readyFunc)
 <th width='25%'>Proposal secondary categories, if any:</th>
 <td><input type='text' name='secondary_category' size='60' placeholder='theatre, dance, visual art, literary, music, film/video'/></td>
 </tr>
-<tr>
-<th width='25%'>Are you interested in collaborating (performing in combination with another proposal of the same or different category)?</th>
-<td><select name='collaboration'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>
-</tr>
-<tr>
-<th width='25%'>If yes, describe the kinds of proposals that might work, and any other info to guide us.</th>
-<td><textarea name='collaboration_details' rows='4' cols='60' placeholder=''></textarea></td>
-</tr>
 </table></div>
 <div class="projectForm">
 <h3>Availability  (click all boxes that apply for each day.)</h3>
@@ -252,7 +244,15 @@ $(document).ready(readyFunc)
 <td><textarea name='workshop_schedule' rows='4' cols='60' placeholder=''></textarea></td>
 </tr>
 <tr>
-<th width='25%'>Your equipment details (what equipment you bring, plus any unusual or unusually large setups)</th>
+<th width='25%'>What is the maximum number of participants you can have?</th>
+<td><input type='text' name='maxparticipants' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>Will you be charging an admission fee? How much? (Infringement requires that admission fees be no more than $10)</th>
+<td><input type='text' name='admission' size='60' placeholder=''/></td>
+</tr>
+<tr>
+<th width='25%'>What equipment will you be bringing? (include details on any unusual or unusually large setups)</th>
 <td><textarea name='equipment_detail' rows='4' cols='60' placeholder=''></textarea></td>
 </tr>
 <tr>

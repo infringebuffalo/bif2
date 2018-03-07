@@ -18,6 +18,7 @@ urlpatterns = [
     path('danceForm/', views.danceForm, name='danceForm'),
     path('literaryForm/', views.literaryForm, name='literaryForm'),
     path('filmForm/', views.filmForm, name='filmForm'),
+    path('workshopForm/', views.workshopForm, name='workshopForm'),
     path('confirm/<int:id>/', views.confirmProposal, name='confirmProposal'),
     path('addtobatch/<int:batchid>/<int:memberid>/', views.addToBatch, name='addToBatch'),
     path('addtobatch/', views.addToBatchForm, name='addToBatch'),

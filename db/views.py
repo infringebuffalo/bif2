@@ -121,6 +121,9 @@ def literaryForm(request):
 def filmForm(request):
     return proposalForm(request, 'db/film_form.html')
 
+def workshopForm(request):
+    return proposalForm(request, 'db/workshop_form.html')
+
 
 def newAccount(request):
     return render(request,'db/new_account.html', {})
