@@ -13,3 +13,5 @@ tmp/
 *.tar
 *.tgz
 .htaccess
+
+*.DS_Store

@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Buffalo Infringement Festival Home{% endblock %}
+
+{% block content %}
+
+<!-- {% load static %} -->
+
+<div class="col-md-12">  
+
+  <div class="row contact">
+    <h1>General Contacts</h1>
+    <p><ul>
+      <li><a href="mailto:info@infringebuffalo.org">General Inquiries</a></li>
+      <li><a href="mailto:pr@infringebuffalo.org">PR + Publicity Inquiries</a></li>
+    </ul></p>  
+  </div>
+
+  <div class="row contact">
+    <h1>Organizers</h1>
+    <p>Contact individual organizers. Performers, these are your direct contacts based on what you are proposing. You can always contact General Inquiries, above, if you are unsure of who to ask.</p>
+    <p><ul>
+      {% for o in orgs %} 
+        <li>
+        {% if o.email %}
+          {{o.name}} - {{o.role}} - <a href="mailto:{{o.email}}">send email</a>
+        {% else %}
+          {{o.name}} - {{o.role}}
+        {% endif %}
+        </li>
+      {% endfor %}
+    </ul></p>
+  </div>
+
+</div>
+
+{% endblock %}

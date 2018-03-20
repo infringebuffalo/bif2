@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Buffalo Infringement Festival Frequently Asked Questions{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+  	<div class="row faq">
+      <div class="col-md-12">
+  		  <p>We try to answer a whole slew of festival-related questions here for your amusement.</p>
+      </div>
+  	</div>
+    {% for title, qna_list in qnas.items %}
+    <div class="row faq">
+      <div class="col-md-12">
+        <h2>{{ title }}</h2>
+        {% for pair in qna_list %}
+        <p class="question">{{ pair.0 }}</p>
+        <p class="answer">{{ pair.1 }}</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </article>
+</div>
+
+{% endblock %}
