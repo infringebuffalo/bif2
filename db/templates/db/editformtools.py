@@ -66,8 +66,7 @@ $(document).ready(readyFunc)
 
 {%% load static %%}
 
-<h1>{{ prop }}</h1>
-<h2>%s proposal </h2>
+<h2>Editing %s proposal </h2>
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 

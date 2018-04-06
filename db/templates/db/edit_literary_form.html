@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Buffalo Infringement Festival Music Proposal{% endblock %}
+{% block title %}Buffalo Infringement Festival Literary Proposal{% endblock %}
 
 {% block style %}
 <style>
@@ -17,7 +17,7 @@
 function validateForm()
 {
 var f = document.forms["proposalform"];
-var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short", "organization", "work_samples_website", "numberperformers", "membersinfo", "out_of_town", "proposaloverlap", "agesensitive" ];
+var fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short" ];
 var okay = true;
 for (i=0; i < fields.length; i++)
     if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
@@ -55,7 +55,7 @@ $(document).ready(readyFunc)
 
 {% load static %}
 
-<h2>Editing Music proposal </h2>
+<h2>Editing Literary proposal </h2>
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
@@ -116,11 +116,11 @@ $(document).ready(readyFunc)
 <h3>Project</h3>
 <table class='alternategrey'>
 <tr>
-<th width='25%'>* Band name / title</th>
+<th width='25%'>* Performance title</th>
 <td><input type='text' name='title' size='60' placeholder='' value='{{ prop_info.title }}'/></td>
 </tr>
 <tr>
-<th width='25%'>* Affiliations? Part of a collective? if so what group...</th>
+<th width='25%'>Organization affiliations</th>
 <td><input type='text' name='organization' size='60' placeholder='' value='{{ prop_info.organization }}'/></td>
 </tr>
 <tr>
@@ -132,35 +132,35 @@ $(document).ready(readyFunc)
 <td><input type='text' name='facebook' size='60' placeholder='facebook / instagram / twitter' value='{{ prop_info.facebook }}'/></td>
 </tr>
 <tr>
-<th width='25%'>* Web link to best example of what you plan to do</th>
+<th width='25%'>Web link to best example of what you plan to do</th>
 <td><input type='text' name='work_samples_website' size='60' placeholder='a good link will answer most of our questions, to program you effectively' value='{{ prop_info.work_samples_website }}'/></td>
 </tr>
 <tr>
 <th width='25%'>* Short description (140 chars)</th>
-<td><textarea name='description_short' rows='2' cols='60' placeholder='This is what people will see in the free weekly paper.  Limited to 140 characters; be succinct.'>{{ prop_info.description_short }}</textarea></td>
+<td><textarea name='description_short' rows='2' cols='60' placeholder=''>{{ prop_info.description_short }}</textarea></td>
 </tr>
 <tr>
 <th width='25%'>Long description (for website &amp; press releases)</th>
-<td><textarea name='description_long' rows='6' cols='60' placeholder='This text will be shown publicly on our website.  This is what potential audiences see in the schedule on our site.'>{{ prop_info.description_long }}</textarea></td>
+<td><textarea name='description_long' rows='6' cols='60' placeholder=''>{{ prop_info.description_long }}</textarea></td>
 </tr>
 <tr>
-<th width='25%'>* How many members in proposal? (#)</th>
+<th width='25%'>How many members in proposal? (#)</th>
 <td><input type='text' name='numberperformers' size='60' placeholder='' value='{{ prop_info.numberperformers }}'/></td>
 </tr>
 <tr>
-<th width='25%'>* Who are they and what do they do?</th>
+<th width='25%'>Who are they and what do they do?</th>
 <td><textarea name='membersinfo' rows='6' cols='60' placeholder=''>{{ prop_info.membersinfo }}</textarea></td>
 </tr>
 <tr>
-<th width='25%'>* Are you based within 60 miles of Buffalo area? Will you need help with housing?</th>
+<th width='25%'>Are you based within 60 miles of Buffalo area? Will you need help with housing?</th>
 <td><input type='text' name='out_of_town' size='60' placeholder='' value='{{ prop_info.out_of_town }}'/></td>
 </tr>
 <tr>
-<th width='25%'>* Are any of your members in other proposals? Explain.</th>
+<th width='25%'>Are any of your members in other proposals? Explain.</th>
 <td><textarea name='proposaloverlap' rows='2' cols='60' placeholder=''>{{ prop_info.proposaloverlap }}</textarea></td>
 </tr>
 <tr>
-<th width='25%'>Is everyone in the proposal over 21?</th>
+<th width='25%'>Is everyone in proposal over 21?</th>
 <td><select name='over21'><option value='Y'{% if prop_info.over21 == "Y" %} selected{% endif %}>Yes</option><option value='N'{% if prop_info.over21 != "Y" %} selected{% endif %}>No</option></select></td>
 </tr>
 <tr>
@@ -178,20 +178,14 @@ $(document).ready(readyFunc)
 </select></td>
 </tr>
 <tr>
-<th width='25%'>Are you willing to perform as part of opening or closing ceremonies? (Money collected from these two events goes to the festival.)</th>
-<td><select name='openingclosing'><option value='Y'{% if prop_info.openingclosing == "Y" %} selected{% endif %}>Yes</option><option value='N'{% if prop_info.openingclosing != "Y" %} selected{% endif %}>No</option></select></td>
-</tr>
-<tr>
 <th width='25%'>Desired number of performances</th>
 <td><select name='numberperformances'>
 <option value='1'{% if prop_info.numberperformances == "1" %} selected{% endif %}>1</option>
 <option value='2'{% if prop_info.numberperformances == "2" %} selected{% endif %}>2</option>
 <option value='3'{% if prop_info.numberperformances == "3" %} selected{% endif %}>3</option>
+<option value='4'{% if prop_info.numberperformances == "4" %} selected{% endif %}>4</option>
+<option value='5'{% if prop_info.numberperformances == "5" %} selected{% endif %}>5</option>
 </select></td>
-</tr>
-<tr>
-<th width='25%'>Are you open to having more than one performance per day?</th>
-<td><select name='morethan1perday'><option value='Y'{% if prop_info.morethan1perday == "Y" %} selected{% endif %}>Yes</option><option value='N'{% if prop_info.morethan1perday != "Y" %} selected{% endif %}>No</option></select></td>
 </tr>
 <tr>
 <th width='25%'>Length of performance: (in minutes)</th>
@@ -202,11 +196,11 @@ $(document).ready(readyFunc)
 <td><select name='showlengthflexible'><option value='Y'{% if prop_info.showlengthflexible == "Y" %} selected{% endif %}>Yes</option><option value='N'{% if prop_info.showlengthflexible != "Y" %} selected{% endif %}>No</option></select></td>
 </tr>
 <tr>
-<th width='25%'>Setup time (in minutes)</th>
+<th width='25%'>Setup time, if any (in minutes)</th>
 <td><input type='text' name='setuptime' size='60' placeholder='' value='{{ prop_info.setuptime }}'/></td>
 </tr>
 <tr>
-<th width='25%'>Teardown time (in minutes)</th>
+<th width='25%'>Teardown time, if any (in minutes)</th>
 <td><input type='text' name='teardowntime' size='60' placeholder='' value='{{ prop_info.teardowntime }}'/></td>
 </tr>
 <tr>
@@ -222,12 +216,12 @@ $(document).ready(readyFunc)
 <td><textarea name='venuerequirements' rows='4' cols='60' placeholder=''>{{ prop_info.venuerequirements }}</textarea></td>
 </tr>
 <tr>
-<th width='25%'>* Is the performance kid-friendly, or does it have age-sensitive content, or neither?</th>
+<th width='25%'>Is the performance kid-friendly, or does it have age-sensitive content, or neither?</th>
 <td><input type='text' name='agesensitive' size='60' placeholder='' value='{{ prop_info.agesensitive }}'/></td>
 </tr>
 <tr>
 <th width='25%'>Proposal secondary categories, if any:</th>
-<td><input type='text' name='secondary_category' size='60' placeholder='theatre, dance, visual art, literary, film/video, workshop' value='{{ prop_info.secondary_category }}'/></td>
+<td><input type='text' name='secondary_category' size='60' placeholder='theatre, dance, visual art, music, film/video, workshop' value='{{ prop_info.secondary_category }}'/></td>
 </tr>
 <tr>
 <th width='25%'>Are you interested in collaborating (performing in combination with another proposal of the same or different category)?</th>
@@ -541,166 +535,28 @@ $(document).ready(readyFunc)
 </tr>
 </table></div>
 <div class='projectForm'>
-<h3>Music specifics</h3>
+<h3>Literary specifics</h3>
 <table class='alternategrey'>
 
 <tr>
-<th width='25%'>Equipment detail - describe your gear</th>
+<th width='25%'>Your equipment details (what equipment you bring, plus any unusual or unusually large setups)</th>
 <td><textarea name='equipment_detail' rows='4' cols='60' placeholder=''>{{ prop_info.equipment_detail }}</textarea></td>
 </tr>
 <tr>
-<th width='25%'>Do you own your own PA?  Will you share it for a group show?</th>
-<td><input type='text' name='haspa' size='60' placeholder='' value='{{ prop_info.haspa }}'/></td>
+<th width='25%'>Do you require audio amplification or playback (Y/N)? If so, please give details.</th>
+<td><input type='text' name='audio' size='60' placeholder='' value='{{ prop_info.audio }}'/></td>
 </tr>
 <tr>
-<th width='25%'>Do you require microphones to perform (Y/N)? If so, how many? Do you own your own mics?  Share?</th>
-<td><input type='text' name='hasmics' size='60' placeholder='' value='{{ prop_info.hasmics }}'/></td>
+<th width='25%'>Do you require chairs for the audience?</th>
+<td><input type='text' name='chairs' size='60' placeholder='' value='{{ prop_info.chairs }}'/></td>
 </tr>
 <tr>
-<th width='25%'>Does your proposal involve a computer or electronic component (ipod, laptop, cd player, projector, other)?  If yes, explain.</th>
-<td><input type='text' name='electronics' size='60' placeholder='' value='{{ prop_info.electronics }}'/></td>
+<th width='25%'>Does your proposal require a projector/screen?  If yes, explain.</th>
+<td><input type='text' name='projector' size='60' placeholder='' value='{{ prop_info.projector }}'/></td>
 </tr>
 <tr>
-<th width='25%'>Do you have a drum kit?  Share?</th>
-<td><input type='text' name='hasdrum' size='60' placeholder='' value='{{ prop_info.hasdrum }}'/></td>
-</tr>
-<tr>
-<th width='25%'>Can you play acoustic, without amps and mics? Preferred?</th>
-<td><input type='text' name='acoustic' size='60' placeholder='' value='{{ prop_info.acoustic }}'/></td>
-</tr>
-<tr>
-<th width='25%'>Volume on a scale from 1-10</th>
-<td><input type='text' name='volume' size='60' placeholder='' value='{{ prop_info.volume }}'/></td>
-</tr>
-<tr>
-<th width='25%'>Primary genre</th>
-<td><select name='genre'>
-<option value='acoustic'{% if prop_info.genre == "acoustic" %} selected{% endif %}>acoustic</option>
-<option value='americana'{% if prop_info.genre == "americana" %} selected{% endif %}>americana</option>
-<option value='avant garde'{% if prop_info.genre == "avant garde" %} selected{% endif %}>avant garde</option>
-<option value='blues'{% if prop_info.genre == "blues" %} selected{% endif %}>blues</option>
-<option value='choral'{% if prop_info.genre == "choral" %} selected{% endif %}>choral</option>
-<option value='classical'{% if prop_info.genre == "classical" %} selected{% endif %}>classical</option>
-<option value='country'{% if prop_info.genre == "country" %} selected{% endif %}>country</option>
-<option value='dance'{% if prop_info.genre == "dance" %} selected{% endif %}>dance</option>
-<option value='disco'{% if prop_info.genre == "disco" %} selected{% endif %}>disco</option>
-<option value='easy listening'{% if prop_info.genre == "easy listening" %} selected{% endif %}>easy listening</option>
-<option value='EDM'{% if prop_info.genre == "EDM" %} selected{% endif %}>EDM</option>
-<option value='electronic'{% if prop_info.genre == "electronic" %} selected{% endif %}>electronic</option>
-<option value='electronic'{% if prop_info.genre == "electronic" %} selected{% endif %}>electronic</option>
-<option value='folk'{% if prop_info.genre == "folk" %} selected{% endif %}>folk</option>
-<option value='funk'{% if prop_info.genre == "funk" %} selected{% endif %}>funk</option>
-<option value='hardcore'{% if prop_info.genre == "hardcore" %} selected{% endif %}>hardcore</option>
-<option value='hip hop'{% if prop_info.genre == "hip hop" %} selected{% endif %}>hip hop</option>
-<option value='improv'{% if prop_info.genre == "improv" %} selected{% endif %}>improv</option>
-<option value='industrial'{% if prop_info.genre == "industrial" %} selected{% endif %}>industrial</option>
-<option value='inspirational - christian & gospel'{% if prop_info.genre == "inspirational - christian & gospel" %} selected{% endif %}>inspirational - christian & gospel</option>
-<option value='instrumental'{% if prop_info.genre == "instrumental" %} selected{% endif %}>instrumental</option>
-<option value='jam'{% if prop_info.genre == "jam" %} selected{% endif %}>jam</option>
-<option value='jazz'{% if prop_info.genre == "jazz" %} selected{% endif %}>jazz</option>
-<option value='latin'{% if prop_info.genre == "latin" %} selected{% endif %}>latin</option>
-<option value='lo-fi'{% if prop_info.genre == "lo-fi" %} selected{% endif %}>lo-fi</option>
-<option value='metal'{% if prop_info.genre == "metal" %} selected{% endif %}>metal</option>
-<option value='noise'{% if prop_info.genre == "noise" %} selected{% endif %}>noise</option>
-<option value='pop'{% if prop_info.genre == "pop" %} selected{% endif %}>pop</option>
-<option value='progressive'{% if prop_info.genre == "progressive" %} selected{% endif %}>progressive</option>
-<option value='punk'{% if prop_info.genre == "punk" %} selected{% endif %}>punk</option>
-<option value='rap'{% if prop_info.genre == "rap" %} selected{% endif %}>rap</option>
-<option value='reggae'{% if prop_info.genre == "reggae" %} selected{% endif %}>reggae</option>
-<option value='retro'{% if prop_info.genre == "retro" %} selected{% endif %}>retro</option>
-<option value='rock'{% if prop_info.genre == "rock" %} selected{% endif %}>rock</option>
-<option value='singer/songwriter'{% if prop_info.genre == "singer/songwriter" %} selected{% endif %}>singer/songwriter</option>
-<option value='soul'{% if prop_info.genre == "soul" %} selected{% endif %}>soul</option>
-<option value='synth'{% if prop_info.genre == "synth" %} selected{% endif %}>synth</option>
-<option value='world'{% if prop_info.genre == "world" %} selected{% endif %}>world</option>
-</select></td>
-</tr>
-<tr>
-<th width='25%'>Secondary genre</th>
-<td><select name='genre2'>
-<option value='acoustic'{% if prop_info.genre2 == "acoustic" %} selected{% endif %}>acoustic</option>
-<option value='americana'{% if prop_info.genre2 == "americana" %} selected{% endif %}>americana</option>
-<option value='avant garde'{% if prop_info.genre2 == "avant garde" %} selected{% endif %}>avant garde</option>
-<option value='blues'{% if prop_info.genre2 == "blues" %} selected{% endif %}>blues</option>
-<option value='choral'{% if prop_info.genre2 == "choral" %} selected{% endif %}>choral</option>
-<option value='classical'{% if prop_info.genre2 == "classical" %} selected{% endif %}>classical</option>
-<option value='country'{% if prop_info.genre2 == "country" %} selected{% endif %}>country</option>
-<option value='dance'{% if prop_info.genre2 == "dance" %} selected{% endif %}>dance</option>
-<option value='disco'{% if prop_info.genre2 == "disco" %} selected{% endif %}>disco</option>
-<option value='easy listening'{% if prop_info.genre2 == "easy listening" %} selected{% endif %}>easy listening</option>
-<option value='EDM'{% if prop_info.genre2 == "EDM" %} selected{% endif %}>EDM</option>
-<option value='electronic'{% if prop_info.genre2 == "electronic" %} selected{% endif %}>electronic</option>
-<option value='electronic'{% if prop_info.genre2 == "electronic" %} selected{% endif %}>electronic</option>
-<option value='folk'{% if prop_info.genre2 == "folk" %} selected{% endif %}>folk</option>
-<option value='funk'{% if prop_info.genre2 == "funk" %} selected{% endif %}>funk</option>
-<option value='hardcore'{% if prop_info.genre2 == "hardcore" %} selected{% endif %}>hardcore</option>
-<option value='hip hop'{% if prop_info.genre2 == "hip hop" %} selected{% endif %}>hip hop</option>
-<option value='improv'{% if prop_info.genre2 == "improv" %} selected{% endif %}>improv</option>
-<option value='industrial'{% if prop_info.genre2 == "industrial" %} selected{% endif %}>industrial</option>
-<option value='inspirational - christian & gospel'{% if prop_info.genre2 == "inspirational - christian & gospel" %} selected{% endif %}>inspirational - christian & gospel</option>
-<option value='instrumental'{% if prop_info.genre2 == "instrumental" %} selected{% endif %}>instrumental</option>
-<option value='jam'{% if prop_info.genre2 == "jam" %} selected{% endif %}>jam</option>
-<option value='jazz'{% if prop_info.genre2 == "jazz" %} selected{% endif %}>jazz</option>
-<option value='latin'{% if prop_info.genre2 == "latin" %} selected{% endif %}>latin</option>
-<option value='lo-fi'{% if prop_info.genre2 == "lo-fi" %} selected{% endif %}>lo-fi</option>
-<option value='metal'{% if prop_info.genre2 == "metal" %} selected{% endif %}>metal</option>
-<option value='noise'{% if prop_info.genre2 == "noise" %} selected{% endif %}>noise</option>
-<option value='pop'{% if prop_info.genre2 == "pop" %} selected{% endif %}>pop</option>
-<option value='progressive'{% if prop_info.genre2 == "progressive" %} selected{% endif %}>progressive</option>
-<option value='punk'{% if prop_info.genre2 == "punk" %} selected{% endif %}>punk</option>
-<option value='rap'{% if prop_info.genre2 == "rap" %} selected{% endif %}>rap</option>
-<option value='reggae'{% if prop_info.genre2 == "reggae" %} selected{% endif %}>reggae</option>
-<option value='retro'{% if prop_info.genre2 == "retro" %} selected{% endif %}>retro</option>
-<option value='rock'{% if prop_info.genre2 == "rock" %} selected{% endif %}>rock</option>
-<option value='singer/songwriter'{% if prop_info.genre2 == "singer/songwriter" %} selected{% endif %}>singer/songwriter</option>
-<option value='soul'{% if prop_info.genre2 == "soul" %} selected{% endif %}>soul</option>
-<option value='synth'{% if prop_info.genre2 == "synth" %} selected{% endif %}>synth</option>
-<option value='world'{% if prop_info.genre2 == "world" %} selected{% endif %}>world</option>
-</select></td>
-</tr>
-<tr>
-<th width='25%'>Tertiary genre</th>
-<td><select name='genre3'>
-<option value='acoustic'{% if prop_info.genre3 == "acoustic" %} selected{% endif %}>acoustic</option>
-<option value='americana'{% if prop_info.genre3 == "americana" %} selected{% endif %}>americana</option>
-<option value='avant garde'{% if prop_info.genre3 == "avant garde" %} selected{% endif %}>avant garde</option>
-<option value='blues'{% if prop_info.genre3 == "blues" %} selected{% endif %}>blues</option>
-<option value='choral'{% if prop_info.genre3 == "choral" %} selected{% endif %}>choral</option>
-<option value='classical'{% if prop_info.genre3 == "classical" %} selected{% endif %}>classical</option>
-<option value='country'{% if prop_info.genre3 == "country" %} selected{% endif %}>country</option>
-<option value='dance'{% if prop_info.genre3 == "dance" %} selected{% endif %}>dance</option>
-<option value='disco'{% if prop_info.genre3 == "disco" %} selected{% endif %}>disco</option>
-<option value='easy listening'{% if prop_info.genre3 == "easy listening" %} selected{% endif %}>easy listening</option>
-<option value='EDM'{% if prop_info.genre3 == "EDM" %} selected{% endif %}>EDM</option>
-<option value='electronic'{% if prop_info.genre3 == "electronic" %} selected{% endif %}>electronic</option>
-<option value='electronic'{% if prop_info.genre3 == "electronic" %} selected{% endif %}>electronic</option>
-<option value='folk'{% if prop_info.genre3 == "folk" %} selected{% endif %}>folk</option>
-<option value='funk'{% if prop_info.genre3 == "funk" %} selected{% endif %}>funk</option>
-<option value='hardcore'{% if prop_info.genre3 == "hardcore" %} selected{% endif %}>hardcore</option>
-<option value='hip hop'{% if prop_info.genre3 == "hip hop" %} selected{% endif %}>hip hop</option>
-<option value='improv'{% if prop_info.genre3 == "improv" %} selected{% endif %}>improv</option>
-<option value='industrial'{% if prop_info.genre3 == "industrial" %} selected{% endif %}>industrial</option>
-<option value='inspirational - christian & gospel'{% if prop_info.genre3 == "inspirational - christian & gospel" %} selected{% endif %}>inspirational - christian & gospel</option>
-<option value='instrumental'{% if prop_info.genre3 == "instrumental" %} selected{% endif %}>instrumental</option>
-<option value='jam'{% if prop_info.genre3 == "jam" %} selected{% endif %}>jam</option>
-<option value='jazz'{% if prop_info.genre3 == "jazz" %} selected{% endif %}>jazz</option>
-<option value='latin'{% if prop_info.genre3 == "latin" %} selected{% endif %}>latin</option>
-<option value='lo-fi'{% if prop_info.genre3 == "lo-fi" %} selected{% endif %}>lo-fi</option>
-<option value='metal'{% if prop_info.genre3 == "metal" %} selected{% endif %}>metal</option>
-<option value='noise'{% if prop_info.genre3 == "noise" %} selected{% endif %}>noise</option>
-<option value='pop'{% if prop_info.genre3 == "pop" %} selected{% endif %}>pop</option>
-<option value='progressive'{% if prop_info.genre3 == "progressive" %} selected{% endif %}>progressive</option>
-<option value='punk'{% if prop_info.genre3 == "punk" %} selected{% endif %}>punk</option>
-<option value='rap'{% if prop_info.genre3 == "rap" %} selected{% endif %}>rap</option>
-<option value='reggae'{% if prop_info.genre3 == "reggae" %} selected{% endif %}>reggae</option>
-<option value='retro'{% if prop_info.genre3 == "retro" %} selected{% endif %}>retro</option>
-<option value='rock'{% if prop_info.genre3 == "rock" %} selected{% endif %}>rock</option>
-<option value='singer/songwriter'{% if prop_info.genre3 == "singer/songwriter" %} selected{% endif %}>singer/songwriter</option>
-<option value='soul'{% if prop_info.genre3 == "soul" %} selected{% endif %}>soul</option>
-<option value='synth'{% if prop_info.genre3 == "synth" %} selected{% endif %}>synth</option>
-<option value='world'{% if prop_info.genre3 == "world" %} selected{% endif %}>world</option>
-<option value='other'{% if prop_info.genre3 == "other" %} selected{% endif %}>other</option>
-</select></td>
+<th width='25%'>Does your proposal require AC power?</th>
+<td><input type='text' name='acpower' size='60' placeholder='' value='{{ prop_info.acpower }}'/></td>
 </tr>
 </table></div>
 <div class='projectForm'>

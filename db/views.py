@@ -125,19 +125,21 @@ def workshopForm(request):
     return proposalForm(request, 'db/workshop_form.html')
 
 
-def editProposal(request, template, id):
+@login_required
+def editProposal(request, id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
     infodict['title'] = prop.title
+# Early test proposals are missing the "type" info; possibly some early actual submissions too - need to check on this
+# For now, just pretending that if it's missing, it's a music proposal
+    if 'type' in infodict.keys():
+        template = "db/edit_%s_form.html" % infodict['type']
+    else:
+        template = "db/edit_music_form.html"
     days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
     return render(request, template, context)
-
-
-@login_required
-def editMusicProposal(request,id):
-    return editProposal(request, 'db/edit_music_form.html', id)
 
 
 @login_required
