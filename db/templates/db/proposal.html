@@ -7,12 +7,15 @@
 <h1>{{ prop.title }}</h1>
 <p>Status: {% if prop.status == 0 %} waiting for confirmation {% elif prop.status == 1 %} accepted {% else %} deleted {% endif %}</p>
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
+<p><a href="{% url 'editProposal' id=prop.id %}">Edit proposal</a></p>
+{% if perms.db.can_schedule %}
 {% if inbatches %}
 <p> in batches:
 {% for b in inbatches %}
 <a href="{% url 'entity' b.id %}">{{ b.name }}</a> 
 {% endfor %}
 </p>
+{% endif %}
 {% endif %}
 {% if batches %}
 <form method="POST" action="{% url 'addToBatch' %}" name="addform">

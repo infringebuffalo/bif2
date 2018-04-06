@@ -29,7 +29,7 @@ def batches(request):
 def submit(request):
     infodict = {}
     infodict = request.POST.copy()
-    for k in ['title','csrfmiddlewaretoken']:
+    for k in ['title','csrfmiddlewaretoken','submit']:
         if k in infodict.keys():
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()
@@ -130,12 +130,7 @@ def editProposal(request, id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
     infodict['title'] = prop.title
-# Early test proposals are missing the "type" info; possibly some early actual submissions too - need to check on this
-# For now, just pretending that if it's missing, it's a music proposal
-    if 'type' in infodict.keys():
-        template = "db/edit_%s_form.html" % infodict['type']
-    else:
-        template = "db/edit_music_form.html"
+    template = "db/edit_%s_form.html" % infodict['type']
     days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
@@ -148,7 +143,7 @@ def update(request):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = {}
     infodict = request.POST.copy()
-    for k in ['title','csrfmiddlewaretoken']:
+    for k in ['title','csrfmiddlewaretoken','submit','prop_id']:
         if k in infodict.keys():
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()

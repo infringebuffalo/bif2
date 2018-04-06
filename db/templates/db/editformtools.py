@@ -74,10 +74,11 @@ $(document).ready(readyFunc)
 {%% csrf_token %%}
 
 <input type="hidden" name="prop_id" value="{{ prop_id }}" />
+<input type="hidden" name="type" value="%s" />
 
 <div class="contact">
 <h3>Contact info</h3>
-<table id="contactinputs">""" % (formtitle, requiredfields_str, formtitle))
+<table id="contactinputs">""" % (formtitle, requiredfields_str, formtitle, formtype))
     textInput("Proposer / primary contact", "contactname")
     textInput("E-mail", "contactemail")
     textInput("Phone (including area code)", "contactphone")
