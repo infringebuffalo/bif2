@@ -125,6 +125,38 @@ def workshopForm(request):
     return proposalForm(request, 'db/workshop_form.html')
 
 
+def editProposal(request, template, id):
+    prop = get_object_or_404(Proposal, pk=id)
+    infodict = json.loads(prop.info)
+    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+    times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
+    context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
+    return render(request, template, context)
+
+
+@login_required
+def editMusicProposal(request,id):
+    return editProposal(request, 'db/edit_music_form.html', id)
+
+
+@login_required
+def update(request):
+    id = int(request.POST["prop_id"])
+    prop = get_object_or_404(Proposal, pk=id)
+    infodict = {}
+    infodict = request.POST.copy()
+    for k in ['title','csrfmiddlewaretoken']:
+        if k in infodict.keys():
+            del infodict[k]
+    infodict["contactemail"] = infodict["contactemail"].strip()
+    infojson = json.dumps(infodict)
+    prop.title = request.POST["title"]
+    prop.info = infojson
+    prop.save()
+    logInfo("updated proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
+    return proposal(request,id)
+
+
 def newAccount(request):
     return render(request,'db/new_account.html', {})
 

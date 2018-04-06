@@ -1,0 +1,44 @@
+{% extends "base_generic.html" %}
+
+{% block scripts %}
+<script type="text/javascript">
+function validateForm()
+{
+var f = document.forms["forminfoform"];
+var fields = ["showtype", "description", "defaultcontact" ];
+var okay = true;
+for (i=0; i < fields.length; i++)
+    if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
+        okay = false;
+if (!okay)
+    {
+    alert("All fields must be filled out");
+    return false;
+    }
+else
+    return true;
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Create/change form info </h1>
+
+{% if error %}
+<p style="color:red">{{ error }}</p>
+{% endif %}
+
+<form method="POST" action="{% url 'createForminfo' %}" name="forminfoform" onsubmit="return validateForm()">
+{% csrf_token %}
+
+<table cellpadding=3>
+  <tr><th>Form name (show type):</th><td> <input type="text" name="showtype" size="20" value="" /> </td></tr>
+  <tr><th>Description:</th><td> <input type="text" name="description" size="60" value="" /> </td></tr>
+  <tr><th>Default contact (organizer e-mail):</th><td> <input type="text" name="defaultcontact" size="60" value="" /> </td></tr>
+  <tr><th>Default batch:</th><td> <input type="text" name="defaultbatch" size="60" value="" /> </td></tr>
+</table>
+
+<input type="Submit" name="submit" value="Create" />
+</p>
+</form>
+{% endblock %}

@@ -22,6 +22,8 @@ urlpatterns = [
     path('confirm/<int:id>/', views.confirmProposal, name='confirmProposal'),
     path('addtobatch/<int:batchid>/<int:memberid>/', views.addToBatch, name='addToBatch'),
     path('addtobatch/', views.addToBatchForm, name='addToBatch'),
+    path('editMusic/<int:id>/', views.editMusicProposal, name='editMusic'),
+    path('update/', views.update, name='update'),
     path('<int:id>/', views.entity, name='entity')
 ]
 
