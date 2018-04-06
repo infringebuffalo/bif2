@@ -128,6 +128,7 @@ def workshopForm(request):
 def editProposal(request, template, id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
+    infodict['title'] = prop.title
     days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
