@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+{% if venue %}
+<h1>{{ venue.name }}</h1>
+<p>Status: {% if venue.status == 0 %} waiting for confirmation {% elif venue.status == 1 %} accepted {% else %} deleted {% endif %}</p>
+<p><a href="{% url 'editVenue' venue.id %}">Edit info</a></p>
+<table>
+{% for key,value in venue_info.items %}
+<tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No venue found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}

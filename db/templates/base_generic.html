@@ -24,6 +24,7 @@
   {% if user.is_authenticated %}
   {% if perms.db.can_schedule %}
     <li><a href="{% url 'allProposals' %}">All proposals</a></li>
+    <li><a href="{% url 'allVenues' %}">All venues</a></li>
     <li><a href="{% url 'batches' %}">Batches</a></li>
   {% endif %}
     <li>&nbsp;

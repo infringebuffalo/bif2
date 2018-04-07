@@ -14,6 +14,7 @@
 </ul>
 {% endif %}
 {% if perms.db.can_schedule %}
+
 {% if prop_list %}
 <h2>all proposals</h2>
     <ul>
@@ -22,6 +23,16 @@
     {% endfor %}
     </ul>
 {% endif %}
+
+{% if venue_list %}
+<h2>all venues</h2>
+    <ul>
+    {% for v in venue_list %}
+        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a> ({{ v.status }})</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 {% endif %}
 {% else %}
 <img src="/static/bif2018_300px.jpg" align="right">
@@ -39,5 +50,12 @@
 <li><a href="/db/filmForm/">Film / Video</a>
 <li><a href="/db/workshopForm/">Education / Workshop</a>
 </ul>
+
+{% if perms.db.can_schedule %}
+<h2>Venues</h2>
+<ul>
+<li><a href="/db/venueForm/">Create a new venue</a>
+</ul>
+{% endif %}
 
 {% endblock %}

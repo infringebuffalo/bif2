@@ -1,0 +1,203 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Buffalo Infringement Festival Venue{% endblock %}
+
+{% block style %}
+<style>
+.avail td { padding: 10px }
+.avail tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey td { padding-top: 6px; padding-bottom: 6px }
+</style>
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+function validateForm()
+{
+var f = document.forms["proposalform"];
+var fields = [ "contactname", "contactemail", "name" ];
+var okay = true;
+for (i=0; i < fields.length; i++)
+    if ((f[fields[i]].value == null) || (f[fields[i]].value == ""))
+        okay = false;
+if (!okay)
+    {
+    alert("All fields marked with * must be filled out before this proposal can be submitted");
+    return false;
+    }
+else
+    return true;
+}
+
+function hoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeIn()
+  }
+
+function unhoverFunc(event)
+  {
+  $(this).parent().find(".helptext").fadeOut()
+  }
+
+function readyFunc()
+  {
+  $(".questionmark").hover(hoverFunc,unhoverFunc)
+  $(".questionmark").parent().find(".helptext").fadeOut()
+  }
+$(document).ready(readyFunc)
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<h2>Editing Venue proposal </h2>
+
+<div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
+
+<form method="POST" action="{% url 'updateVenue' %}" name="proposalform" onsubmit="return validateForm()">
+{% csrf_token %}
+
+<input type="hidden" name="venue_id" value="{{ venue_id }}" />
+<input type="hidden" name="type" value="venue" />
+
+<div class='venueForm'>
+<table class="alternategrey">
+<tr>
+<th width='25%'>* Venue name</th>
+<td><input type='text' name='name' size='60' placeholder='' value='{{ venue_info.name }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Owner</th>
+<td><input type='text' name='ownername' size='60' placeholder='' value='{{ venue_info.ownername }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Address</th>
+<td><input type='text' name='address' size='60' placeholder='' value='{{ venue_info.address }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Website</th>
+<td><input type='text' name='website' size='60' placeholder='' value='{{ venue_info.website }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Social media address(es)</th>
+<td><input type='text' name='contactfacebook' size='60' placeholder='facebook / instagram / twitter' value='{{ venue_info.contactfacebook }}'/></td>
+</tr>
+<tr>
+<th width='25%'>* Contact person</th>
+<td><input type='text' name='contactname' size='60' placeholder='' value='{{ venue_info.contactname }}'/></td>
+</tr>
+<tr>
+<th width='25%'>* Contact e-mail</th>
+<td><input type='text' name='contactemail' size='60' placeholder='' value='{{ venue_info.contactemail }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Contact phone</th>
+<td><input type='text' name='contactphone' size='60' placeholder='' value='{{ venue_info.contactphone }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Venue type</th>
+<td><input type='text' name='venuetype' size='60' placeholder='' value='{{ venue_info.venuetype }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Preferred show genres</th>
+<td><input type='text' name='preferredgenres' size='60' placeholder='theatre / music / visual art / dance / literary / film / workshop' value='{{ venue_info.preferredgenres }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Other allowed genres</th>
+<td><input type='text' name='allowedgenres' size='60' placeholder='theatre / music / visual art / dance / literary / film / workshop' value='{{ venue_info.allowedgenres }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Performance space</th>
+<td><input type='text' name='performancespace' size='60' placeholder='size & description' value='{{ venue_info.performancespace }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Wall space available?</th>
+<td><select name='wallspace'><option value='Y'{% if venue_info.wallspace == "Y" %} selected{% endif %}>Yes</option><option value='N'{% if venue_info.wallspace != "Y" %} selected{% endif %}>No</option></select></td>
+</tr>
+<tr>
+<th width='25%'>Wall size</th>
+<td><input type='text' name='wallsize' size='60' placeholder='' value='{{ venue_info.wallsize }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Window?</th>
+<td><input type='text' name='window' size='60' placeholder='' value='{{ venue_info.window }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Capacity</th>
+<td><input type='text' name='capacity' size='60' placeholder='' value='{{ venue_info.capacity }}'/></td>
+</tr>
+<tr>
+<th width='25%'>Stage?</th>
+<td><input type='text' name='stage' size='60' placeholder='' value='{{ venue_info.stage }}'/></td>
+</tr>
+</table></div>
+<div class="projectForm">
+<h3>Availability</h3>
+<table class="avail">
+
+<tr><th>July 26 (Thu)</th>
+<td>
+<input type="text" name="available_day1" value="{{ venue_info.available_day1 }}">
+</td>
+</tr>
+<tr><th>July 27 (Fri)</th>
+<td>
+<input type="text" name="available_day2" value="{{ venue_info.available_day2 }}">
+</td>
+</tr>
+<tr><th>July 28 (Sat)</th>
+<td>
+<input type="text" name="available_day3" value="{{ venue_info.available_day3 }}">
+</td>
+</tr>
+<tr><th>July 29 (Sun)</th>
+<td>
+<input type="text" name="available_day4" value="{{ venue_info.available_day4 }}">
+</td>
+</tr>
+<tr><th>July 30 (Mon)</th>
+<td>
+<input type="text" name="available_day5" value="{{ venue_info.available_day5 }}">
+</td>
+</tr>
+<tr><th>July 31 (Tue)</th>
+<td>
+<input type="text" name="available_day6" value="{{ venue_info.available_day6 }}">
+</td>
+</tr>
+<tr><th>Aug 1 (Wed)</th>
+<td>
+<input type="text" name="available_day7" value="{{ venue_info.available_day7 }}">
+</td>
+</tr>
+<tr><th>Aug 2 (Thu)</th>
+<td>
+<input type="text" name="available_day8" value="{{ venue_info.available_day8 }}">
+</td>
+</tr>
+<tr><th>Aug 3 (Fri)</th>
+<td>
+<input type="text" name="available_day9" value="{{ venue_info.available_day9 }}">
+</td>
+</tr>
+<tr><th>Aug 4 (Sat)</th>
+<td>
+<input type="text" name="available_day10" value="{{ venue_info.available_day10 }}">
+</td>
+</tr>
+<tr><th>Aug 5 (Sun)</th>
+<td>
+<input type="text" name="available_day11" value="{{ venue_info.available_day11 }}">
+</td>
+</tr>
+</table></div>
+<input type="Submit" name="submit" value="Update" />
+</p>
+</form>
+
+{% endblock %}

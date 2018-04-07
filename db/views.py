@@ -21,6 +21,11 @@ def allProposals(request):
     return render(request,'db/index.html', { 'prop_list' : props })
 
 
+def allVenues(request):
+    venues = Venue.objects.all()
+    return render(request,'db/index.html', { 'venue_list' : venues })
+
+
 def batches(request):
     batchlist = Batch.objects.all()
     return render(request,'db/batches.html', { 'batchlist' : batchlist })
@@ -124,6 +129,9 @@ def filmForm(request):
 def workshopForm(request):
     return proposalForm(request, 'db/workshop_form.html')
 
+def venueForm(request):
+    return proposalForm(request, 'db/venue_form.html')
+
 
 @login_required
 def editProposal(request, id):
@@ -191,6 +199,59 @@ def claimProposals(bifuser):
             setEntityOwner(p, bifuser)
 
 
+def createVenue(request):
+    infodict = {}
+    infodict = request.POST.copy()
+    for k in ['name','csrfmiddlewaretoken','submit']:
+        if k in infodict.keys():
+            del infodict[k]
+    infodict["contactemail"] = infodict["contactemail"].strip()
+    infojson = json.dumps(infodict)
+    ven = Venue(name=request.POST["name"], info=infojson, status=Venue.WAITING)
+    ven.save()
+    logInfo("saved venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
+    return index(request)
+
+
+@login_required
+def venue(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    infodict = json.loads(ven.info)
+    inbatches = ven.batches.all()
+    batches = Batch.objects.all()
+    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches}
+    return render(request,'db/venue.html', context)
+
+
+@login_required
+def editVenue(request, id):
+    ven = get_object_or_404(Venue, pk=id)
+    infodict = json.loads(ven.info)
+    infodict['name'] = ven.name
+    template = "db/edit_venue_form.html"
+    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+    context = {'daylist':days, 'venue_info':infodict, 'venue_id':id}
+    return render(request, template, context)
+
+
+@login_required
+def updateVenue(request):
+    id = int(request.POST["venue_id"])
+    ven = get_object_or_404(Venue, pk=id)
+    infodict = {}
+    infodict = request.POST.copy()
+    for k in ['title','csrfmiddlewaretoken','submit','venue_id']:
+        if k in infodict.keys():
+            del infodict[k]
+    infodict["contactemail"] = infodict["contactemail"].strip()
+    infojson = json.dumps(infodict)
+    ven.name = request.POST["name"]
+    ven.info = infojson
+    ven.save()
+    logInfo("updated venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
+    return venue(request,id)
+
+
 def newBatch(request):
     return render(request,'db/new_batch.html', {})
 
@@ -230,6 +291,8 @@ def entity(request,id):
         return proposal(request,id)
     elif e.entityType == 'batch':
         return batch(request,id)
+    elif e.entityType == 'venue':
+        return venue(request,id)
     else:
         return render(request, 'db/entity_error.html', { 'type': e.entityType })
 

@@ -8,6 +8,7 @@ urlpatterns = [
     path('newaccount/', views.newAccount, name='newAccount'),
     path('createaccount/', views.createAccount, name='createAccount'),
     path('allproposals/', views.allProposals, name='allProposals'),
+    path('allvenues/', views.allVenues, name='allVenues'),
     path('newbatch/', views.newBatch, name='newBatch'),
     path('createbatch/', views.createBatch, name='createBatch'),
     path('batches/', views.batches, name='batches'),
@@ -19,11 +20,15 @@ urlpatterns = [
     path('literaryForm/', views.literaryForm, name='literaryForm'),
     path('filmForm/', views.filmForm, name='filmForm'),
     path('workshopForm/', views.workshopForm, name='workshopForm'),
+    path('createVenue/', views.createVenue, name='createVenue'),
+    path('venueForm/', views.venueForm, name='venueForm'),
+    path('editVenue/<int:id>/', views.editVenue, name='editVenue'),
     path('confirm/<int:id>/', views.confirmProposal, name='confirmProposal'),
     path('addtobatch/<int:batchid>/<int:memberid>/', views.addToBatch, name='addToBatch'),
     path('addtobatch/', views.addToBatchForm, name='addToBatch'),
     path('edit/<int:id>/', views.editProposal, name='editProposal'),
     path('update/', views.update, name='update'),
+    path('updateVenue/', views.updateVenue, name='updateVenue'),
     path('<int:id>/', views.entity, name='entity')
 ]
 
