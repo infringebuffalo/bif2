@@ -95,7 +95,7 @@ def confirmProposal(request,id):
         owner = User.objects.get(username=propinfodict["contactemail"])
         setEntityOwner(prop, owner.bifuser)
     except:
-        logInfo("exception while trying to setEntityOwner on {ID:%s}" % prop.id)
+        logInfo("exception while trying to setEntityOwner on {ID:%d}" % prop.id)
     prop.save()
     logInfo("confirmed proposal {ID:%d}" % id, request)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
@@ -210,7 +210,7 @@ def createVenue(request):
     ven = Venue(name=request.POST["name"], info=infojson, status=Venue.WAITING)
     ven.save()
     logInfo("saved venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
-    return index(request)
+    return redirect('index')
 
 
 @login_required
@@ -303,7 +303,8 @@ def proposal(request,id):
     infodict = json.loads(prop.info)
     inbatches = prop.batches.all()
     batches = Batch.objects.all()
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches}
+    notes = prop.notes.all()
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes}
     return render(request,'db/proposal.html', context)
 
 
@@ -327,6 +328,28 @@ def entityName(e):
         return e.venue.name
     else:
         return "%s %d" % (e.entityType,e.id)
+
+@login_required
+def addNote(request):
+    entityid = int(request.POST['entity'])
+    notetext = request.POST['note']
+    try:
+        creator = request.user.bifuser
+    except:
+        creator = None
+    try:
+        note = Note(creator=creator, notetext=notetext)
+    except:
+        logError("Unknown error creating note '%s'"%notetext, request)
+        return redirect('index')
+    note.save()
+    e = get_object_or_404(Entity, pk=entityid)
+    note.attachedTo.add(e)
+    if creator:
+        setEntityOwner(note, creator)
+    logInfo("Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext), request)
+    return redirect('entity',id=entityid)
+    
 
 
 import logging

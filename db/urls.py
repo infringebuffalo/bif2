@@ -29,6 +29,7 @@ urlpatterns = [
     path('edit/<int:id>/', views.editProposal, name='editProposal'),
     path('update/', views.update, name='update'),
     path('updateVenue/', views.updateVenue, name='updateVenue'),
+    path('addNote/', views.addNote, name='addNote'),
     path('<int:id>/', views.entity, name='entity')
 ]
 
