@@ -332,7 +332,7 @@ def batch(request,id):
     b = get_object_or_404(Batch, pk=id)
     memberlist = []
     for e in b.members.all():
-        memberlist.append({'id':e.id,'name':entityName(e)})
+        memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
     props = Proposal.objects.all()
     context = {'batch':b, 'members':memberlist, 'proposals':props}
     return render(request,'db/batch.html', context)
@@ -347,6 +347,16 @@ def entityName(e):
         return e.venue.name
     else:
         return "%s %d" % (e.entityType,e.id)
+
+
+def entityStatus(e):
+    if e.entityType == 'proposal':
+        return e.proposal.status
+    elif e.entityType == 'venue':
+        return e.venue.status
+    else:
+        return 1
+
 
 @login_required
 def addNote(request):
