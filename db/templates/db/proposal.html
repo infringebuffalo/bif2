@@ -18,6 +18,13 @@
 {% if perms.db.can_schedule %}
 <div class="col-sm-4">
 
+<p>
+{% if prop.status != 2 %}
+<form method="get" action="{% url 'deleteProposal' prop.id %}"><button type="submit">delete proposal</button></form>
+{% else %}
+<form method="get" action="{% url 'undeleteProposal' prop.id %}"><button type="submit">undelete proposal</button></form>
+{% endif %}
+</p>
 {% if inbatches %}
 <p> in batches:
 {% for b in inbatches %}

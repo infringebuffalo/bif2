@@ -10,15 +10,18 @@ import json
 
 def index(request):
     if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
-        owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER)
+        owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal')
     else:
         owned = None
     return render(request,'db/index.html', { 'owned':owned })
 
 
 def allProposals(request):
-    props = Proposal.objects.all()
-    return render(request,'db/index.html', { 'prop_list' : props })
+    fest = FestivalInfo.objects.last()
+    confirmed_props = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED)
+    waiting_props = Proposal.objects.filter(festival=fest,status=Proposal.WAITING)
+    deleted_props = Proposal.objects.filter(festival=fest,status=Proposal.DELETED)
+    return render(request,'db/index.html', { 'confirmed_props' : confirmed_props, 'waiting_props' : waiting_props, 'deleted_props': deleted_props })
 
 
 def allVenues(request):
@@ -99,6 +102,22 @@ def confirmProposal(request,id):
     prop.save()
     logInfo("confirmed proposal {ID:%d}" % id, request)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
+
+
+def deleteProposal(request,id):
+    prop = get_object_or_404(Proposal, pk=id)
+    prop.status = Proposal.DELETED
+    prop.save()
+    logInfo("deleted proposal {ID:%d}" % id, request)
+    return redirect('entity',id=id)
+
+
+def undeleteProposal(request,id):
+    prop = get_object_or_404(Proposal, pk=id)
+    prop.status = Proposal.ACCEPTED   # Note that we can't tell if proposal was previously ACCEPTED or WAITING; will just have to default to this, or redesign
+    prop.save()
+    logInfo("undeleted proposal {ID:%d}" % id, request)
+    return redirect('entity',id=id)
 
 
 def proposalForm(request, template):
