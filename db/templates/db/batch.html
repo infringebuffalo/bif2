@@ -8,7 +8,7 @@
 <p>{{ batch.description }}</p>
 <table>
 {% for e in members %}
-<tr><th><a href="/db/{{ e.id }}">{{ e.name }}</td></tr>
+<tr><td><a href="/db/{{ e.id }}">{{ e.name }}</a></td></tr>
 {% endfor %}
 </table>
 {% else %}
