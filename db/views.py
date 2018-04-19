@@ -164,13 +164,16 @@ def venueForm(request):
 @login_required
 def editProposal(request, id):
     prop = get_object_or_404(Proposal, pk=id)
-    infodict = json.loads(prop.info)
-    infodict['title'] = prop.title
-    template = "db/edit_%s_form.html" % infodict['type']
-    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
-    times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
-    context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
-    return render(request, template, context)
+    if userCanEdit(request.user.bifuser, prop):
+        infodict = json.loads(prop.info)
+        infodict['title'] = prop.title
+        template = "db/edit_%s_form.html" % infodict['type']
+        days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+        times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
+        context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
+        return render(request, template, context)
+    else:
+        return render(request, 'db/no_view.html')
 
 
 @login_required
@@ -317,14 +320,37 @@ def addToBatchForm(request):
 @login_required
 def entity(request,id):
     e = get_object_or_404(Entity, pk=id)
-    if e.entityType == 'proposal':
-        return proposal(request,id)
-    elif e.entityType == 'batch':
-        return batch(request,id)
-    elif e.entityType == 'venue':
-        return venue(request,id)
+    if userCanView(request.user.bifuser, e):
+        if e.entityType == 'proposal':
+            return proposal(request,id)
+        elif e.entityType == 'batch':
+            return batch(request,id)
+        elif e.entityType == 'venue':
+            return venue(request,id)
+        else:
+            return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
-        return render(request, 'db/entity_error.html', { 'type': e.entityType })
+        return render(request, 'db/no_view.html')
+
+
+def userCanView(u, e):
+    if u.user.has_perm("db.can_schedule"):
+        return True
+    perms = e.permit_who.filter(bifuser=u)
+    for p in perms:
+        if p.permission != UserPermission.NONE:
+            return True
+    return False
+
+
+def userCanEdit(u, e):
+    if u.user.has_perm("db.can_schedule"):
+        return True
+    perms = e.permit_who.filter(bifuser=u)
+    for p in perms:
+        if p.permission in [UserPermission.OWNER, UserPermission.EDIT]:
+            return True
+    return False
 
 
 @login_required
