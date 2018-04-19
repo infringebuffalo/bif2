@@ -10,10 +10,12 @@ import json
 
 def index(request):
     if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
-        owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal')
+        owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.ACCEPTED)
+        deleted = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.DELETED)
+        waiting = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.WAITING)
     else:
         owned = None
-    return render(request,'db/index.html', { 'owned':owned })
+    return render(request,'db/index.html', { 'owned':owned, 'deleted':deleted, 'waiting':waiting })
 
 
 def allProposals(request):

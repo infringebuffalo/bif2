@@ -5,6 +5,7 @@
 
 {% if user.is_authenticated %}
   <p>Welcome, {{ user }}. Thanks for signing in.</p>
+
 {% if owned %}
 <h2>my proposals</h2>
 <ul>
@@ -13,10 +14,29 @@
 {% endfor %}
 </ul>
 {% endif %}
+
+{% if waiting %}
+<h2>my proposals that still need to be confirmed</h2>
+<ul>
+{% for p in waiting %}
+<li><a href="/db/{{ p.entity.id }}/">{% if p.entity.proposal.title == "" %}NEEDS A TITLE{% else %}{{ p.entity.proposal.title }}{% endif %}</a>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if perms.db.can_schedule %}
 
+{% if deleted %}
+<h2>my deleted proposals</h2>
+<ul>
+{% for p in deleted %}
+<li><a href="/db/{{ p.entity.id }}/">{% if p.entity.proposal.title == "" %}NEEDS A TITLE{% else %}{{ p.entity.proposal.title }}{% endif %}</a>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if confirmed_props %}
-<h2>confirmed proposals</h2>
+<h2>all confirmed proposals</h2>
     <ul>
     {% for p in confirmed_props %}
         <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
@@ -25,7 +45,7 @@
 {% endif %}
 
 {% if waiting_props %}
-<h2>proposals waiting for confirmation</h2>
+<h2>all proposals waiting for confirmation</h2>
     <ul>
     {% for p in waiting_props %}
         <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
@@ -34,7 +54,7 @@
 {% endif %}
 
 {% if deleted_props %}
-<h2>deleted proposals</h2>
+<h2>all deleted proposals</h2>
     <ul>
     {% for p in deleted_props %}
         <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
