@@ -15,9 +15,12 @@ def index(request):
         waiting = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.WAITING)
     else:
         owned = None
+        deleted = None
+        waiting = None
     return render(request,'db/index.html', { 'owned':owned, 'deleted':deleted, 'waiting':waiting })
 
 
+@login_required
 def allProposals(request):
     fest = FestivalInfo.objects.last()
     confirmed_props = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED)
@@ -26,11 +29,13 @@ def allProposals(request):
     return render(request,'db/index.html', { 'confirmed_props' : confirmed_props, 'waiting_props' : waiting_props, 'deleted_props': deleted_props })
 
 
+@login_required
 def allVenues(request):
     venues = Venue.objects.all()
     return render(request,'db/index.html', { 'venue_list' : venues })
 
 
+@login_required
 def batches(request):
     batchlist = Batch.objects.all()
     return render(request,'db/batches.html', { 'batchlist' : batchlist })
@@ -106,6 +111,7 @@ def confirmProposal(request,id):
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
 
 
+@login_required
 def deleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.DELETED
@@ -114,6 +120,7 @@ def deleteProposal(request,id):
     return redirect('entity',id=id)
 
 
+@login_required
 def undeleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.ACCEPTED   # Note that we can't tell if proposal was previously ACCEPTED or WAITING; will just have to default to this, or redesign
@@ -273,10 +280,12 @@ def updateVenue(request):
     return venue(request,id)
 
 
+@login_required
 def newBatch(request):
     return render(request,'db/new_batch.html', {})
 
 
+@login_required
 def createBatch(request):
     name = request.POST['name']
     description = request.POST['description']
