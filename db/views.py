@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import login,authenticate
 from django.template import loader
 from django.core.mail import EmailMultiAlternatives
@@ -111,7 +111,7 @@ def confirmProposal(request,id):
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
 
 
-@login_required
+@permission_required('db.can_schedule')
 def deleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.DELETED
@@ -120,7 +120,7 @@ def deleteProposal(request,id):
     return redirect('entity',id=id)
 
 
-@login_required
+@permission_required('db.can_schedule')
 def undeleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.ACCEPTED   # Note that we can't tell if proposal was previously ACCEPTED or WAITING; will just have to default to this, or redesign
@@ -283,12 +283,12 @@ def updateVenue(request):
     return venue(request,id)
 
 
-@login_required
+@permission_required('db.can_schedule')
 def newBatch(request):
     return render(request,'db/new_batch.html', {})
 
 
-@login_required
+@permission_required('db.can_schedule')
 def createBatch(request):
     name = request.POST['name']
     description = request.POST['description']
@@ -302,7 +302,7 @@ def createBatch(request):
     return redirect('index')
 
 
-@login_required
+@permission_required('db.can_schedule')
 def addToBatch(request,batchid,memberid):
     b = get_object_or_404(Batch, pk=batchid)
     m = get_object_or_404(Entity, pk=memberid)
@@ -310,7 +310,7 @@ def addToBatch(request,batchid,memberid):
     logInfo("Added {ID:%d} to batch {ID:%d}"%(memberid,batchid), request)
     return redirect('entity',id=batchid)
 
-@login_required
+@permission_required('db.can_schedule')
 def addToBatchForm(request):
     batchid = int(request.POST['batch'])
     memberid = int(request.POST['show'])
@@ -364,7 +364,7 @@ def proposal(request,id):
     return render(request,'db/proposal.html', context)
 
 
-@login_required
+@permission_required('db.can_schedule')
 def batch(request,id):
     b = get_object_or_404(Batch, pk=id)
     memberlist = []
@@ -395,7 +395,7 @@ def entityStatus(e):
         return 1
 
 
-@login_required
+@permission_required('db.can_schedule')
 def addNote(request):
     entityid = int(request.POST['entity'])
     notetext = request.POST['note']
