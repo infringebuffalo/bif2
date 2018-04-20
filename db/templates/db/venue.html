@@ -5,6 +5,8 @@
 
 {% if venue %}
 <h1>{{ venue.name }}</h1>
+<div class="row">
+<div class="col-sm-8">
 <p>Status: {% if venue.status == 0 %} waiting for confirmation {% elif venue.status == 1 %} accepted {% else %} deleted {% endif %}</p>
 <p><a href="{% url 'editVenue' venue.id %}">Edit info</a></p>
 <table>
@@ -12,6 +14,55 @@
 <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
 {% endfor %}
 </table>
+</div>
+
+{% if perms.db.can_schedule %}
+<div class="col-sm-4">
+<p>
+{% if venue.status != 2 %}
+<form method="get" action="{% url 'deleteVenue' venue.id %}"><button type="submit">delete venue</button></form>
+{% else %}
+<form method="get" action="{% url 'undeleteVenue' venue.id %}"><button type="submit">undelete venue</button></form>
+{% endif %}
+</p>
+{% if inbatches %}
+<p> in batches:
+{% for b in inbatches %}
+<a href="{% url 'entity' b.id %}">{{ b.name }}</a>
+{% endfor %}
+</p>
+{% endif %}
+
+{% if batches %}
+<form method="POST" action="{% url 'addToBatch' %}" name="addform">
+{% csrf_token %}
+<input type="hidden" name="show" value="{{ venue.id }}">
+<select name="batch">
+{% for b in batches %}
+<option value="{{ b.id }}">{{ b.name }}</option>
+{% endfor %}
+</select>
+<input type="submit" name="submit" value="Add to batch" />
+</form>
+{% endif %}{# end "if batches" #}
+
+<br><br>
+{% if notes %}
+{% for n in notes %}
+<div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
+{% endfor %}
+{% endif %}
+<form method="POST" action="{% url 'addNote' %}" name="addnote">
+{% csrf_token %}
+<input type="hidden" name="entity" value="{{ venue.id }}">
+<textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>
+<input type="submit" name="submit" value="Add note" />
+</form>
+
+</div>{# end div class=col-sm-4 #}
+{% endif %}{# end "if can_schedule" #}
+</div>{# end "div class=row" #}
+
 {% else %}
 <p>No venue found.  (Shouldn't this 404?)</p>
 {% endif %}

@@ -194,7 +194,7 @@ def update(request):
     prop.info = infojson
     prop.save()
     logInfo("updated proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
-    return proposal(request,id)
+    return redirect('entity',id=id)
 
 
 def newAccount(request):
@@ -285,6 +285,26 @@ def updateVenue(request):
     ven.save()
     logInfo("updated venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
     return venue(request,id)
+
+
+@permission_required('db.can_schedule')
+def deleteVenue(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    ven.status = Venue.DELETED
+    ven.save()
+    logInfo("deleted venue {ID:%d}" % id, request)
+    messages.success(request, 'Venue deleted')
+    return redirect('entity',id=id)
+
+
+@permission_required('db.can_schedule')
+def undeleteVenue(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    ven.status = Venue.ACCEPTED
+    ven.save()
+    logInfo("undeleted venue {ID:%d}" % id, request)
+    messages.success(request, 'Venue undeleted')
+    return redirect('entity',id=id)
 
 
 @permission_required('db.can_schedule')
