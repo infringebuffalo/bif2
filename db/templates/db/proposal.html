@@ -5,7 +5,7 @@
 <h1>{{ prop.title }}</h1>
 <div class="row">
 <div class="col-sm-8">
-<p>Status: {% if prop.status == 0 %} waiting for confirmation {% elif prop.status == 1 %} accepted {% else %} deleted {% endif %}</p>
+<p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
 <p><a href="{% url 'editProposal' id=prop.id %}">Edit proposal</a></p>
 <table>
@@ -19,7 +19,7 @@
 <div class="col-sm-4">
 
 <p>
-{% if prop.status != 2 %}
+{% if prop.status != prop.DELETED %}
 <form method="get" action="{% url 'deleteProposal' prop.id %}"><button type="submit">delete proposal</button></form>
 {% else %}
 <form method="get" action="{% url 'undeleteProposal' prop.id %}"><button type="submit">undelete proposal</button></form>
