@@ -254,7 +254,8 @@ def venue(request,id):
     infodict = json.loads(ven.info)
     inbatches = ven.batches.all()
     batches = Batch.objects.all()
-    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches}
+    notes = ven.notes.all()
+    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes}
     return render(request,'db/venue.html', context)
 
 
