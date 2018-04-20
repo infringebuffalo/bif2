@@ -288,6 +288,15 @@ def updateVenue(request):
 
 
 @permission_required('db.can_schedule')
+def confirmVenue(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    ven.status = Venue.ACCEPTED
+    ven.save()
+    logInfo("confirmed venue {ID:%d}" % id, request)
+    return redirect('entity',id=id)
+
+
+@permission_required('db.can_schedule')
 def deleteVenue(request,id):
     ven = get_object_or_404(Venue, pk=id)
     ven.status = Venue.DELETED

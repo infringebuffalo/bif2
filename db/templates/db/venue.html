@@ -19,6 +19,9 @@
 {% if perms.db.can_schedule %}
 <div class="col-sm-4">
 <p>
+{% if venue.status == 0 %}
+<form method="get" action="{% url 'confirmVenue' venue.id %}"><button type="submit">confirm venue</button></form>
+{% endif %}
 {% if venue.status != 2 %}
 <form method="get" action="{% url 'deleteVenue' venue.id %}"><button type="submit">delete venue</button></form>
 {% else %}
