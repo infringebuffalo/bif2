@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import login,authenticate
+from django.contrib import messages
 from django.template import loader
 from django.core.mail import EmailMultiAlternatives
 
@@ -117,6 +118,7 @@ def deleteProposal(request,id):
     prop.status = Proposal.DELETED
     prop.save()
     logInfo("deleted proposal {ID:%d}" % id, request)
+    messages.success(request, 'Proposal deleted')
     return redirect('entity',id=id)
 
 
@@ -126,6 +128,7 @@ def undeleteProposal(request,id):
     prop.status = Proposal.ACCEPTED   # Note that we can't tell if proposal was previously ACCEPTED or WAITING; will just have to default to this, or redesign
     prop.save()
     logInfo("undeleted proposal {ID:%d}" % id, request)
+    messages.success(request, 'Proposal undeleted')
     return redirect('entity',id=id)
 
 
@@ -195,7 +198,7 @@ def update(request):
 
 
 def newAccount(request):
-    return render(request,'db/new_account.html', {})
+    return render(request,'db/new_account.html')
 
 
 from django.contrib.auth.models import User
@@ -209,11 +212,12 @@ def createAccount(request):
         djuser = User.objects.create_user(email, email, password, first_name=name)
     except IntegrityError:
         logError("Tried to create duplicate account '%s'"%email, request)
-        err = "An account '%s' already exists" % email
-        return render(request, 'db/new_account.html', { 'error': err })
+        messages.error(request, "An account '%s' already exists" % email)
+        return render(request, 'db/new_account.html')
     except:
         logError("Unknown error creating account '%s'"%email, request)
-        return render(request, 'db/new_account.html', { 'error': 'Failed to create account.' })
+        messages.error(request, 'Failed to create account')
+        return render(request, 'db/new_account.html')
     bifuser = BIFUser.objects.create(user=djuser, phone='555-1212')
     claimProposals(bifuser)
     login(request, authenticate(username=email,password=password))
@@ -285,7 +289,7 @@ def updateVenue(request):
 
 @permission_required('db.can_schedule')
 def newBatch(request):
-    return render(request,'db/new_batch.html', {})
+    return render(request,'db/new_batch.html')
 
 
 @permission_required('db.can_schedule')
@@ -296,7 +300,8 @@ def createBatch(request):
         batch = Batch(name=name, description=description, festival=None)
     except:
         logError("Unknown error creating batch '%s'"%name, request)
-        return render(request, 'db/new_batch.html', { 'error': 'Failed to create batch.' })
+        messages.error(request, 'Failed to create batch')
+        return render(request, 'db/new_batch.html')
     batch.save()
     logInfo("Created new batch {ID:%d} '%s'"%(batch.id,name), request)
     return redirect('index')

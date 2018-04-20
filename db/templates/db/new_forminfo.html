@@ -24,10 +24,6 @@ else
 {% block content %}
 <h1>Create/change form info </h1>
 
-{% if error %}
-<p style="color:red">{{ error }}</p>
-{% endif %}
-
 <form method="POST" action="{% url 'createForminfo' %}" name="forminfoform" onsubmit="return validateForm()">
 {% csrf_token %}
 

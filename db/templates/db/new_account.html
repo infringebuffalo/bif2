@@ -29,10 +29,6 @@ else
 {% block content %}
 <h1>Create an account</h1>
 
-{% if error %}
-<p style="color:red">{{ error }}</p>
-{% endif %}
-
 <form method="POST" action="{% url 'createAccount' %}" name="accountform" onsubmit="return validateForm()">
 {% csrf_token %}
 
