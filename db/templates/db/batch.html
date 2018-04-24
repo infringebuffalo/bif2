@@ -6,6 +6,7 @@
 {% if batch %}
 <h1>{{ batch.name }}</h1>
 <p>{{ batch.description }}</p>
+<p><a href="{% url 'editEntity' id=batch.id %}">Edit batch</a></p>
 <table>
 {% for e in members %}
 <tr><td><a href="/db/{{ e.id }}">{{ e.name }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>

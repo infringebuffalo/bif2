@@ -353,6 +353,20 @@ def addToBatchForm(request):
 
 
 @login_required
+def editEntity(request,id):
+    e = get_object_or_404(Entity, pk=id)
+    if userCanEdit(request.user.bifuser, e):
+        if e.entityType == 'proposal':
+            return editProposal(request,id)
+        elif e.entityType == 'venue':
+            return editVenue(request,id)
+        else:
+            return render(request, 'db/entity_error.html', { 'type': e.entityType })
+    else:
+        return render(request, 'db/no_edit.html')
+
+
+@login_required
 def entity(request,id):
     e = get_object_or_404(Entity, pk=id)
     if userCanView(request.user.bifuser, e):

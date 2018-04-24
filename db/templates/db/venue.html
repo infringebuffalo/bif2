@@ -8,7 +8,7 @@
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if venue.status == venue.WAITING %} waiting for confirmation {% elif venue.status == venue.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
-<p><a href="{% url 'editVenue' venue.id %}">Edit info</a></p>
+<p><a href="{% url 'editEntity' venue.id %}">Edit info</a></p>
 <table>
 {% for key,value in venue_info.items %}
 <tr><th>{{ key }}</th><td>{{ value }}</td></tr>

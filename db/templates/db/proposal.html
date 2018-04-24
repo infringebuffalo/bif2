@@ -7,7 +7,7 @@
 <div class="col-sm-8">
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
-<p><a href="{% url 'editProposal' id=prop.id %}">Edit proposal</a></p>
+<p><a href="{% url 'editEntity' id=prop.id %}">Edit proposal</a></p>
 <table>
 {% for key,value in prop_info.items %}
 <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
