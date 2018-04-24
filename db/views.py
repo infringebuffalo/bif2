@@ -338,6 +338,17 @@ def createBatch(request):
 
 
 @permission_required('db.can_schedule')
+def batch(request,id):
+    b = get_object_or_404(Batch, pk=id)
+    memberlist = []
+    for e in b.members.all():
+        memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
+    props = Proposal.objects.all()
+    context = {'batch':b, 'members':memberlist, 'proposals':props}
+    return render(request,'db/batch.html', context)
+
+
+@permission_required('db.can_schedule')
 def addToBatch(request,batchid,memberid):
     b = get_object_or_404(Batch, pk=batchid)
     m = get_object_or_404(Entity, pk=memberid)
@@ -352,6 +363,36 @@ def addToBatchForm(request):
     return addToBatch(request,batchid,memberid)
 
 
+@permission_required('db.can_schedule')
+def removeFromBatch(request,batchid,memberid):
+    b = get_object_or_404(Batch, pk=batchid)
+    m = get_object_or_404(Entity, pk=memberid)
+    b.members.remove(m)
+    logInfo("Removed {ID:%d} from batch {ID:%d}"%(memberid,batchid), request)
+    return redirect('editEntity',id=batchid)
+
+
+@login_required
+def editBatch(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    memberlist = []
+    for e in b.members.all():
+        memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
+    props = Proposal.objects.all()
+    context = {'batch':b, 'members':memberlist, 'proposals':props}
+    return render(request,'db/edit_batch.html', context)
+
+@login_required
+def updateBatch(request):
+    id = int(request.POST["batch_id"])
+    b = get_object_or_404(Batch, pk=id)
+    b.name = request.POST['name']
+    b.description = request.POST['description']
+    b.save()
+    logInfo("updated batch {ID:%d} ('%s')" % (b.id,b.name), request)
+    return redirect('entity',id=id)
+
+
 @login_required
 def editEntity(request,id):
     e = get_object_or_404(Entity, pk=id)
@@ -360,6 +401,8 @@ def editEntity(request,id):
             return editProposal(request,id)
         elif e.entityType == 'venue':
             return editVenue(request,id)
+        elif e.entityType == 'batch':
+            return editBatch(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
@@ -411,17 +454,6 @@ def proposal(request,id):
     notes = prop.notes.all()
     context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes}
     return render(request,'db/proposal.html', context)
-
-
-@permission_required('db.can_schedule')
-def batch(request,id):
-    b = get_object_or_404(Batch, pk=id)
-    memberlist = []
-    for e in b.members.all():
-        memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
-    props = Proposal.objects.all()
-    context = {'batch':b, 'members':memberlist, 'proposals':props}
-    return render(request,'db/batch.html', context)
 
 
 def entityName(e):
