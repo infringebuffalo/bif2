@@ -372,7 +372,7 @@ def removeFromBatch(request,batchid,memberid):
     return redirect('editEntity',id=batchid)
 
 
-@login_required
+@permission_required('db.can_schedule')
 def editBatch(request, id):
     b = get_object_or_404(Batch, pk=id)
     memberlist = []
@@ -382,7 +382,7 @@ def editBatch(request, id):
     context = {'batch':b, 'members':memberlist, 'proposals':props}
     return render(request,'db/edit_batch.html', context)
 
-@login_required
+@permission_required('db.can_schedule')
 def updateBatch(request):
     id = int(request.POST["batch_id"])
     b = get_object_or_404(Batch, pk=id)
