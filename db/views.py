@@ -4,6 +4,7 @@ from django.contrib.auth import login,authenticate
 from django.contrib import messages
 from django.template import loader
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseRedirect
 
 from .models import *
 
@@ -354,7 +355,7 @@ def addToBatch(request,batchid,memberid):
     m = get_object_or_404(Entity, pk=memberid)
     b.members.add(m)
     logInfo("Added {ID:%d} to batch {ID:%d}"%(memberid,batchid), request)
-    return redirect('entity',id=batchid)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @permission_required('db.can_schedule')
 def addToBatchForm(request):
@@ -369,7 +370,7 @@ def removeFromBatch(request,batchid,memberid):
     m = get_object_or_404(Entity, pk=memberid)
     b.members.remove(m)
     logInfo("Removed {ID:%d} from batch {ID:%d}"%(memberid,batchid), request)
-    return redirect('editEntity',id=batchid)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @permission_required('db.can_schedule')
