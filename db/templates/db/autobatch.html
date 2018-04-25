@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Auto-add to batch</h1>
+
+Automatically add proposals to batch "{{ batch.name }}"
+
+<form method="POST" action="{% url 'autoBatchRun' %}" name="batchform">
+{% csrf_token %}
+<input type="hidden" name="batch_id" value="{{ batch.id }}" />
+
+Process proposals from batch:
+<select name='frombatchid'>
+{% for b in allbatches %}
+<option value='{{ b.id }}'>{{ b.name }}</option>
+{% endfor %}
+</select>
+<br>
+Proposal field label: <input type="text" name="field" size="20" value="" />
+<input type='checkbox' name='exactlabel' value='1'>exact match
+<br>
+Value: <input type="text" name="value" size="20" value="" />
+<input type='checkbox' name='exactvalue' value='1'>exact match
+<br>
+
+<input type="Submit" name="submit" value="Do it" />
+</p>
+</form>
+{% endblock %}

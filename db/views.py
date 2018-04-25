@@ -33,8 +33,10 @@ def allProposals(request):
 
 @login_required
 def allVenues(request):
-    venues = Venue.objects.all()
-    return render(request,'db/index.html', { 'venue_list' : venues })
+    confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED)
+    waiting_venues = Venue.objects.filter(status=Venue.WAITING)
+    deleted_venues = Venue.objects.filter(status=Venue.DELETED)
+    return render(request,'db/index.html', { 'confirmed_venues' : confirmed_venues, 'waiting_venues' : waiting_venues, 'deleted_venues': deleted_venues })
 
 
 @login_required
@@ -411,6 +413,46 @@ def batchEmails(request, id):
             prev = a
     context = { 'batch': b, 'addrs': uniqaddrs }
     return render(request,'db/batch_emails.html', context)
+
+@permission_required('db.can_schedule')
+def autoBatch(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    allbatches = [{'id':0,'name':'[all proposals]'}]
+    for batch in Batch.objects.all():
+        allbatches.append({'id':batch.id, 'name':batch.name})
+    context = { 'batch': b, 'allbatches': allbatches }
+    return render(request, 'db/autobatch.html', context)
+
+@permission_required('db.can_schedule')
+def autoBatchRun(request):
+    id = int(request.POST["batch_id"])
+    b = get_object_or_404(Batch, pk=id)
+    frombatchid = int(request.POST["frombatchid"])
+    fest = FestivalInfo.objects.last()
+    if frombatchid == 0:
+        proposals = Proposal.objects.filter(festival=fest)
+    else:
+        frombatch = get_object_or_404(Batch, pk=frombatchid)
+        proposals = frombatch.members.filter(entityType='proposal')
+    field = request.POST['field']
+    exactlabel = ('exactlabel' in request.POST.keys()) and (request.POST['exactlabel'] == '1')
+    value = request.POST['value']
+    exactvalue = ('exactvalue' in request.POST.keys()) and (request.POST['exactvalue'] == '1')
+    for p in proposals:
+        infodict = json.loads(p.proposal.info)
+        for label in infodict.keys():
+            if stringMatch(field,label,exactlabel) and stringMatch(value,infodict[label],exactvalue):
+                b.members.add(p)
+    return redirect('entity',id)
+
+def stringMatch(needle,haystack,exact):
+    n = needle.casefold()
+    h = haystack.casefold()
+    if exact:
+        return n == h
+    else:
+        return n in h
+
 
 @login_required
 def editEntity(request,id):

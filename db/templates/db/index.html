@@ -62,11 +62,29 @@
     </ul>
 {% endif %}
 
-{% if venue_list %}
-<h2>all venues</h2>
+{% if confirmed_venues %}
+<h2>all confirmed venues</h2>
     <ul>
-    {% for v in venue_list %}
-        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a> ({{ v.status }})</li>
+    {% for v in confirmed_venues %}
+        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if waiting_venues %}
+<h2>all venues waiting for confirmation</h2>
+    <ul>
+    {% for v in waiting_venues %}
+        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if deleted_venues %}
+<h2>all deleted venues</h2>
+    <ul>
+    {% for v in deleted_venues %}
+        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a></li>
     {% endfor %}
     </ul>
 {% endif %}
