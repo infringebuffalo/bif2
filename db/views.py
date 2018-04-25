@@ -90,6 +90,27 @@ def submit(request):
     return render(request,'db/proposal_submit.html', {})
 
 
+@permission_required('db.can_schedule')
+def reconfirm(request,id):
+    prop = get_object_or_404(Proposal, pk=id)
+    infodict = json.loads(prop.info)
+    mail_to = infodict["contactemail"]
+    from django.core.validators import validate_email
+    from django.core.exceptions import ValidationError
+    try:
+        validate_email( mail_to )
+    except ValidationError:
+        logInfo("email '%s' is invalid" % mail_to)
+        return render(request,'db/proposal_email_fail.html', {'address':mail_to})
+    context = {'prop':prop, 'prop_info':infodict}
+    mail_subject = "Buffalo Infringement Festival proposal '%s'" % prop.title
+    mail_body = loader.render_to_string('db/submit_email.txt', context)
+    EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to]).send()
+    messages.success(request, 'Confirmation message sent')
+    logInfo("Sent confirmation email for {ID:%d} to '%s'" % (id,mail_to))
+    return redirect('entity',id)
+
+
 def setEntityOwner(e,u):
 # need to: check if already owned by someone else, and change it (if allowed)
 # note: this if-statement tries to prevent redundant entries, but if the user has some other permission (like VIEW), it will prevent changing ownership - must fix this

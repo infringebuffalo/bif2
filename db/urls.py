@@ -39,6 +39,7 @@ urlpatterns = [
     path('update/', views.update, name='update'),
     path('updateVenue/', views.updateVenue, name='updateVenue'),
     path('addNote/', views.addNote, name='addNote'),
+    path('reconfirm/<int:id>/', views.reconfirm, name='reconfirm'),
     path('<int:id>/', views.entity, name='entity')
 ]
 

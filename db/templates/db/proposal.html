@@ -25,6 +25,11 @@
 <form method="get" action="{% url 'undeleteProposal' prop.id %}"><button type="submit">undelete proposal</button></form>
 {% endif %}
 </p>
+{% if prop.status == prop.WAITING %}
+<p>
+<form method="get" action="{% url 'reconfirm' prop.id %}"><button type="submit">re-send confirmation mail</button></form>
+</p>
+{% endif %}
 {% if inbatches %}
 <p> in batches:
 <ul>
