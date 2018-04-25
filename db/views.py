@@ -392,6 +392,24 @@ def updateBatch(request):
     logInfo("updated batch {ID:%d} ('%s')" % (b.id,b.name), request)
     return redirect('entity',id=id)
 
+@permission_required('db.can_schedule')
+def batchEmails(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    addrs = []
+    for e in b.members.all():
+        if e.entityType == 'proposal':
+            infodict = json.loads(e.proposal.info)
+            addrs.append(infodict['contactemail'])
+            addrs.append(infodict['secondcontactemail'])
+    addrs.sort()
+    uniqaddrs = []
+    prev = ''
+    for a in addrs:
+        if a != prev:
+            uniqaddrs.append(a)
+            prev = a
+    context = { 'batch': b, 'addrs': uniqaddrs }
+    return render(request,'db/batch_emails.html', context)
 
 @login_required
 def editEntity(request,id):

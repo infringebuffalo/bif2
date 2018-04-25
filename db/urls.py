@@ -32,6 +32,7 @@ urlpatterns = [
     path('addtobatch/', views.addToBatchForm, name='addToBatch'),
     path('removefrombatch/<int:batchid>/<int:memberid>/', views.removeFromBatch, name='removeFromBatch'),
     path('updateBatch/', views.updateBatch, name='updateBatch'),
+    path('batchEmails/<int:id>/', views.batchEmails, name='batchEmails'),
     path('edit/<int:id>/', views.editEntity, name='editEntity'),
     path('update/', views.update, name='update'),
     path('updateVenue/', views.updateVenue, name='updateVenue'),

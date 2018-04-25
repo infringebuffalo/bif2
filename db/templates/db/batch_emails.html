@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% if batch %}
+<h1>E-mail addresses for {{ batch.name }}</h1>
+<ul style="list-style-type:none">
+{% for a in addrs %}
+<li> {{ a }}
+{% endfor %}
+</el>
+{% else %}
+<p>No batch found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}

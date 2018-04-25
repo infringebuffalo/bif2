@@ -5,8 +5,9 @@
 
 {% if batch %}
 <h1>{{ batch.name }}</h1>
+<div class="row">
+<div class="col-sm-8">
 <p>{{ batch.description }}</p>
-<p><a href="{% url 'editEntity' id=batch.id %}">Edit batch</a></p>
 <table>
 {% for e in members %}
 <tr><td><a href="/db/{{ e.id }}">{{ e.name }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>
@@ -26,6 +27,15 @@
 </select>
 <input type="Submit" name="submit" value="Add to batch" />
 </form>
+</div>
 
+{% if perms.db.can_schedule %}
+<div class="col-sm-4">
+<p><a href="{% url 'editEntity' id=batch.id %}">edit batch</a></p>
+<p>
+<a href="{% url 'batchEmails' batch.id %}">email addresses</a>
+</p>
+</div>
+{% endif %}
 
 {% endblock %}
