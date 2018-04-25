@@ -27,9 +27,11 @@
 </p>
 {% if inbatches %}
 <p> in batches:
+<ul>
 {% for b in inbatches %}
-<a href="{% url 'entity' b.id %}">{{ b.name }}</a> 
+<li><a href="{% url 'entity' b.id %}">{{ b.name }}</a>  <span style="font-size: xx-small"><a href="{% url 'removeFromBatch' b.id prop.id %}">[remove]</a></span>
 {% endfor %}
+</ul>
 </p>
 {% endif %}
 
