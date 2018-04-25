@@ -17,18 +17,6 @@
 <p>No batch found.  (Shouldn't this 404?)</p>
 {% endif %}
 
-<form method="POST" action="{% url 'addToBatch' %}" name="addform">
-{% csrf_token %}
-<input type="hidden" name="batch" value="{{ batch.id }}">
-<select name="show">
-{% for p in proposals.all %}
-<option value="{{ p.id }}">{{ p.title }}</option>
-{% endfor %}
-</select>
-<input type="Submit" name="submit" value="Add to batch" />
-</form>
-</div>
-
 {% if perms.db.can_schedule %}
 <div class="col-sm-4">
 <p><a href="{% url 'editEntity' id=batch.id %}">edit batch</a></p>
