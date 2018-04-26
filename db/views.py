@@ -64,7 +64,8 @@ def submit(request):
             pass
 
     infojson = json.dumps(infodict)
-    prop = Proposal(title=request.POST["title"], info=infojson, status=Proposal.WAITING, orgContact=defaultContact)
+    fest = FestivalInfo.objects.last()
+    prop = Proposal(title=request.POST["title"], info=infojson, status=Proposal.WAITING, orgContact=defaultContact, festival=fest)
     prop.save()
     logInfo("saved proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
 
