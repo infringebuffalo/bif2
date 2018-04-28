@@ -33,7 +33,7 @@ def contact(request):
 		{'name' : "Curt Rotterdam", 'role' : "Music, Meeting Chair", 'email' : "merlinsbooking@gmail.com"},
 		{'name' : "Bill Smythe", 'role' : "Venues", 'email' : "whsmythe@gmail.com"},
 		{'name' : "Tom Stoll", 'role' : "Web", 'email' : "tms@kitefishlabs.com"},
-		{'name' : "Pam Swartz", 'role' : "Poster", 'email' : ""},
+		{'name' : "Pam Swarts", 'role' : "Poster", 'email' : ""},
 		{'name' : "Janna Willoughby-Lohr", 'role' : "Paper Schedule Design", 'email' : ""},]
 	return render(request,'publicsite/contact.html', { 'orgs' : organizers })
 
