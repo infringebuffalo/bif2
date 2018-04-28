@@ -1,0 +1,195 @@
+/* MIXINS */
+/* As hex codes */
+/* Main Primary color aqua */
+/* Main Secondary color (1) purple */
+/* Main Secondary color (2) yellow */
+/* Main Complement color orange */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  /*border: 1px green solid;*/
+}
+h1,
+h2 {
+  font-family: 'Alegreya Sans SC', 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+}
+h3,
+h4 {
+  font-family: 'Alegreya Sans SC', 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+}
+h5,
+h6 {
+  font-family: 'Alegreya Sans SC', 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+body {
+  font-family: 'Open Sans', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+p {
+  margin: 7.5px 0px 12.5px 0px;
+}
+ul {
+  padding-left: 5px;
+}
+
+li {
+  list-style: none;
+  margin-left: 0;
+  padding: 5px 0;
+}
+img {
+  display: block;
+  margin: 2.5px 7.5px;
+}
+a {
+  text-decoration: none;
+  color: #076E8D;
+  cursor: grab;
+}
+.fill {
+  align-items: center;
+}
+.fit-image {
+  max-width: 100px;
+  float: left;
+  clear: left;
+}
+.navbar-fixed-top .nav {
+  padding: 15px 0;
+}
+.navbar-fixed-top .navbar-brand {
+  padding: 0 15px;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  background-color: #F7981D;
+}
+.navbar-inverse .navbar-nav > li > a:active {
+  background-color: #333;
+  color: #FFF;
+}
+.navbar {
+  font-family: 'Open Sans', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  padding-top: 0px;
+  background-color: #ffffff;
+  margin-top: 0;
+  text-align: center;
+}
+.footer {
+  background-color: #fff88f;
+  min-height: 48px;
+  padding: 16px;
+}
+
+.datetime {
+  float: left;
+  /* clear: right; */
+  background-color: #CCC;
+  padding: 5px 10px;
+
+}
+
+.highlight-badge-right {
+  float: right;
+  background-color: #9ccde5;
+  font-size: 90%;
+  width: 60px;
+  padding: 5px 10px;
+  text-align: center;
+  line-height: 90%;
+  font-family: 'Alegreya Sans SC', 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.social-links-bar {
+  float: left;
+  clear: both;
+}
+.social-link {
+  display: block;
+  width: 25px;
+  float: left;
+  clear: none;
+  padding: 0;
+}
+.home {
+  margin: 5px;
+  border: 1px solid #333;
+  padding: 10px 15px;
+}
+.box-content {
+  clear: left;
+  padding-top: 5px;
+}
+
+.about, .contact, .faq {
+  padding: 20px;
+}
+.about > ul {
+  padding-left: 15px;
+}
+
+p.question {
+  font-size: 120%;
+  color: #4278da;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    padding-top: 90px;
+    /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+  }
+  .navbar img#sitelogo {
+    padding: 1px;
+    margin-top: 0px;
+    width: 64px;
+  }
+  .navbar-fixed-top .navbar-brand {
+    padding: 0 0;
+  }
+  .fill {
+    align-items: center;
+  }
+  .fit-image {
+    /* min-width: 100%; */
+    /* min-height: 100%; */
+    max-width: 320px;
+  }
+  .fit-blank {
+    display: block;
+    width: inherit;
+  }
+
+  .social-links-bar {
+    /*padding: 15px 0;*/
+    float: left;
+    clear: none;
+  }
+/*   .social-links-bar > a > span {
+    width: 36px;
+  } */
+}
+
+
+@media screen and (max-width: 768px) {
+  body {
+    padding-top: 60px;
+    /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+  }
+  .navbar img#sitelogo {
+    padding: 1px;
+    margin-top: 0px;
+    width: 38px;
+  }
+}

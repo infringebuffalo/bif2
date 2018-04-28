@@ -1,0 +1,83 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Buffalo Infringement Festival Home{% endblock %}
+
+{% block content %}
+
+<!-- {% load static %} -->
+
+<div class="col-md-12">
+  <div class="row home sticky" id="sticky_0">
+    <div class="datetime">
+      <span>Due Apr 15, 2018 - 11:59PM</span>
+    </div>
+    <div class="box-content">
+      <h2>Applications Now Open!</h2>
+      <p>Applications are now open for the 2018 Buffalo Infringement Festival. Apply <a href="/db" target="_blank">here!</a></p>
+    </div>
+  </div>
+
+  {% if next_event %}
+  <div class="row home upcoming-event" id="calendar_0">
+    <div class="datetime">
+      <span>{{ next_event.datetime }}</span>
+    </div>
+    <div class="highlight-badge-right">
+      <span>next event</span>
+    </div>
+    <div class="box-content">
+      <h2>{{ next_event.title }}</h2>
+      <p>{{ next_event.description}}
+        {% if next_event.url %}
+        <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+  
+  {% endif %}
+
+  <div class="row home sticky" id="sticky_1">
+    <div class="box-content">
+      <h2>T-Shirts Available</h2>
+      <p>2018 T-shirts are going alarmingly fast. They can be purchased <a href="https://www.etsy.com/listing/593122773/flippin-awesome-2018-buffalo?ref=shop_home_active_1" target="_blank">on Etsy <i class="fas fa-external-link-alt"></i></a>.</p>
+    </div>
+  </div>
+
+  <div class="row home upcoming-event-list" id="calendar_1">
+    <div class="box-content">
+      <h2>Upcoming Events</h2>
+      {% if next_events_list %}
+        <ul>
+          {% for event in next_events_list %}
+            <li>{{ event.datetime }} - {{ event.title }}
+              {% if event.url %}
+              <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+      <p>No upcoming events scheduled.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row home sticky-bottom" id="bottom_0">
+    {% include 'publicsite/social_links.html' %}
+  </div>
+  <div class="row home past-event" id="past_0">
+    <div class="datetime">
+      <span>Fri Dec 1, 2017</span>
+    </div>
+    <div class="box-content">
+      <h2>Poster Contest Winner</h2>
+      <img class="fit-image"
+           src="{% static 'publicsite/img/bif2018_600.jpg' %}"
+           width="300"
+           alt="bif2018 logo">
+      <p>The 2018 Official Festival Poster Design Contest is over. The winner is artist, performer, and super-human promoter of the arts in Buffalo--- Pam Swartz! Congratulations, Pam. Her design will be used for the 2018 festival poster, t-shirts, web, and print materials.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

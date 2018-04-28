@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Buffalo Infringement Festival{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:700|Open+Sans" rel="stylesheet">
+
+{% load static %}
+<link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'publicsite/style.css' %}">
+
+{% block style %}{% endblock %}
+</head>
+
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#thenavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img id="sitelogo" src="{% static 'publicsite/img/bif_blue_logo.png' %}" alt="Buffalo Infringement Festival"></a>
+    </div>
+    <div class="collapse navbar-collapse" id="thenavbar">
+      <ul class="nav navbar-nav">
+        <li><a class="active" href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/history/">History</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/db/"><i class="fas fa-lg fa-sign-in-alt"></i> Submit/Edit Proposal</a></li>
+      </ul>
+    </div>
+  </div>
+</nav> 
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+{% block scripts %}{% endblock %} 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+  <script src="{% static 'publicsite/site.js' %}">
+  </script>
+</html>
