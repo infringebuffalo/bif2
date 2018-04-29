@@ -84,9 +84,11 @@ class UserPermission(Model):
 
 class FormInfo(Entity):
     showType = CharField(max_length=256)
+    festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
     description = TextField()
     defaultContact = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
     defaultBatch = ForeignKey('Batch', on_delete=SET_NULL, null=True)
+    fields = TextField()
 
 
 from django.db.models.signals import post_init

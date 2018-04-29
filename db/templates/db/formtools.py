@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import json
 
 all_required_fields = [ "contactname", "contactemail", "contactphone", "contactaddress", "title", "description_short" ]
 
@@ -8,6 +9,7 @@ def startPage(formtitle,formtype=None,requiredfields=None):
         formtype = formtitle.lower()
     if requiredfields:
         all_required_fields += requiredfields
+    formfields.init(formtype)
     requiredfields_str = ', '.join(map(lambda x:'"%s"'%x,all_required_fields))
     print("""{%% extends "base_generic.html" %%}
 
@@ -118,6 +120,7 @@ def endPage():
 </form>
 
 {% endblock %}""")
+    formfields.dump()
 
 
 formnames = []
@@ -126,7 +129,28 @@ def checkName(name):
         raise AssertionError("duplicate name '%s'" % name)
     formnames.append(name)
 
-    
+
+class formfields:
+    fields = [ [ 'type', 'type' ] ]
+    formtype = 'unknown'
+    @staticmethod
+    def init(t):
+        formfields.formtype = t
+    @staticmethod
+    def add(fieldname, fielddescription):
+        formfields.fields.append([fieldname,fielddescription])
+    @staticmethod
+    def dump():
+        f = open("makeforminfo.py", "a")
+        f.write("def makeFormInfo_%s():\n" % formfields.formtype)
+        f.write("    fi = FormInfo.objects.get(showType='%s')\n" % formfields.formtype)
+        f.write("    fields = %s\n" % json.dumps(formfields.fields))
+        f.write("    fi.fields = json.dumps(fields)\n")
+        f.write("    fi.save()\n")
+        f.write("\n")
+        f.close()
+
+
 def textInput(label,name,placeholder=''):
     global all_required_fields
     if name in all_required_fields: label = '* ' + label
@@ -135,6 +159,7 @@ def textInput(label,name,placeholder=''):
     print("<th width='25%%'>%s</th>" % label)
     print("<td><input type='text' name='%s' size='60' placeholder='%s'/></td>" % (name,placeholder))
     print("</tr>")
+    formfields.add(name,label)
 
 def textarea(label,name,rows=4,placeholder=''):
     global all_required_fields
@@ -144,6 +169,7 @@ def textarea(label,name,rows=4,placeholder=''):
     print("<th width='25%%'>%s</th>" % label)
     print("<td><textarea name='%s' rows='%d' cols='60' placeholder='%s'></textarea></td>" % (name,rows,placeholder))
     print("</tr>")
+    formfields.add(name,label)
 
 def yesnoInput(label,name,default='y'):
     global all_required_fields
@@ -156,6 +182,7 @@ def yesnoInput(label,name,default='y'):
     else:
         print("<td><select name='%s'><option value='Y'>Yes</option><option value='N' selected>No</option></select></td>" % name)
     print("</tr>")
+    formfields.add(name,label)
 
 def menuInput(label,name,options):
     global all_required_fields
@@ -168,4 +195,5 @@ def menuInput(label,name,options):
         print("<option value='%s'>%s</option>" % (o,o))
     print("</select></td>")
     print("</tr>")
+    formfields.add(name,label)
 

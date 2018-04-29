@@ -532,10 +532,16 @@ def userCanEdit(u, e):
 def proposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
+    forminfo = FormInfo.objects.get(showType=infodict['type'])
+    formfields = json.loads(forminfo.fields)
+    fieldlist = []
+    for f in formfields:
+        if f[0] in infodict.keys():
+            fieldlist.append([f[1], infodict[f[0]]])
     inbatches = prop.batches.all()
     batches = Batch.objects.all()
     notes = prop.notes.all()
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes}
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist}
     return render(request,'db/proposal.html', context)
 
 
