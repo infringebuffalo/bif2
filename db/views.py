@@ -109,7 +109,7 @@ def reconfirm(request,id):
     EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to]).send()
     messages.success(request, 'Confirmation message sent')
     logInfo("Sent confirmation email for {ID:%d} to '%s'" % (id,mail_to))
-    return redirect('entity',id)
+    return redirect('db-entity',id)
 
 
 def setEntityOwner(e,u):
@@ -144,7 +144,7 @@ def deleteProposal(request,id):
     prop.save()
     logInfo("deleted proposal {ID:%d}" % id, request)
     messages.success(request, 'Proposal deleted')
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 @permission_required('db.can_schedule')
@@ -154,7 +154,7 @@ def undeleteProposal(request,id):
     prop.save()
     logInfo("undeleted proposal {ID:%d}" % id, request)
     messages.success(request, 'Proposal undeleted')
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 def proposalForm(request, template):
@@ -219,7 +219,7 @@ def update(request):
     prop.info = infojson
     prop.save()
     logInfo("updated proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 def newAccount(request):
@@ -247,7 +247,7 @@ def createAccount(request):
     claimProposals(bifuser)
     login(request, authenticate(username=email,password=password))
     logInfo("Created new account '%s'"%email, request)
-    return redirect('index')
+    return redirect('db-index')
 
 
 def claimProposals(bifuser):
@@ -270,7 +270,7 @@ def createVenue(request):
     ven = Venue(name=request.POST["name"], info=infojson, status=Venue.WAITING)
     ven.save()
     logInfo("saved venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
-    return redirect('index')
+    return redirect('db-index')
 
 
 @login_required
@@ -319,7 +319,7 @@ def confirmVenue(request,id):
     ven.status = Venue.ACCEPTED
     ven.save()
     logInfo("confirmed venue {ID:%d}" % id, request)
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 @permission_required('db.can_schedule')
@@ -329,7 +329,7 @@ def deleteVenue(request,id):
     ven.save()
     logInfo("deleted venue {ID:%d}" % id, request)
     messages.success(request, 'Venue deleted')
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 @permission_required('db.can_schedule')
@@ -339,7 +339,7 @@ def undeleteVenue(request,id):
     ven.save()
     logInfo("undeleted venue {ID:%d}" % id, request)
     messages.success(request, 'Venue undeleted')
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 
 @permission_required('db.can_schedule')
@@ -359,7 +359,7 @@ def createBatch(request):
         return render(request, 'db/new_batch.html')
     batch.save()
     logInfo("Created new batch {ID:%d} '%s'"%(batch.id,name), request)
-    return redirect('index')
+    return redirect('db-index')
 
 
 @permission_required('db.can_schedule')
@@ -415,7 +415,7 @@ def updateBatch(request):
     b.description = request.POST['description']
     b.save()
     logInfo("updated batch {ID:%d} ('%s')" % (b.id,b.name), request)
-    return redirect('entity',id=id)
+    return redirect('db-entity',id=id)
 
 @permission_required('db.can_schedule')
 def batchEmails(request, id):
@@ -465,7 +465,7 @@ def autoBatchRun(request):
         for label in infodict.keys():
             if stringMatch(field,label,exactlabel) and stringMatch(value,infodict[label],exactvalue):
                 b.members.add(p)
-    return redirect('entity',id)
+    return redirect('db-entity',id)
 
 def stringMatch(needle,haystack,exact):
     n = needle.casefold()
@@ -577,14 +577,14 @@ def addNote(request):
         note = Note(creator=creator, notetext=notetext)
     except:
         logError("Unknown error creating note '%s'"%notetext, request)
-        return redirect('index')
+        return redirect('db-index')
     note.save()
     e = get_object_or_404(Entity, pk=entityid)
     note.attachedTo.add(e)
     if creator:
         setEntityOwner(note, creator)
     logInfo("Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext), request)
-    return redirect('entity',id=entityid)
+    return redirect('db-entity',id=entityid)
     
 
 

@@ -16,7 +16,7 @@
 <div class="col-sm-8">
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
-<p><a href="{% url 'editEntity' id=prop.id %}">Edit proposal</a></p>
+<p><a href="{% url 'db-editEntity' id=prop.id %}">Edit proposal</a></p>
 <table class='alternategrey'>
 {% for f in fieldlist %}
 <tr><th width="35%">{{ f.0 }}</td><td>{{ f.1 }}</td></tr>
@@ -48,28 +48,28 @@ Availability:
 
 <p>
 {% if prop.status != prop.DELETED %}
-<form method="get" action="{% url 'deleteProposal' prop.id %}"><button type="submit">delete proposal</button></form>
+<form method="get" action="{% url 'db-deleteProposal' prop.id %}"><button type="submit">delete proposal</button></form>
 {% else %}
-<form method="get" action="{% url 'undeleteProposal' prop.id %}"><button type="submit">undelete proposal</button></form>
+<form method="get" action="{% url 'db-undeleteProposal' prop.id %}"><button type="submit">undelete proposal</button></form>
 {% endif %}
 </p>
 {% if prop.status == prop.WAITING %}
 <p>
-<form method="get" action="{% url 'reconfirm' prop.id %}"><button type="submit">re-send confirmation mail</button></form>
+<form method="get" action="{% url 'db-reconfirm' prop.id %}"><button type="submit">re-send confirmation mail</button></form>
 </p>
 {% endif %}
 {% if inbatches %}
 <p> in batches:
 <ul>
 {% for b in inbatches %}
-<li><a href="{% url 'entity' b.id %}">{{ b.name }}</a>  <span style="font-size: xx-small"><a href="{% url 'removeFromBatch' b.id prop.id %}">[remove]</a></span>
+<li><a href="{% url 'db-entity' b.id %}">{{ b.name }}</a>  <span style="font-size: xx-small"><a href="{% url 'db-removeFromBatch' b.id prop.id %}">[remove]</a></span>
 {% endfor %}
 </ul>
 </p>
 {% endif %}
 
 {% if batches %}
-<form method="POST" action="{% url 'addToBatch' %}" name="addform">
+<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
 {% csrf_token %}
 <input type="hidden" name="show" value="{{ prop.id }}">
 <select name="batch">
@@ -87,7 +87,7 @@ Availability:
 <div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
 {% endfor %}
 {% endif %}
-<form method="POST" action="{% url 'addNote' %}" name="addnote">
+<form method="POST" action="{% url 'db-addNote' %}" name="addnote">
 {% csrf_token %}
 <input type="hidden" name="entity" value="{{ prop.id }}">
 <textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>

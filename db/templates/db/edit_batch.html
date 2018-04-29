@@ -7,7 +7,7 @@
 <h1>Editing batch</h1>
 
 <p>
-<form method="POST" action="{% url 'updateBatch' %}" name="batchform" onsubmit="return validateForm()">
+<form method="POST" action="{% url 'db-updateBatch' %}" name="batchform" onsubmit="return validateForm()">
 {% csrf_token %}
 <input type="hidden" name="batch_id" value="{{ batch.id }}" />
 
@@ -22,13 +22,13 @@
 
 <table>
 {% for e in members %}
-<tr><td style="padding-right:1em"><a href="{% url 'removeFromBatch' batch.id e.id %}">[remove]</a></td>
+<tr><td style="padding-right:1em"><a href="{% url 'db-removeFromBatch' batch.id e.id %}">[remove]</a></td>
 <td><a href="/db/{{ e.id }}">{{ e.name }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>
 {% endfor %}
 </table>
-<form method="get" action="{% url 'entity' batch.id %}"><button type="submit">done</button></form>
+<form method="get" action="{% url 'db-entity' batch.id %}"><button type="submit">done</button></form>
 
-<form method="POST" action="{% url 'addToBatch' %}" name="addform">
+<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
 {% csrf_token %}
 <input type="hidden" name="batch" value="{{ batch.id }}">
 <select name="show">

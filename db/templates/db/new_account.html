@@ -29,7 +29,7 @@ else
 {% block content %}
 <h1>Create an account</h1>
 
-<form method="POST" action="{% url 'createAccount' %}" name="accountform" onsubmit="return validateForm()">
+<form method="POST" action="{% url 'db-createAccount' %}" name="accountform" onsubmit="return validateForm()">
 {% csrf_token %}
 
 <table cellpadding=3>

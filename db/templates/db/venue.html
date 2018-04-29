@@ -8,7 +8,7 @@
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if venue.status == venue.WAITING %} waiting for confirmation {% elif venue.status == venue.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
-<p><a href="{% url 'editEntity' venue.id %}">Edit info</a></p>
+<p><a href="{% url 'db-editEntity' venue.id %}">Edit info</a></p>
 <table>
 {% for key,value in venue_info.items %}
 <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
@@ -20,24 +20,24 @@
 <div class="col-sm-4">
 <p>
 {% if venue.status == venue.WAITING %}
-<form method="get" action="{% url 'confirmVenue' venue.id %}"><button type="submit">confirm venue</button></form>
+<form method="get" action="{% url 'db-confirmVenue' venue.id %}"><button type="submit">confirm venue</button></form>
 {% endif %}
 {% if venue.status != venue.DELETED %}
-<form method="get" action="{% url 'deleteVenue' venue.id %}"><button type="submit">delete venue</button></form>
+<form method="get" action="{% url 'db-deleteVenue' venue.id %}"><button type="submit">delete venue</button></form>
 {% else %}
-<form method="get" action="{% url 'undeleteVenue' venue.id %}"><button type="submit">undelete venue</button></form>
+<form method="get" action="{% url 'db-undeleteVenue' venue.id %}"><button type="submit">undelete venue</button></form>
 {% endif %}
 </p>
 {% if inbatches %}
 <p> in batches:
 {% for b in inbatches %}
-<a href="{% url 'entity' b.id %}">{{ b.name }}</a>
+<a href="{% url 'db-entity' b.id %}">{{ b.name }}</a>
 {% endfor %}
 </p>
 {% endif %}
 
 {% if batches %}
-<form method="POST" action="{% url 'addToBatch' %}" name="addform">
+<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
 {% csrf_token %}
 <input type="hidden" name="show" value="{{ venue.id }}">
 <select name="batch">
@@ -55,7 +55,7 @@
 <div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
 {% endfor %}
 {% endif %}
-<form method="POST" action="{% url 'addNote' %}" name="addnote">
+<form method="POST" action="{% url 'db-addNote' %}" name="addnote">
 {% csrf_token %}
 <input type="hidden" name="entity" value="{{ venue.id }}">
 <textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>
