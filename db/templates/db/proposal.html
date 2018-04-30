@@ -82,11 +82,9 @@ Availability:
 {% endif %}{# end "if batches" #}
 
 <br><br>
-{% if notes %}
 {% for n in notes %}
 <div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
 {% endfor %}
-{% endif %}
 <form method="POST" action="{% url 'db-addNote' %}" name="addnote">
 {% csrf_token %}
 <input type="hidden" name="entity" value="{{ prop.id }}">
