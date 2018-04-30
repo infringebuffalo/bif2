@@ -58,39 +58,10 @@ Availability:
 <form method="get" action="{% url 'db-reconfirm' prop.id %}"><button type="submit">re-send confirmation mail</button></form>
 </p>
 {% endif %}
-{% if inbatches %}
-<p> in batches:
-<ul>
-{% for b in inbatches %}
-<li><a href="{% url 'db-entity' b.id %}">{{ b.name }}</a>  <span style="font-size: xx-small"><a href="{% url 'db-removeFromBatch' b.id prop.id %}">[remove]</a></span>
-{% endfor %}
-</ul>
-</p>
-{% endif %}
-
-{% if batches %}
-<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
-{% csrf_token %}
-<input type="hidden" name="show" value="{{ prop.id }}">
-<select name="batch">
-{% for b in batches %}
-<option value="{{ b.id }}">{{ b.name }}</option>
-{% endfor %}
-</select>
-<input type="submit" name="submit" value="Add to batch" />
-</form>
-{% endif %}{# end "if batches" #}
+{% include "./entity_batches.html" with entity=prop %}
 
 <br><br>
-{% for n in notes %}
-<div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
-{% endfor %}
-<form method="POST" action="{% url 'db-addNote' %}" name="addnote">
-{% csrf_token %}
-<input type="hidden" name="entity" value="{{ prop.id }}">
-<textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>
-<input type="submit" name="submit" value="Add note" />
-</form>
+{% include "./entity_notes.html" with entity=prop %}
 
 </div>{# end div class=col-sm-4 #}
 {% endif %}{# end "if can_schedule" #}

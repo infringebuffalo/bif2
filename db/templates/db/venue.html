@@ -28,37 +28,10 @@
 <form method="get" action="{% url 'db-undeleteVenue' venue.id %}"><button type="submit">undelete venue</button></form>
 {% endif %}
 </p>
-{% if inbatches %}
-<p> in batches:
-{% for b in inbatches %}
-<a href="{% url 'db-entity' b.id %}">{{ b.name }}</a>
-{% endfor %}
-</p>
-{% endif %}
-
-{% if batches %}
-<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
-{% csrf_token %}
-<input type="hidden" name="show" value="{{ venue.id }}">
-<select name="batch">
-{% for b in batches %}
-<option value="{{ b.id }}">{{ b.name }}</option>
-{% endfor %}
-</select>
-<input type="submit" name="submit" value="Add to batch" />
-</form>
-{% endif %}{# end "if batches" #}
+{% include "./entity_batches.html" with entity=venue %}
 
 <br><br>
-{% for n in notes %}
-<div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
-{% endfor %}
-<form method="POST" action="{% url 'db-addNote' %}" name="addnote">
-{% csrf_token %}
-<input type="hidden" name="entity" value="{{ venue.id }}">
-<textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>
-<input type="submit" name="submit" value="Add note" />
-</form>
+{% include "./entity_notes.html" with entity=venue %}
 
 </div>{# end div class=col-sm-4 #}
 {% endif %}{# end "if can_schedule" #}

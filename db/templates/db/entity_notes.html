@@ -1,0 +1,9 @@
+{% for n in notes %}
+<div style="border: 1px solid"><span style="background:#bbb">{{ n.creator.user.username}} ({{ n.timestamp }}):</span><br>{{ n.notetext }}</div>
+{% endfor %}
+<form method="POST" action="{% url 'db-addNote' %}" name="addnote">
+{% csrf_token %}
+<input type="hidden" name="entity" value="{{ entity.id }}">
+<textarea name="note" rows="2" cols="30" placeholder="notes can be added now (they can't be edited yet)"></textarea>
+<input type="submit" name="submit" value="Add note" />
+</form>
