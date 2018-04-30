@@ -10,7 +10,7 @@
 <h2>my proposals</h2>
 <ul>
 {% for p in owned %}
-<li><a href="/db/{{ p.entity.id }}/">{% if p.entity.proposal.title == "" %}NEEDS A TITLE{% else %}{{ p.entity.proposal.title }}{% endif %}</a>
+<li><a href="/db/{{ p.entity.id }}/">{{ p.entity.proposal.title|default:"NEEDS A TITLE" }}</a>
 {% endfor %}
 </ul>
 {% endif %}
@@ -19,7 +19,7 @@
 <h2>my proposals that still need to be confirmed</h2>
 <ul>
 {% for p in waiting %}
-<li><a href="/db/{{ p.entity.id }}/">{% if p.entity.proposal.title == "" %}NEEDS A TITLE{% else %}{{ p.entity.proposal.title }}{% endif %}</a>
+<li><a href="/db/{{ p.entity.id }}/">{{ p.entity.proposal.title|default:"NEEDS A TITLE" }}</a>
 {% endfor %}
 </ul>
 {% endif %}
@@ -30,7 +30,7 @@
 <h2>my deleted proposals</h2>
 <ul>
 {% for p in deleted %}
-<li><a href="/db/{{ p.entity.id }}/">{% if p.entity.proposal.title == "" %}NEEDS A TITLE{% else %}{{ p.entity.proposal.title }}{% endif %}</a>
+<li><a href="/db/{{ p.entity.id }}/">{{ p.entity.proposal.title|default:"NEEDS A TITLE" }}</a>
 {% endfor %}
 </ul>
 {% endif %}
@@ -39,7 +39,7 @@
 <h2>all confirmed proposals</h2>
     <ul>
     {% for p in confirmed_props %}
-        <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
+        <li><a href="/db/{{ p.id }}/">{{ p.title|default:"NEEDS A TITLE" }}</a> ({{ p.status }})</li>
     {% endfor %}
     </ul>
 {% endif %}
@@ -48,7 +48,7 @@
 <h2>all proposals waiting for confirmation</h2>
     <ul>
     {% for p in waiting_props %}
-        <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
+        <li><a href="/db/{{ p.id }}/">{{ p.title|default:"NEEDS A TITLE" }}</a> ({{ p.status }})</li>
     {% endfor %}
     </ul>
 {% endif %}
@@ -57,7 +57,7 @@
 <h2>all deleted proposals</h2>
     <ul>
     {% for p in deleted_props %}
-        <li><a href="/db/{{ p.id }}/">{% if p.title == "" %}NEEDS A TITLE{% else %}{{ p.title }}{% endif %}</a> ({{ p.status }})</li>
+        <li><a href="/db/{{ p.id }}/">{{ p.title|default:"NEEDS A TITLE" }}</a> ({{ p.status }})</li>
     {% endfor %}
     </ul>
 {% endif %}
