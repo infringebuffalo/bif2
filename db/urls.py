@@ -40,6 +40,9 @@ urlpatterns = [
     path('updateVenue/', views.updateVenue, name='db-updateVenue'),
     path('addNote/', views.addNote, name='db-addNote'),
     path('reconfirm/<int:id>/', views.reconfirm, name='db-reconfirm'),
+    path('newSpreadsheet/', views.newSpreadsheet, name='db-newSpreadsheet'),
+    path('createSpreadsheet/', views.createSpreadsheet, name='db-createSpreadsheet'),
+    path('allSpreadsheets/', views.allSpreadsheets, name='db-allSpreadsheets'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 

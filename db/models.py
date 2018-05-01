@@ -91,6 +91,20 @@ class FormInfo(Entity):
     fields = TextField()
 
 
+class Spreadsheet(Entity):
+    name = CharField(max_length=256)
+    festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
+    description = TextField()
+    frombatch = ForeignKey('Batch', on_delete=SET_NULL, null=True)
+    columns = TextField()
+
+
+class SpreadsheetRow(Model):
+    spreadsheet = ForeignKey('Spreadsheet', on_delete=CASCADE, related_name='rows')
+    entity = ForeignKey('Entity', on_delete=CASCADE)
+    data = TextField()
+
+
 from django.db.models.signals import post_init
 from django.dispatch import receiver
 
@@ -125,4 +139,8 @@ def setEntityTypeNote(sender,instance,**kwargs):
 @receiver(post_init,sender=FormInfo)
 def setEntityTypeFormInfo(sender,instance,**kwargs):
     instance.entityType='forminfo'
+
+@receiver(post_init,sender=Spreadsheet)
+def setEntityTypeSpreadsheet(sender,instance,**kwargs):
+    instance.entityType='spreadsheet'
 

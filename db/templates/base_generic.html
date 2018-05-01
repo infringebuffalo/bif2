@@ -23,8 +23,9 @@
   <li><a href="{% url 'db-index' %}">Home</a></li>
   {% if user.is_authenticated %}
   {% if perms.db.can_schedule %}
-    <li><a href="{% url 'db-allProposals' %}">All proposals</a></li>
-    <li><a href="{% url 'db-allVenues' %}">All venues</a></li>
+    <li><a href="{% url 'db-allProposals' %}">Proposals</a></li>
+    <li><a href="{% url 'db-allSpreadsheets' %}">Spreadsheets</a></li>
+    <li><a href="{% url 'db-allVenues' %}">Venues</a></li>
     <li><a href="{% url 'db-batches' %}">Batches</a></li>
   {% endif %}
     <li>&nbsp;

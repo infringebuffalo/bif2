@@ -476,6 +476,78 @@ def stringMatch(needle,haystack,exact):
         return n in h
 
 
+@permission_required('db.can_schedule')
+def newSpreadsheet(request):
+    batches = Batch.objects.all()
+    context = {'batches':batches}
+    return render(request,'db/new_spreadsheet.html', context)
+
+
+@permission_required('db.can_schedule')
+def createSpreadsheet(request):
+    name = request.POST['name']
+    fest = FestivalInfo.objects.last()
+    description = request.POST['description']
+    batchid = int(request.POST['batch'])
+    frombatch = get_object_or_404(Batch, pk=batchid)
+    columnname = request.POST.getlist('columnname[]')
+    propfield = request.POST.getlist('propfield[]')
+    default = request.POST.getlist('default[]')
+    cols = []
+    for c in zip(columnname, propfield, default):
+        cols.append([c[0],c[1],c[2]])
+    colsjson = json.dumps(cols)
+    try:
+        spreadsheet = Spreadsheet(name=name, festival=fest, description=description, frombatch=frombatch, columns=colsjson)
+    except:
+        logError("Unknown error creating spreadsheet '%s'"%name, request)
+        messages.error(request, 'Failed to create spreadsheet')
+        return render(request, 'db/new_spreadsheet.html')
+    spreadsheet.save()
+    messages.success(request, 'created spreadsheet "%s"'%name)
+    logInfo("Created new spreadsheet {ID:%d} '%s'"%(spreadsheet.id,name), request)
+    for e in frombatch.members.all():
+        values = []
+        for c in cols:
+            if c[1] != "":
+                values.append(getEntityField(e,c[1]))
+            else:
+                values.append(c[2])
+        r = SpreadsheetRow(spreadsheet=spreadsheet, entity=e, data=json.dumps(values))
+        r.save()
+    return redirect('db-entity',id=spreadsheet.id)
+
+
+def getEntityField(e,label):
+    infodict = {}
+    if e.entityType == 'proposal':
+        infodict = json.loads(e.proposal.info)
+    elif e.entityType == 'venue':
+        infodict = json.loads(e.venue.info)
+    if label in infodict.keys():
+        return infodict[label]
+    else:
+        return ""
+
+@permission_required('db.can_schedule')
+def allSpreadsheets(request):
+    fest = FestivalInfo.objects.last()
+    spreadsheets = Spreadsheet.objects.filter(festival=fest)
+    return render(request,'db/all_spreadsheets.html', { 'spreadsheets' : spreadsheets })
+
+
+@permission_required('db.can_schedule')
+def spreadsheet(request,id):
+    sheet = get_object_or_404(Spreadsheet, pk=id)
+    columns = [c[0] for c in json.loads(sheet.columns)]
+    rows = []
+    for r in sheet.rows.all():
+        vals = json.loads(r.data)
+        rows.append({'title':entityName(r.entity), 'id':r.entity.id, 'values':vals})
+    context = {'spreadsheet':sheet, 'columns':columns, 'rows':rows}
+    return render(request,'db/spreadsheet.html',context)
+
+
 @login_required
 def editEntity(request,id):
     e = get_object_or_404(Entity, pk=id)
@@ -502,6 +574,8 @@ def entity(request,id):
             return batch(request,id)
         elif e.entityType == 'venue':
             return venue(request,id)
+        elif e.entityType == 'spreadsheet':
+            return spreadsheet(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:

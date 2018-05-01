@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block title %} Spreadsheet {{spreadsheet.name}} {% endblock %}
+
+{% block style %}
+<style>
+th { padding-right: 10px }
+td { padding-right: 10px }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ spreadsheet.name }}</h1>
+<p>{{spreadsheet.description}}</p>
+
+<p>
+TO BE DONE:
+<ul>
+<li>editing values
+<li>updating spreadsheet when something is added to / removed from a batch
+</ul>
+</p>
+
+<table>
+<tr>
+<th></th>
+{% for c in columns %}
+<th>{{c}}</th>
+{% endfor %}
+</tr>
+{% for r in rows %}
+<tr>
+<td><a href="{% url 'db-entity' r.id %}">{{r.title}}</a></td>
+{% for v in r.values %}
+<td>{{ v }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

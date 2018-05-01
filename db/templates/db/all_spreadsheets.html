@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<p>
+<a href="{% url 'db-newSpreadsheet' %}">create new spreadsheet</a>
+</p>
+<ul>
+{% for s in spreadsheets %}
+<li><a href="/db/{{ s.id }}/">{{ s.name|default:"NEEDS A NAME" }}</a>
+{% endfor %}
+</ul>
+
+{% endblock %}
