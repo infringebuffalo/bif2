@@ -15,23 +15,25 @@
   </div>
 
   {% if next_event %}
-  <div class="row home upcoming-event" id="calendar_0">
-    <div class="datetime">
-      <span>{{ next_event.datetime }}</span>
+    {% for next in next_event %}
+
+    <div class="row home upcoming-event" id="calendar_0">
+      <div class="datetime">
+        <span>{{ next.datetime }}</span>
+      </div>
+      <div class="highlight-badge-right">
+        <span>next event</span>
+      </div>
+      <div class="box-content">
+        <h2>{{ next.title }}</h2>
+        <p>{{ next.description}}
+          {% if next.url %}
+          <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+          {% endif %}
+        </p>
+      </div>
     </div>
-    <div class="highlight-badge-right">
-      <span>next event</span>
-    </div>
-    <div class="box-content">
-      <h2>{{ next_event.title }}</h2>
-      <p>{{ next_event.description}}
-        {% if next_event.url %}
-        <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
-        {% endif %}
-      </p>
-    </div>
-  </div>
-  
+  {% endfor %}  
   {% endif %}
 
   <div class="row home sticky" id="sticky_1">
