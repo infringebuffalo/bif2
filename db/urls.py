@@ -43,6 +43,7 @@ urlpatterns = [
     path('newSpreadsheet/', views.newSpreadsheet, name='db-newSpreadsheet'),
     path('createSpreadsheet/', views.createSpreadsheet, name='db-createSpreadsheet'),
     path('allSpreadsheets/', views.allSpreadsheets, name='db-allSpreadsheets'),
+    path('scheduleProposal', views.scheduleProposal, name='db-scheduleProposal'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 

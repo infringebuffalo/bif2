@@ -615,7 +615,8 @@ def proposal(request,id):
     inbatches = prop.batches.all()
     batches = Batch.objects.all()
     notes = prop.notes.all()
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist}
+    listings = prop.listing_set.order_by('date')
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings}
     return render(request,'db/proposal.html', context)
 
 
@@ -660,6 +661,26 @@ def addNote(request):
     logInfo("Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext), request)
     return redirect('db-entity',id=entityid)
     
+
+@permission_required('db.can_schedule')
+def scheduleProposal(request):
+    from datetime import timedelta
+    proposal = get_object_or_404(Proposal, pk=int(request.POST['proposal']))
+    venue = get_object_or_404(Venue, pk=int(request.POST['venue']))
+    venuenote = request.POST['venuenote']
+    starttime = int(request.POST['starttime'])
+    endtime = int(request.POST['endtime'])
+    installation = False
+    note = request.POST['note']
+    fest = FestivalInfo.objects.last()
+    for d in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        if day.isoformat() in request.POST.keys():
+            messages.success(request,'schedule ' + day.isoformat())
+            listing = Listing(who=proposal, where=venue, venuenote=venuenote, date=day, starttime=starttime, endtime=endtime, installation=installation, listingnote=note)
+            listing.save()
+            logInfo("listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
+    return redirect('db-entity',id=proposal.id)
 
 
 import logging

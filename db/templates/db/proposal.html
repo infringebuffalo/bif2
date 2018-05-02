@@ -6,6 +6,7 @@
 .avail tr:nth-child(odd) { background-color: #f0f0f0 }
 .alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
 .alternategrey td { padding-top: 6px; padding-bottom: 6px }
+.listings td { padding-right: 10px }
 </style>
 {% endblock %}
 
@@ -18,6 +19,9 @@
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
 <p><a href="{% url 'db-editEntity' id=prop.id %}">Edit proposal</a></p>
+
+{% include "./entity_schedule.html" with proposal=prop %}
+
 <table class='alternategrey'>
 {% for f in fieldlist %}
 <tr><th width="35%">{{ f.0 }}</td><td>{{ f.1 }}</td></tr>

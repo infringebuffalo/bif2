@@ -1,0 +1,41 @@
+{% if perms.db.can_schedule %}
+{% load db_scheduling %}
+
+{% if listings %}
+<table class="listings">
+{% for l in listings %}
+{% db_listingRow l %}
+{% endfor %}
+</table>
+{% endif %}
+
+<div class="schedulebox">[scheduling]<br>
+<div class="scheduleForm" id="scheduleEventForm" style="display: block">
+<form method="POST" action="{% url 'db-scheduleProposal' %}">
+{% csrf_token %}
+{% if proposal %}
+<input type="hidden" name="proposal" value="{{proposal.id}}" />
+{% elif venue %}
+<input type="hidden" name="venue" value="{{venue.id}}" />
+{% endif %}
+<input type="hidden" name="installation" value="0" />
+<table>
+<tr>
+<td> {% db_smallCalendar %} </td>
+<td>
+{% if proposal %}
+{% db_venueMenu %}
+{% else %}
+proposalmenu
+{% endif %}
+<br>Venue detail:<input type="text" name="venuenote" value="" size="20"/> </td>
+<td> Start time: {% db_timeMenu 6 28 "starttime" %}
+<br> End time: {% db_timeMenu 6 28 "endtime" %} </td>
+{# <td>Note:<input type="text" name="note" value="" size="10"/></td> #}
+<td> <input type="submit" value="Add"> </td>
+</tr>
+</table>
+</form>
+</div>
+</div>
+{% endif %}
