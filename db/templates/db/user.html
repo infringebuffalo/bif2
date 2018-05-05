@@ -2,21 +2,21 @@
 
 {% block content %}
 
-{% if user %}
-<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+{% if theuser %}
+<h1>{{ theuser.first_name }} {{ theuser.last_name }}</h1>
 <div class="row">
 <div class="col-sm-8">
 <table>
-<tr><th> email</th><td> {{ user.email }} </td></tr>
-<tr><th> last login</th><td> {{ user.last_login }} </td></tr>
-<tr><th> date joined</th><td> {{ user.date_joined }} </td></tr>
+<tr><th> email</th><td> {{ theuser.email }} </td></tr>
+<tr><th> last login</th><td> {{ theuser.last_login }} </td></tr>
+<tr><th> date joined</th><td> {{ theuser.date_joined }} </td></tr>
 <tr><th>
-groups</th><td> {% for g in user.groups.all %} {{g.name }} {% endfor %}
+groups</th><td> {% for g in theuser.groups.all %} {{g.name }} {% endfor %}
 </td></tr>
 <tr><th>
-flags</th><td> {% if user.is_active %} is_active {% endif %}
-{% if user.is_staff %} is_staff {% endif %}
-{% if user.is_superuser %} is_superuser {% endif %}
+flags</th><td> {% if theuser.is_active %} is_active {% endif %}
+{% if theuser.is_staff %} is_staff {% endif %}
+{% if theuser.is_superuser %} is_superuser {% endif %}
 </td>
 </tr>
 </table>

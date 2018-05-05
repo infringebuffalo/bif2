@@ -275,11 +275,11 @@ def createVenue(request):
 
 @permission_required('db.can_schedule')
 def user(request,id):
-    bifu = get_object_or_404(BIFUser, pk=id)
-    u = bifu.user
-    notes = bifu.notes.all()
-    proposals = bifu.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal')
-    context = {'user':u, 'bifuser': bifu, 'proposals': proposals, 'notes':notes}
+    bifuser = get_object_or_404(BIFUser, pk=id)
+    theuser = bifuser.user
+    notes = bifuser.notes.all()
+    proposals = bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal')
+    context = {'theuser':theuser, 'bifuser': bifuser, 'proposals': proposals, 'notes':notes}
     return render(request,'db/user.html', context)
 
 
