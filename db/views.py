@@ -434,9 +434,7 @@ def updateBatch(request):
     logInfo("updated batch {ID:%d} ('%s')" % (b.id,b.name), request)
     return redirect('db-entity',id=id)
 
-@permission_required('db.can_schedule')
-def batchEmails(request, id):
-    b = get_object_or_404(Batch, pk=id)
+def getBatchEmailAddresses(b):
     addrs = []
     for e in b.members.all():
         if e.entityType == 'proposal':
@@ -450,8 +448,38 @@ def batchEmails(request, id):
         if a != prev:
             uniqaddrs.append(a)
             prev = a
-    context = { 'batch': b, 'addrs': uniqaddrs }
+    return uniqaddrs
+
+@permission_required('db.can_schedule')
+def batchEmails(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    context = { 'batch': b, 'addrs': getBatchEmailAddresses(b) }
     return render(request,'db/batch_emails.html', context)
+
+@permission_required('db.can_schedule')
+def composeMailToBatch(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    context = { 'batch': b, 'sender': request.user.email, 'defaultsubject': "BIF!" }
+    return render(request,'db/batch_composemail.html', context)
+
+@permission_required('db.can_schedule')
+def mailBatch(request):
+    from django.core.validators import validate_email
+    from django.core.exceptions import ValidationError
+    id = int(request.POST["batch_id"])
+    b = get_object_or_404(Batch, pk=id)
+    addrs = getBatchEmailAddresses(b)
+    for mail_to in addrs:
+        try:
+            validate_email( mail_to )
+        except ValidationError:
+            logInfo("email '%s' is invalid" % mail_to)
+            messages.error(request, "email '%s' is invalid" % mail_to)
+        mail_subject = request.POST["subject"]
+        mail_body = request.POST["message"]
+        EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to], reply_to=request.user.email).send()
+    return redirect('db-entity',id=id)
+
 
 @permission_required('db.can_schedule')
 def autoBatch(request, id):

@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+{% block title %} Mail to batch {{batch.name}} {% endblock %}
+{% block content %}
+
+{% if batch %}
+<h1>Send mail to batch "{{batch.name}}"</h1>
+
+<p>
+<form method="POST" action="{% url 'db-mailBatch' %}" name="batchform">
+{% csrf_token %}
+<input type="hidden" name="batch_id" value="{{ batch.id }}" />
+
+<table cellpadding=3>
+<tr><th>From:</th><td> <input type="text" name="name" size="20" value="{{ sender }}" /> </td></tr>
+<tr><th>Subject:</th><td> <input type="text" name="description" size="60" value="{{ defaultsubject }}" /> </td></tr>
+<tr><th>Message:</th><td> <textarea name="message" rows="10" cols="60"></textarea></td></tr>
+</table>
+
+<input type="Submit" name="submit" value="Send" />
+</form>
+</p>
+
+{% else %}
+<p>No batch found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}
