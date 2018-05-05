@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>all users</h1>
+<ul>
+{% for u in users %}
+<li><a href="/db/{{ u.id }}/">{{ u.user.email|default:"NO EMAIL?" }} ({{ u.user.first_name }})</a>
+{% endfor %}
+</ul>
+
+{% endblock %}

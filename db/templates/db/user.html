@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% if user %}
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<div class="row">
+<div class="col-sm-8">
+<table>
+<tr><th> email</th><td> {{ user.email }} </td></tr>
+<tr><th> last login</th><td> {{ user.last_login }} </td></tr>
+<tr><th> date joined</th><td> {{ user.date_joined }} </td></tr>
+<tr><th>
+groups</th><td> {% for g in user.groups.all %} {{g.name }} {% endfor %}
+</td></tr>
+<tr><th>
+flags</th><td> {% if user.is_active %} is_active {% endif %}
+{% if user.is_staff %} is_staff {% endif %}
+{% if user.is_superuser %} is_superuser {% endif %}
+</td>
+</tr>
+</table>
+<h2>proposals</h2>
+<ul>
+{% for p in proposals %}
+<li> <a href="{% url 'db-entity' p.entity.id %}">{{p.entity.proposal.title|default:"NEEDS A TITLE"}}</a> ({%if p.entity.proposal.status == p.entity.proposal.ACCEPTED%}confirmed{%elif p.entity.proposal.status == p.entity.proposal.DELETED%}deleted{%else%}waiting for confirmation{%endif%})</li>
+{% endfor %}
+</ul>
+</div>
+
+{% if perms.db.can_schedule %}
+<div class="col-sm-4">
+{% include "./entity_notes.html" with entity=bifuser %}
+</div>
+{% endif %}{# end "if can_schedule" #}
+</div>{# end "div class=row" #}
+
+{% else %}
+<p>No user found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}

@@ -44,6 +44,7 @@ urlpatterns = [
     path('createSpreadsheet/', views.createSpreadsheet, name='db-createSpreadsheet'),
     path('allSpreadsheets/', views.allSpreadsheets, name='db-allSpreadsheets'),
     path('scheduleProposal', views.scheduleProposal, name='db-scheduleProposal'),
+    path('allUsers/', views.allUsers, name='db-allUsers'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 

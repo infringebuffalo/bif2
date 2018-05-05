@@ -273,6 +273,22 @@ def createVenue(request):
     return redirect('db-index')
 
 
+@permission_required('db.can_schedule')
+def user(request,id):
+    bifu = get_object_or_404(BIFUser, pk=id)
+    u = bifu.user
+    notes = bifu.notes.all()
+    proposals = bifu.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal')
+    context = {'user':u, 'bifuser': bifu, 'proposals': proposals, 'notes':notes}
+    return render(request,'db/user.html', context)
+
+
+@permission_required('db.can_schedule')
+def allUsers(request):
+    users = BIFUser.objects.all()
+    return render(request,'db/all_users.html', { 'users' : users })
+
+
 @login_required
 def venue(request,id):
     ven = get_object_or_404(Venue, pk=id)
@@ -576,6 +592,8 @@ def entity(request,id):
             return venue(request,id)
         elif e.entityType == 'spreadsheet':
             return spreadsheet(request,id)
+        elif e.entityType == 'bifuser':
+            return user(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
