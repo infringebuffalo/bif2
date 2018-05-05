@@ -1,4 +1,14 @@
 {% extends "base_generic.html" %}
+{% block title %} Venue {{venue.name}} {% endblock %}
+{% block style %}
+<style>
+.avail td { padding: 20px }
+.avail tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
+.alternategrey td { padding-top: 6px; padding-bottom: 6px }
+.listings td { padding-right: 10px }
+</style>
+{% endblock %}
 
 {% block content %}
 
@@ -9,6 +19,9 @@
 <div class="col-sm-8">
 <p>Status: {% if venue.status == venue.WAITING %} waiting for confirmation {% elif venue.status == venue.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
 <p><a href="{% url 'db-editEntity' venue.id %}">Edit info</a></p>
+
+{% include "./entity_schedule.html" with venue=venue %}
+
 <table>
 {% for key,value in venue_info.items %}
 <tr><th>{{ key }}</th><td>{{ value }}</td></tr>

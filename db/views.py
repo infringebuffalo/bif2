@@ -296,7 +296,8 @@ def venue(request,id):
     inbatches = ven.batches.all()
     batches = Batch.objects.all()
     notes = ven.notes.all()
-    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes}
+    listings = ven.listing_set.order_by('date')
+    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings}
     return render(request,'db/venue.html', context)
 
 
@@ -696,7 +697,7 @@ def scheduleProposal(request):
     for d in range(0,fest.numberOfDays):
         day = fest.startDate + timedelta(days=d)
         if day.isoformat() in request.POST.keys():
-            messages.success(request,'schedule ' + day.isoformat())
+            messages.success(request,'Scheduled %s on %s at %s'%(proposal.title,day.isoformat(),venue.name))
             listing = Listing(who=proposal, where=venue, venuenote=venuenote, date=day, starttime=starttime, endtime=endtime, installation=installation, listingnote=listnote)
             listing.save()
             logInfo("listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))

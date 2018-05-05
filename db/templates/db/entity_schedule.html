@@ -4,7 +4,7 @@
 {% if listings %}
 <table class="listings">
 {% for l in listings %}
-{% db_listingRow l %}
+{% db_listingRow l proposal venue %}
 {% endfor %}
 </table>
 {% endif %}
@@ -26,7 +26,7 @@
 {% if proposal %}
 {% db_venueMenu %}
 {% else %}
-proposalmenu
+{% db_proposalMenu %}
 {% endif %}
 <br>Venue detail:<input type="text" name="venuenote" value="" size="20"/> </td>
 <td> Start time: {% db_timeMenu 6 28 "starttime" %}

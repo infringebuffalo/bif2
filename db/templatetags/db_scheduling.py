@@ -35,6 +35,22 @@ def db_venueMenu():
 
 
 @register.simple_tag
+def db_proposalMenu():
+    fest = FestivalInfo.objects.last()
+    proposals = Proposal.objects.filter(status=Proposal.ACCEPTED,festival=fest).all()
+    retval = format_html('<select name="proposal">')
+    for p in proposals:
+        name = p.title
+        if len(name) > 32:
+            name = name[:29] + "..."
+        elif name == "":
+            name = "NEEDS A TITLE"
+        retval += format_html('<option value="{}">{}</option>', p.id, name)
+    retval += format_html('</select>')
+    return retval
+
+
+@register.simple_tag
 def db_timeMenu(startHour,endHour,name,*args,**kwargs):
     startHour = int(startHour)
     endHour = int(endHour)
@@ -77,9 +93,12 @@ def timeToString(t):
 
 
 @register.simple_tag
-def db_listingRow(listing):
+def db_listingRow(listing,proposal,venue):
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
-    retval = format_html('<tr><tr><td>{}</td><td>{}-{}</td><td>{}{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),listing.where.name,venuenote)
+    if proposal:
+        retval = format_html('<tr><tr><td>{}</td><td>{}-{}</td><td>{}{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),listing.where.name,venuenote)
+    else:
+        retval = format_html('<tr><tr><td>{}</td><td>{}-{}</td><td>{}{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),listing.who.title,venuenote)
 #    if listing.listingnote != '':
 #        retval += format_html('<td>{}</td>',listing.listingnote)
     retval += format_html('</tr>\n')
