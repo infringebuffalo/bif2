@@ -685,17 +685,17 @@ def scheduleProposal(request):
     from datetime import timedelta
     proposal = get_object_or_404(Proposal, pk=int(request.POST['proposal']))
     venue = get_object_or_404(Venue, pk=int(request.POST['venue']))
-    venuenote = request.POST['venuenote']
+    venuenote = request.POST['venuenote'] if 'venuenote' in request.POST.keys() else ''
     starttime = int(request.POST['starttime'])
     endtime = int(request.POST['endtime'])
     installation = False
-    note = request.POST['note']
+    listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
     fest = FestivalInfo.objects.last()
     for d in range(0,fest.numberOfDays):
         day = fest.startDate + timedelta(days=d)
         if day.isoformat() in request.POST.keys():
             messages.success(request,'schedule ' + day.isoformat())
-            listing = Listing(who=proposal, where=venue, venuenote=venuenote, date=day, starttime=starttime, endtime=endtime, installation=installation, listingnote=note)
+            listing = Listing(who=proposal, where=venue, venuenote=venuenote, date=day, starttime=starttime, endtime=endtime, installation=installation, listingnote=listnote)
             listing.save()
             logInfo("listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
     return redirect('db-entity',id=proposal.id)
