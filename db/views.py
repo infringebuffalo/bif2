@@ -459,7 +459,8 @@ def batchEmails(request, id):
 @permission_required('db.can_schedule')
 def composeMailToBatch(request, id):
     b = get_object_or_404(Batch, pk=id)
-    context = { 'batch': b, 'sender': request.user.email, 'defaultsubject': "BIF!" }
+    fest = FestivalInfo.objects.last()
+    context = { 'batch': b, 'sender': request.user.email, 'defaultsubject': fest.name }
     return render(request,'db/batch_composemail.html', context)
 
 @permission_required('db.can_schedule')
@@ -468,16 +469,21 @@ def mailBatch(request):
     from django.core.exceptions import ValidationError
     id = int(request.POST["batch_id"])
     b = get_object_or_404(Batch, pk=id)
+    sender = request.POST["sender"]
     addrs = getBatchEmailAddresses(b)
-    for mail_to in addrs:
+    validaddrs = []
+    for a in addrs:
         try:
-            validate_email( mail_to )
+            validate_email(a)
+            validaddrs.append(a)
         except ValidationError:
-            logInfo("email '%s' is invalid" % mail_to)
-            messages.error(request, "email '%s' is invalid" % mail_to)
-        mail_subject = request.POST["subject"]
-        mail_body = request.POST["message"]
-        EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to], reply_to=request.user.email).send()
+            logInfo("email '%s' is invalid" % a)
+            messages.error(request, "email '%s' is invalid" % a)
+    mail_subject = request.POST["subject"]
+    mail_body = request.POST["message"]
+    EmailMultiAlternatives(mail_subject, mail_body, None, [sender], reply_to=[sender], bcc=validaddrs).send()
+    logInfo("sent mail to '%s'" % ', '.join(validaddrs))
+    messages.success(request, "sent mail to %s" % ', '.join(validaddrs))
     return redirect('db-entity',id=id)
 
 
