@@ -8,33 +8,32 @@
 
 <div class="col-md-12">
   <div class="row home sticky" id="sticky_0">
-    <div class="datetime">
-      <span>Due May 1, 2018 - 11:59PM</span>
-    </div>
     <div class="box-content">
-      <h2>Applications Now Open!</h2>
-      <p>Workshop applications are still open for the 2018 Buffalo Infringement Festival. Apply <a href="/db" target="_blank">here!</a></p>
+      <h2>Applications are closed.</h2>
+      <p>The deadline has passed for the 2018 Buffalo Infringement Festival. Organizers are working on programming the festival. Performers, login to view/edit proposals <a href="/db" target="_blank">here</a>!</p>
     </div>
   </div>
 
   {% if next_event %}
-  <div class="row home upcoming-event" id="calendar_0">
-    <div class="datetime">
-      <span>{{ next_event.datetime }}</span>
+    {% for next in next_event %}
+
+    <div class="row home upcoming-event" id="calendar_0">
+      <div class="datetime">
+        <span>{{ next.datetime }}</span>
+      </div>
+      <div class="highlight-badge-right">
+        <span>next event</span>
+      </div>
+      <div class="box-content">
+        <h2>{{ next.title }}</h2>
+        <p>{{ next.description}}
+          {% if next.url %}
+          <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+          {% endif %}
+        </p>
+      </div>
     </div>
-    <div class="highlight-badge-right">
-      <span>next event</span>
-    </div>
-    <div class="box-content">
-      <h2>{{ next_event.title }}</h2>
-      <p>{{ next_event.description}}
-        {% if next_event.url %}
-        <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
-        {% endif %}
-      </p>
-    </div>
-  </div>
-  
+  {% endfor %}  
   {% endif %}
 
   <div class="row home sticky" id="sticky_1">
