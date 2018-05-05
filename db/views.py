@@ -634,7 +634,8 @@ def proposal(request,id):
     batches = Batch.objects.all()
     notes = prop.notes.all()
     listings = prop.listing_set.order_by('date')
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings}
+    owner = prop.permit_who.filter(permission=UserPermission.OWNER).first().bifuser
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner}
     return render(request,'db/proposal.html', context)
 
 

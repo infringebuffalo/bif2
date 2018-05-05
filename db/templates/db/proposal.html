@@ -17,6 +17,7 @@
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
+{% if perms.db.can_schedule and owner %}<p>Owner: <a href="{% url 'db-entity' owner.id %}">{{owner.user.email}}</a></p>{% endif %}
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
 <p><a href="{% url 'db-editEntity' id=prop.id %}">Edit proposal</a></p>
 
