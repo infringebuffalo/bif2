@@ -530,7 +530,14 @@ def stringMatch(needle,haystack,exact):
 @permission_required('db.can_schedule')
 def newSpreadsheet(request):
     batches = Batch.objects.all()
-    context = {'batches':batches}
+    fest = FestivalInfo.objects.last()
+    forminfos = FormInfo.objects.all()
+    fielddict = {}
+    for fi in forminfos:
+        fields = json.loads(fi.fields)
+        for f in fields:
+            fielddict[f[0]] = f[1]
+    context = {'batches':batches, 'fields':fielddict}
     return render(request,'db/new_spreadsheet.html', context)
 
 

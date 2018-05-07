@@ -30,6 +30,8 @@ $(document).ready(function() {
 {% block content %}
 <h1>Create a spreadsheet</h1>
 
+<div class="row">
+<div class="col-sm-6">
 <form method="POST" action="{% url 'db-createSpreadsheet' %}" onsubmit="return validateForm(this)">
 {% csrf_token %}
 
@@ -52,4 +54,14 @@ $(document).ready(function() {
 <input type="Submit" name="submit" value="Create" />
 </p>
 </form>
+</div>
+
+<div class="col-sm-4">
+<table>
+<tr><th>field label</th><th>description</th></tr>
+{% for label,text in fields.items %}
+<tr><td>{{label}}</td><td>{{text}}</td></tr>
+{% endfor %}
+</table>
+</div>
 {% endblock %}
