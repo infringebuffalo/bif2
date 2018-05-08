@@ -537,7 +537,9 @@ def newSpreadsheet(request):
         fields = json.loads(fi.fields)
         for f in fields:
             fielddict[f[0]] = f[1]
-    context = {'batches':batches, 'fields':fielddict}
+    fieldlist = list(fielddict.items())
+    fieldlist.sort()
+    context = {'batches':batches, 'fields':fieldlist}
     return render(request,'db/new_spreadsheet.html', context)
 
 

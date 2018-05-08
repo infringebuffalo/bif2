@@ -21,7 +21,7 @@ else
 $(document).ready(function() {
     $(".addbutton").click(function(e) {
         e.preventDefault();
-        $(".formtable").append('<tr><th rowspan="2">Column</th><td> name: <input type="text" name="columnname[]" size="20" value="" /> </td></tr><tr><td>field label: <input type="text" name="propfield[]" size="20" value="" /> <em>OR</em> default value: <input type="text" name="default[]" size="20" value="" /> </td></tr>');
+        $(".formtable").append('<tr><th rowspan="2">Column</th><td> name: <input type="text" name="columnname[]" size="20" value="" /> </td></tr><tr><td>field label: <select name="propfield[]"> {% for f in fields %} <option value="{{ f.0 }}">{{f.0}}</option> {% endfor %} </select> <em>OR</em> default value: <input type="text" name="default[]" size="20" value="" /> </td> </tr>');
         });
     });
 </script>
@@ -46,7 +46,11 @@ $(document).ready(function() {
            </select>
       </td></tr>
   <tr><th rowspan="2">Column</th><td> name: <input type="text" name="columnname[]" size="20" value="" /> </td></tr>
-  <tr><td>field label: <input type="text" name="propfield[]" size="20" value="" /> <em>OR</em> default value: <input type="text" name="default[]" size="20" value="" /> </td></tr>
+  <tr><td>field label: 
+<select name="propfield[]">
+{% for f in fields %}<option value="{{ f.0 }}">{{f.0}}</option>{% endfor %}
+</select>
+<em>OR</em> default value: <input type="text" name="default[]" size="20" value="" /> </td></tr>
 </table>
 <button class="addbutton">Add column</button>
 
@@ -59,7 +63,7 @@ $(document).ready(function() {
 <div class="col-sm-4">
 <table>
 <tr><th>field label</th><th>description</th></tr>
-{% for label,text in fields.items %}
+{% for label,text in fields %}
 <tr><td>{{label}}</td><td>{{text}}</td></tr>
 {% endfor %}
 </table>
