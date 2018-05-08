@@ -724,7 +724,7 @@ def addNote(request):
         setEntityOwner(note, creator)
     logInfo("Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext), request)
     return redirect('db-entity',id=entityid)
-    
+
 
 @permission_required('db.can_schedule')
 def scheduleProposal(request):
@@ -745,6 +745,16 @@ def scheduleProposal(request):
             listing.save()
             logInfo("listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
     return redirect('db-entity',id=proposal.id)
+
+
+@permission_required('db.can_schedule')
+def deleteListing(request,id):
+    listing = get_object_or_404(Listing, pk=id)
+    proposal = listing.who
+    messages.success(request,'Deleted listing of %s on %s at %s'%(proposal.title,listing.date.isoformat(),listing.where.name))
+    logInfo('Deleted listing of {ID:%d} on %s at {ID:%d}'%(proposal.id,listing.date.isoformat(),listing.where.id))
+    listing.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 import logging

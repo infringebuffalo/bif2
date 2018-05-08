@@ -97,9 +97,10 @@ def db_listingRow(listing,proposal,venue):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     if proposal:
-        retval = format_html('<tr><tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
+        retval = format_html('<tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
     else:
-        retval = format_html('<tr><tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote)
+        retval = format_html('<tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote)
+    retval += format_html('<td><a href="{}">(delete)</a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
 #    if listing.listingnote != '':
 #        retval += format_html('<td>{}</td>',listing.listingnote)
     retval += format_html('</tr>\n')
