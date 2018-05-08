@@ -376,7 +376,7 @@ def createBatch(request):
         return render(request, 'db/new_batch.html')
     batch.save()
     logInfo(request, "Created new batch {ID:%d} '%s'"%(batch.id,name))
-    return redirect('db-index')
+    return redirect('db-entity',id=batch.id)
 
 
 @permission_required('db.can_schedule')
