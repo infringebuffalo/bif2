@@ -26,10 +26,12 @@ def db_smallCalendar():
 @register.simple_tag
 def db_venueMenu():
     fest = FestivalInfo.objects.last()
-    venues = Venue.objects.all()
+    venueObjects = Venue.objects.filter(status=Venue.ACCEPTED)
+    venues = [(v.name, v.id) for v in venueObjects]
+    venues.sort(key=lambda v: v[0].casefold())
     retval = format_html('<select name="venue">')
     for v in venues:
-        retval += format_html('<option value="{}">{}</option>', v.id, v.name)
+        retval += format_html('<option value="{}">{}</option>', v[1], v[0])
     retval += format_html('</select>')
     return retval
 
@@ -37,15 +39,17 @@ def db_venueMenu():
 @register.simple_tag
 def db_proposalMenu():
     fest = FestivalInfo.objects.last()
-    proposals = Proposal.objects.filter(status=Proposal.ACCEPTED,festival=fest).all()
+    proposalObjects = Proposal.objects.filter(status=Proposal.ACCEPTED,festival=fest).all()
+    proposals = [(p.title, p.id) for p in proposalObjects]
+    proposals.sort(key=lambda p: p[0].casefold())
     retval = format_html('<select name="proposal">')
     for p in proposals:
-        name = p.title
+        name = p[0]
         if len(name) > 32:
             name = name[:29] + "..."
         elif name == "":
             name = "NEEDS A TITLE"
-        retval += format_html('<option value="{}">{}</option>', p.id, name)
+        retval += format_html('<option value="{}">{}</option>', p[1], name)
     retval += format_html('</select>')
     return retval
 
