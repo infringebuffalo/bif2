@@ -4,13 +4,13 @@ from django.dispatch import receiver
 from .models import BIFUser
 
 def logUserLogin(sender, user, request, **kwargs):
-    logInfo('logged in',request)
+    logInfo(request, 'logged in')
 
 def logUserLogout(sender, user, request, **kwargs):
-    logInfo('logged out',request)
+    logInfo(request, 'logged out')
 
 def logLoginFail(sender, credentials, request, **kwargs):
-    logInfo('login failed (%s)' % credentials['username'],request)
+    logInfo(request, 'login failed (%s)' % credentials['username'])
 
 user_logged_in.connect(logUserLogin)
 user_logged_out.connect(logUserLogout)
@@ -18,17 +18,17 @@ user_login_failed.connect(logLoginFail)
 
 import logging
 
-def logInfo(message,request=None):
+def logInfo(request, message):
     logger = logging.getLogger(__name__)
-    logger.info(logMessage(message,request))
+    logger.info(logMessage(request,message))
 
 
-def logError(message,request=None):
+def logError(request, message):
     logger = logging.getLogger(__name__)
-    logger.error(logMessage(message,request))
+    logger.error(logMessage(request,message))
 
 
-def logMessage(message,request=None):
+def logMessage(request, message):
     from datetime import datetime
     username = 'anonymous-user'
     if request and hasattr(request,'user') and hasattr(request.user,'username') and request.user.username != '':

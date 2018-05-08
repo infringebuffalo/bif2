@@ -67,7 +67,7 @@ def submit(request):
     fest = FestivalInfo.objects.last()
     prop = Proposal(title=request.POST["title"], info=infojson, status=Proposal.WAITING, orgContact=defaultContact, festival=fest)
     prop.save()
-    logInfo("saved proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
+    logInfo(request, "saved proposal {ID:%d} ('%s')" % (prop.id,prop.title))
 
     mail_to = infodict["contactemail"]
     from django.core.validators import validate_email
@@ -75,7 +75,7 @@ def submit(request):
     try:
         validate_email( mail_to )
     except ValidationError:
-        logInfo("email '%s' is invalid" % mail_to)
+        logInfo(request, "email '%s' is invalid" % mail_to)
         return render(request,'db/proposal_email_fail.html', {'address':mail_to})
     context = {'prop':prop, 'prop_info':infodict}
     mail_subject = "Buffalo Infringement Festival proposal '%s'" % prop.title
@@ -87,7 +87,7 @@ def submit(request):
     EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to], cc=cc_list).send()
     if defaultBatch:
         defaultBatch.members.add(prop)
-        logInfo("Added {ID:%d} to batch {ID:%d}"%(prop.id,defaultBatch.id), request)
+        logInfo(request, "Added {ID:%d} to batch {ID:%d}"%(prop.id,defaultBatch.id))
     return render(request,'db/proposal_submit.html', {})
 
 
@@ -101,14 +101,14 @@ def reconfirm(request,id):
     try:
         validate_email( mail_to )
     except ValidationError:
-        logInfo("email '%s' is invalid" % mail_to)
+        logInfo(request, "email '%s' is invalid" % mail_to)
         return render(request,'db/proposal_email_fail.html', {'address':mail_to})
     context = {'prop':prop, 'prop_info':infodict}
     mail_subject = "Buffalo Infringement Festival proposal '%s'" % prop.title
     mail_body = loader.render_to_string('db/submit_email.txt', context)
     EmailMultiAlternatives(mail_subject, mail_body, None, [mail_to]).send()
     messages.success(request, 'Confirmation message sent')
-    logInfo("Sent confirmation email for {ID:%d} to '%s'" % (id,mail_to))
+    logInfo(request, "Sent confirmation email for {ID:%d} to '%s'" % (id,mail_to))
     return redirect('db-entity',id)
 
 
@@ -118,9 +118,9 @@ def setEntityOwner(e,u):
     if UserPermission.objects.filter(entity=e,bifuser=u).count() == 0:
         permit = UserPermission(entity=e, bifuser = u, permission=UserPermission.OWNER)
         permit.save()
-        logInfo("set owner of {ID:%d} to user {ID:%d}" % (e.id, u.id))
+        logInfo(None, "set owner of {ID:%d} to user {ID:%d}" % (e.id, u.id))
     else:
-        logInfo("tried to set owner of {ID:%d} to user {ID:%d} redundantly" % (e.id, u.id))
+        logInfo(None, "tried to set owner of {ID:%d} to user {ID:%d} redundantly" % (e.id, u.id))
 
 
 def confirmProposal(request,id):
@@ -131,9 +131,9 @@ def confirmProposal(request,id):
         owner = User.objects.get(username=propinfodict["contactemail"])
         setEntityOwner(prop, owner.bifuser)
     except:
-        logInfo("exception while trying to setEntityOwner on {ID:%d}" % prop.id)
+        logInfo(request, "exception while trying to setEntityOwner on {ID:%d}" % prop.id)
     prop.save()
-    logInfo("confirmed proposal {ID:%d}" % id, request)
+    logInfo(request, "confirmed proposal {ID:%d}" % id)
     return render(request,'db/proposal_confirm.html', {'title':prop.title})
 
 
@@ -142,7 +142,7 @@ def deleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.DELETED
     prop.save()
-    logInfo("deleted proposal {ID:%d}" % id, request)
+    logInfo(request, "deleted proposal {ID:%d}" % id)
     messages.success(request, 'Proposal deleted')
     return redirect('db-entity',id=id)
 
@@ -152,7 +152,7 @@ def undeleteProposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     prop.status = Proposal.ACCEPTED   # Note that we can't tell if proposal was previously ACCEPTED or WAITING; will just have to default to this, or redesign
     prop.save()
-    logInfo("undeleted proposal {ID:%d}" % id, request)
+    logInfo(request, "undeleted proposal {ID:%d}" % id)
     messages.success(request, 'Proposal undeleted')
     return redirect('db-entity',id=id)
 
@@ -218,7 +218,7 @@ def update(request):
     prop.title = request.POST["title"]
     prop.info = infojson
     prop.save()
-    logInfo("updated proposal {ID:%d} ('%s')" % (prop.id,prop.title), request)
+    logInfo(request, "updated proposal {ID:%d} ('%s')" % (prop.id,prop.title))
     return redirect('db-entity',id=id)
 
 
@@ -236,17 +236,17 @@ def createAccount(request):
     try:
         djuser = User.objects.create_user(email, email, password, first_name=name)
     except IntegrityError:
-        logError("Tried to create duplicate account '%s'"%email, request)
+        logError(request, "Tried to create duplicate account '%s'"%email)
         messages.error(request, "An account '%s' already exists" % email)
         return render(request, 'db/new_account.html')
     except:
-        logError("Unknown error creating account '%s'"%email, request)
+        logError(request, "Unknown error creating account '%s'"%email)
         messages.error(request, 'Failed to create account')
         return render(request, 'db/new_account.html')
     bifuser = BIFUser.objects.create(user=djuser, phone='555-1212')
     claimProposals(bifuser)
     login(request, authenticate(username=email,password=password))
-    logInfo("Created new account '%s'"%email, request)
+    logInfo(request, "Created new account '%s'"%email)
     return redirect('db-index')
 
 
@@ -269,7 +269,7 @@ def createVenue(request):
     infojson = json.dumps(infodict)
     ven = Venue(name=request.POST["name"], info=infojson, status=Venue.WAITING)
     ven.save()
-    logInfo("saved venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
+    logInfo(request, "saved venue {ID:%d} ('%s')" % (ven.id,ven.name))
     return redirect('db-index')
 
 
@@ -326,7 +326,7 @@ def updateVenue(request):
     ven.name = request.POST["name"]
     ven.info = infojson
     ven.save()
-    logInfo("updated venue {ID:%d} ('%s')" % (ven.id,ven.name), request)
+    logInfo(request, "updated venue {ID:%d} ('%s')" % (ven.id,ven.name))
     return venue(request,id)
 
 
@@ -335,7 +335,7 @@ def confirmVenue(request,id):
     ven = get_object_or_404(Venue, pk=id)
     ven.status = Venue.ACCEPTED
     ven.save()
-    logInfo("confirmed venue {ID:%d}" % id, request)
+    logInfo(request, "confirmed venue {ID:%d}" % id)
     return redirect('db-entity',id=id)
 
 
@@ -344,7 +344,7 @@ def deleteVenue(request,id):
     ven = get_object_or_404(Venue, pk=id)
     ven.status = Venue.DELETED
     ven.save()
-    logInfo("deleted venue {ID:%d}" % id, request)
+    logInfo(request, "deleted venue {ID:%d}" % id)
     messages.success(request, 'Venue deleted')
     return redirect('db-entity',id=id)
 
@@ -354,7 +354,7 @@ def undeleteVenue(request,id):
     ven = get_object_or_404(Venue, pk=id)
     ven.status = Venue.ACCEPTED
     ven.save()
-    logInfo("undeleted venue {ID:%d}" % id, request)
+    logInfo(request, "undeleted venue {ID:%d}" % id)
     messages.success(request, 'Venue undeleted')
     return redirect('db-entity',id=id)
 
@@ -371,11 +371,11 @@ def createBatch(request):
     try:
         batch = Batch(name=name, description=description, festival=None)
     except:
-        logError("Unknown error creating batch '%s'"%name, request)
+        logError(request, "Unknown error creating batch '%s'"%name)
         messages.error(request, 'Failed to create batch')
         return render(request, 'db/new_batch.html')
     batch.save()
-    logInfo("Created new batch {ID:%d} '%s'"%(batch.id,name), request)
+    logInfo(request, "Created new batch {ID:%d} '%s'"%(batch.id,name))
     return redirect('db-index')
 
 
@@ -395,7 +395,7 @@ def addToBatch(request,batchid,memberid):
     b = get_object_or_404(Batch, pk=batchid)
     m = get_object_or_404(Entity, pk=memberid)
     b.members.add(m)
-    logInfo("Added {ID:%d} to batch {ID:%d}"%(memberid,batchid), request)
+    logInfo(request, "Added {ID:%d} to batch {ID:%d}"%(memberid,batchid))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @permission_required('db.can_schedule')
@@ -410,7 +410,7 @@ def removeFromBatch(request,batchid,memberid):
     b = get_object_or_404(Batch, pk=batchid)
     m = get_object_or_404(Entity, pk=memberid)
     b.members.remove(m)
-    logInfo("Removed {ID:%d} from batch {ID:%d}"%(memberid,batchid), request)
+    logInfo(request, "Removed {ID:%d} from batch {ID:%d}"%(memberid,batchid))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -431,7 +431,7 @@ def updateBatch(request):
     b.name = request.POST['name']
     b.description = request.POST['description']
     b.save()
-    logInfo("updated batch {ID:%d} ('%s')" % (b.id,b.name), request)
+    logInfo(request, "updated batch {ID:%d} ('%s')" % (b.id,b.name))
     return redirect('db-entity',id=id)
 
 def getBatchEmailAddresses(b):
@@ -477,12 +477,12 @@ def mailBatch(request):
             validate_email(a)
             validaddrs.append(a)
         except ValidationError:
-            logInfo("email '%s' is invalid" % a)
+            logInfo(request, "email '%s' is invalid" % a)
             messages.error(request, "email '%s' is invalid" % a)
     mail_subject = request.POST["subject"]
     mail_body = request.POST["message"]
     EmailMultiAlternatives(mail_subject, mail_body, None, [sender], reply_to=[sender], bcc=validaddrs).send()
-    logInfo("sent mail to '%s'" % ', '.join(validaddrs))
+    logInfo(request, "sent mail to '%s'" % ', '.join(validaddrs))
     messages.success(request, "sent mail to %s" % ', '.join(validaddrs))
     return redirect('db-entity',id=id)
 
@@ -560,12 +560,12 @@ def createSpreadsheet(request):
     try:
         spreadsheet = Spreadsheet(name=name, festival=fest, description=description, frombatch=frombatch, columns=colsjson)
     except:
-        logError("Unknown error creating spreadsheet '%s'"%name, request)
+        logError(request, "Unknown error creating spreadsheet '%s'"%name)
         messages.error(request, 'Failed to create spreadsheet')
         return render(request, 'db/new_spreadsheet.html')
     spreadsheet.save()
     messages.success(request, 'created spreadsheet "%s"'%name)
-    logInfo("Created new spreadsheet {ID:%d} '%s'"%(spreadsheet.id,name), request)
+    logInfo(request, "Created new spreadsheet {ID:%d} '%s'"%(spreadsheet.id,name))
     for e in frombatch.members.all():
         values = []
         for c in cols:
@@ -715,14 +715,14 @@ def addNote(request):
     try:
         note = Note(creator=creator, notetext=notetext)
     except:
-        logError("Unknown error creating note '%s'"%notetext, request)
+        logError(request, "Unknown error creating note '%s'"%notetext)
         return redirect('db-index')
     note.save()
     e = get_object_or_404(Entity, pk=entityid)
     note.attachedTo.add(e)
     if creator:
         setEntityOwner(note, creator)
-    logInfo("Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext), request)
+    logInfo(request, "Created new note {ID:%d} attached to {ID:%s} '%s'"%(note.id,entityid,notetext))
     return redirect('db-entity',id=entityid)
 
 
@@ -743,7 +743,7 @@ def scheduleProposal(request):
             messages.success(request,'Scheduled %s on %s at %s'%(proposal.title,day.isoformat(),venue.name))
             listing = Listing(who=proposal, where=venue, venuenote=venuenote, date=day, starttime=starttime, endtime=endtime, installation=installation, listingnote=listnote)
             listing.save()
-            logInfo("listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
+            logInfo(request, "listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
     return redirect('db-entity',id=proposal.id)
 
 
@@ -752,24 +752,24 @@ def deleteListing(request,id):
     listing = get_object_or_404(Listing, pk=id)
     proposal = listing.who
     messages.success(request,'Deleted listing of %s on %s at %s'%(proposal.title,listing.date.isoformat(),listing.where.name))
-    logInfo('Deleted listing of {ID:%d} on %s at {ID:%d}'%(proposal.id,listing.date.isoformat(),listing.where.id))
+    logInfo(request, 'Deleted listing of {ID:%d} on %s at {ID:%d}'%(proposal.id,listing.date.isoformat(),listing.where.id))
     listing.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 import logging
 
-def logInfo(message,request=None):
+def logInfo(request,message):
     logger = logging.getLogger(__name__)
-    logger.info(logMessage(message,request))
+    logger.info(logMessage(request,message))
 
 
-def logError(message,request=None):
+def logError(request,message):
     logger = logging.getLogger(__name__)
-    logger.error(logMessage(message,request))
+    logger.error(logMessage(request,message))
 
 
-def logMessage(message,request=None):
+def logMessage(request,message):
     from datetime import datetime
     username = 'anonymous-user'
     if request and hasattr(request,'user') and hasattr(request.user,'username') and request.user.username != '':
