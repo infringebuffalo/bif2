@@ -21,6 +21,7 @@
 {% if perms.db.can_schedule %}
 <div class="col-sm-4">
 <p><a href="{% url 'db-editEntity' batch.id %}">edit batch</a></p>
+<p><a href="{% url 'db-deleteBatch' batch.id %}">delete batch</a></p>
 <p><a href="{% url 'db-autoBatch' batch.id %}">auto-add</a></p>
 <p><a href="{% url 'db-batchEmails' batch.id %}">email addresses</a></p>
 <p><a href="{% url 'db-composeMailToBatch' batch.id %}">send email</a></p>

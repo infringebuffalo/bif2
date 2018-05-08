@@ -528,6 +528,17 @@ def stringMatch(needle,haystack,exact):
 
 
 @permission_required('db.can_schedule')
+def deleteBatch(request, id):
+    b = get_object_or_404(Batch, pk=id)
+    msg = 'Deleted batch "%s"' % b.name
+    logmsg = 'deleted batch {ID:%d}' % b.id
+    b.delete()
+    messages.success(request, msg)
+    logInfo(request, logmsg)
+    return redirect('db-batches')
+
+
+@permission_required('db.can_schedule')
 def newSpreadsheet(request):
     batches = Batch.objects.all()
     fest = FestivalInfo.objects.last()

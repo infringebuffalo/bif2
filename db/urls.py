@@ -37,6 +37,7 @@ urlpatterns = [
     path('mailBatch/', views.mailBatch, name='db-mailBatch'),
     path('autoBatch/<int:id>/', views.autoBatch, name='db-autoBatch'),
     path('autoBatchRun/', views.autoBatchRun, name='db-autoBatchRun'),
+    path('deleteBatch/<int:id>/', views.deleteBatch, name='db-deleteBatch'),
     path('edit/<int:id>/', views.editEntity, name='db-editEntity'),
     path('update/', views.update, name='db-update'),
     path('updateVenue/', views.updateVenue, name='db-updateVenue'),
