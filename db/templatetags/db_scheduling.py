@@ -19,19 +19,35 @@ def db_smallCalendar():
     retval += format_html('</table>')
     return retval
 
-#<td colspan="6"></td></tr>
 
+@register.simple_tag
+def db_dateMenu(**kwargs):
+    fest = FestivalInfo.objects.last()
+    if 'defaultDate' in kwargs:
+        defaultDate = kwargs['defaultDate']
+    else:
+        defaultDate = ''
+    retval = format_html('<select name="date">')
+    for d in range(0, fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        retval += format_html('<option value="{}" {}>{}</option>', day, 'selected' if day.isoformat()==defaultDate else '', day.strftime('%a %b %d'))
+    retval += format_html('</select>')
+    return retval
 
 
 @register.simple_tag
-def db_venueMenu():
+def db_venueMenu(**kwargs):
     fest = FestivalInfo.objects.last()
+    if 'defaultVenue' in kwargs:
+        defaultVenue = int(kwargs['defaultVenue'])
+    else:
+        defaultVenue = 0
     venueObjects = Venue.objects.filter(status=Venue.ACCEPTED)
     venues = [(v.name, v.id) for v in venueObjects]
     venues.sort(key=lambda v: v[0].casefold())
     retval = format_html('<select name="venue">')
     for v in venues:
-        retval += format_html('<option value="{}">{}</option>', v[1], v[0])
+        retval += format_html('<option value="{}" {}>{}</option>', v[1], 'selected' if v[1]==defaultVenue else '', v[0])
     retval += format_html('</select>')
     return retval
 
@@ -66,9 +82,9 @@ def db_timeMenu(startHour,endHour,name,*args,**kwargs):
     for hour in range(startHour, endHour):
         for minute in [0, 15, 30, 45]:
             t = '%02d%02d' % (hour, minute)
-            retval += format_html('<option value="{}"{}>{}</option>', t, 'selected' if t==default else '', timeToString(t))
+            retval += format_html('<option value="{}" {}>{}</option>', t, 'selected' if t==default else '', timeToString(t))
     t = '%02d00' % endHour
-    retval += format_html('<option value="{}"{}>{}</option>', t, 'selected' if t==default else '', timeToString(t))
+    retval += format_html('<option value="{}" {}>{}</option>', t, 'selected' if t==default else '', timeToString(t))
     retval += format_html('</select>')
     return retval
 
@@ -101,12 +117,21 @@ def db_listingRow(listing,proposal,venue):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     if proposal:
-        retval = format_html('<tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
+        retval = format_html('<tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
     else:
         retval = format_html('<tr><td>{}</td><td>{}-{}</td><td><a href="{}">{}</a>{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime),reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote)
+    retval += format_html('<td><a href="{}">(edit)</a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
     retval += format_html('<td><a href="{}">(delete)</a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
 #    if listing.listingnote != '':
 #        retval += format_html('<td>{}</td>',listing.listingnote)
     retval += format_html('</tr>\n')
     return retval
 
+
+@register.simple_tag
+def db_entityFromURL(url):
+    from urllib.parse import urlparse
+    from django.urls import resolve
+    r = resolve(urlparse(url).path)
+    retval = format_html('{}',r.kwargs['id'])
+    return retval

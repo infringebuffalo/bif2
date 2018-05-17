@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+
+{% block content %}
+
+{% if listing %}
+<h1>Editing listing</h1>
+
+<p>
+<form method="POST" action="{% url 'db-updateListing' %}" name="listingform" onsubmit="return validateForm()">
+{% csrf_token %}
+<input type="hidden" name="listing_id" value="{{ listing.id }}" />
+<input type="hidden" name="return_entity" value="{% db_entityFromURL request.META.HTTP_REFERER %}" />
+
+<table cellpadding=3>
+  <tr><th>Show:</th><td> {{ listing.showtitle }} </td></tr>
+  <tr><th>Venue:</th><td> {% db_venueMenu defaultVenue=listing.where.id %} </td></tr>
+  <tr><th>Venue detail:</th><td> <input type="text" name="venuenote" size="60" value="{{ listing.venuenote }}" /> </td></tr>
+  <tr><th>Date:</th><td> {% db_dateMenu defaultDate=listing.date|date:"c" %} </td></tr>
+  <tr><th>Start time:</th><td> {% db_timeMenu 6 28 "starttime" default=listing.starttime %} </td></tr>
+  <tr><th>End time:</th><td> {% db_timeMenu 6 28 "endtime" default=listing.endtime %} </td></tr>
+</table>
+
+
+<input type="Submit" name="submit" value="Update info" />
+</form>
+</p>
+
+{% else %}
+<p>No listing found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}

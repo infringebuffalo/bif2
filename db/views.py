@@ -629,6 +629,8 @@ def editEntity(request,id):
             return editVenue(request,id)
         elif e.entityType == 'batch':
             return editBatch(request,id)
+        elif e.entityType == 'listing':
+            return editListing(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
@@ -757,6 +759,29 @@ def scheduleProposal(request):
             logInfo(request, "listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
     return redirect('db-entity',id=proposal.id)
 
+
+@permission_required('db.can_schedule')
+def editListing(request,id):
+    listing = get_object_or_404(Listing, pk=id)
+    listing.showtitle = listing.who.title
+    listing.venuename = listing.where.name
+    context = {'listing':listing}
+    return render(request,'db/edit_listing.html', context)
+
+@permission_required('db.can_schedule')
+def updateListing(request):
+    id = int(request.POST["listing_id"])
+    l = get_object_or_404(Listing, pk=id)
+    l.where = get_object_or_404(Venue, pk=int(request.POST["venue"]))
+    l.venuenote = request.POST['venuenote'] if 'venuenote' in request.POST.keys() else ''
+    l.starttime = int(request.POST['starttime'])
+    l.endtime = int(request.POST['endtime'])
+    l.listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
+    l.date = request.POST["date"]
+    l.save()
+    messages.success(request,"Updated listing: %s on %s at %s"%(l.who.title,l.date,l.where.name))
+    logInfo(request, "updated listing {ID:%d}: {ID:%d} at {ID:%d} on %s, %d to %d" % (l.id,l.who.id,l.where.id,l.date,l.starttime,l.endtime))
+    return redirect('db-entity',id=int(request.POST["return_entity"]))
 
 @permission_required('db.can_schedule')
 def deleteListing(request,id):

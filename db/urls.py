@@ -48,6 +48,7 @@ urlpatterns = [
     path('allSpreadsheets/', views.allSpreadsheets, name='db-allSpreadsheets'),
     path('scheduleProposal', views.scheduleProposal, name='db-scheduleProposal'),
     path('deleteListing/<int:id>/', views.deleteListing, name='db-deleteListing'),
+    path('updateListing/', views.updateListing, name='db-updateListing'),
     path('allUsers/', views.allUsers, name='db-allUsers'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
