@@ -33,9 +33,9 @@ def allProposals(request):
 
 @login_required
 def allVenues(request):
-    confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED)
-    waiting_venues = Venue.objects.filter(status=Venue.WAITING)
-    deleted_venues = Venue.objects.filter(status=Venue.DELETED)
+    confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED).order_by('name')
+    waiting_venues = Venue.objects.filter(status=Venue.WAITING).order_by('name')
+    deleted_venues = Venue.objects.filter(status=Venue.DELETED).order_by('name')
     return render(request,'db/index.html', { 'confirmed_venues' : confirmed_venues, 'waiting_venues' : waiting_venues, 'deleted_venues': deleted_venues })
 
 
@@ -296,7 +296,7 @@ def venue(request,id):
     inbatches = ven.batches.all()
     batches = Batch.objects.all()
     notes = ven.notes.all()
-    listings = ven.listing_set.order_by('date')
+    listings = ven.listing_set.order_by('date','starttime')
     context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings}
     return render(request,'db/venue.html', context)
 
@@ -385,6 +385,7 @@ def batch(request,id):
     memberlist = []
     for e in b.members.all():
         memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
+    memberlist.sort(key=lambda m: m['name'].casefold())
     props = Proposal.objects.all()
     context = {'batch':b, 'members':memberlist, 'proposals':props}
     return render(request,'db/batch.html', context)
