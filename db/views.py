@@ -438,7 +438,7 @@ def updateBatch(request):
 def getBatchEmailAddresses(b):
     addrs = []
     for e in b.members.all():
-        if e.entityType == 'proposal':
+        if e.entityType == 'proposal' and e.proposal.status != e.proposal.DELETED:
             infodict = json.loads(e.proposal.info)
             addrs.append(infodict['contactemail'])
             addrs.append(infodict['secondcontactemail'])
