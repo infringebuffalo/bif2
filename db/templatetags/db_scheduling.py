@@ -131,7 +131,7 @@ def db_listingRow(listing,proposal,venue):
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     retval = format_html('<tr><td>{}</td><td>{}-{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime))
     if not proposal:
-        retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote)
+        retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
     if not venue:
         retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
     retval += format_html('<td><a href="{}">(edit)</a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
