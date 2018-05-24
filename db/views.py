@@ -33,15 +33,17 @@ def allProposals(request):
 
 @login_required
 def allVenues(request):
-    confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED).order_by('name')
-    waiting_venues = Venue.objects.filter(status=Venue.WAITING).order_by('name')
-    deleted_venues = Venue.objects.filter(status=Venue.DELETED).order_by('name')
+    from django.db.models.functions import Lower
+    confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED).order_by(Lower('name'))
+    waiting_venues = Venue.objects.filter(status=Venue.WAITING).order_by(Lower('name'))
+    deleted_venues = Venue.objects.filter(status=Venue.DELETED).order_by(Lower('name'))
     return render(request,'db/index.html', { 'confirmed_venues' : confirmed_venues, 'waiting_venues' : waiting_venues, 'deleted_venues': deleted_venues })
 
 
 @login_required
 def batches(request):
-    batchlist = Batch.objects.all()
+    from django.db.models.functions import Lower
+    batchlist = Batch.objects.all().order_by(Lower('name'))
     return render(request,'db/batches.html', { 'batchlist' : batchlist })
 
 
@@ -646,7 +648,7 @@ def spreadsheetCounts(request,id):
     for r in sheet.rows.all():
         vals = json.loads(r.data)
         if r.entity.entityType == 'proposal':
-            listings = r.entity.proposal.listing_set.order_by('date')
+            listings = r.entity.proposal.listing_set
             numlistings = len(listings)
             daycountDict = {}
             for d in daylist:
@@ -743,7 +745,7 @@ def proposal(request,id):
     inbatches = prop.batches.all()
     batches = Batch.objects.all()
     notes = prop.notes.all()
-    listings = prop.listing_set.order_by('date')
+    listings = prop.listing_set.order_by('date','starttime')
     owner = prop.permit_who.filter(permission=UserPermission.OWNER).first()
     if owner: owner = owner.bifuser
     context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner}
