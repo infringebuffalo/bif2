@@ -378,14 +378,17 @@ def createBatch(request):
     logInfo(request, "Created new batch {ID:%d} '%s'"%(batch.id,name))
     return redirect('db-entity',id=batch.id)
 
-
-@permission_required('db.can_schedule')
-def batch(request,id):
-    b = get_object_or_404(Batch, pk=id)
+def sortedBatchMembers(b):
     memberlist = []
     for e in b.members.all():
         memberlist.append({'id':e.id, 'name':entityName(e), 'status':entityStatus(e)})
     memberlist.sort(key=lambda m: m['name'].casefold())
+    return memberlist
+
+@permission_required('db.can_schedule')
+def batch(request,id):
+    b = get_object_or_404(Batch, pk=id)
+    memberlist = sortedBatchMembers(b)
     props = Proposal.objects.all()
     context = {'batch':b, 'members':memberlist, 'proposals':props}
     return render(request,'db/batch.html', context)
@@ -434,6 +437,31 @@ def updateBatch(request):
     b.save()
     logInfo(request, "updated batch {ID:%d} ('%s')" % (b.id,b.name))
     return redirect('db-entity',id=id)
+
+@permission_required('db.can_schedule')
+def batchStep(request,batchid,memberid,dir):
+    b = get_object_or_404(Batch, pk=batchid)
+    memberlist = sortedBatchMembers(b)
+    i = 0
+    while (i < len(memberlist)) and (memberlist[i]['id'] != memberid):
+        i = i+1
+    if i >= len(memberlist):
+        returnID = memberid
+    else:
+        if dir > 0:
+            returnID = memberlist[(i+1) % len(memberlist)]['id']
+        else:
+            returnID = memberlist[(i+len(memberlist)-1) % len(memberlist)]['id']
+    return redirect('db-entity',id=returnID)
+
+@permission_required('db.can_schedule')
+def batchStepForward(request,batchid,memberid):
+    return batchStep(request,batchid,memberid,1)
+
+@permission_required('db.can_schedule')
+def batchStepBackward(request,batchid,memberid):
+    return batchStep(request,batchid,memberid,-1)
+
 
 def getBatchEmailAddresses(b):
     addrs = []

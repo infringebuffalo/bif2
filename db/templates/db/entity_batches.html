@@ -2,7 +2,7 @@
 <p> in batches:
 <ul>
 {% for b in inbatches %}
-<li><a href="{% url 'db-entity' b.id %}">{{ b.name }}</a>  <span style="font-size: xx-small"><a href="{% url 'db-removeFromBatch' b.id entity.id %}">[remove]</a></span>
+<li><a href="{% url 'db-batchStepBackward' b.id entity.id %}">&#x2190;</a> <a href="{% url 'db-entity' b.id %}">{{ b.name }}</a> <a href="{% url 'db-batchStepForward' b.id entity.id %}">&#x2192;</a>  <span style="font-size: xx-small"><a href="{% url 'db-removeFromBatch' b.id entity.id %}">[remove]</a></span>
 {% endfor %}
 </ul>
 </p>
