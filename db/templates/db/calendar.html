@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+{% block style %}
+<style>
+th { padding-right: 10px }
+td { padding-right: 10px }
+</style>
+{% endblock %}
+
+{% block title %} Calendar {% endblock %}
+
+{% block content %}
+{% for d in days %}
+<table class="listings">
+{% for l in d.listings %}
+{% db_listingRow l proposal venue %}
+{% endfor %}
+</table>
+<br>
+{% endfor %}
+
+{% endblock %}
