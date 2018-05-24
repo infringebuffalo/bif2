@@ -48,6 +48,7 @@ urlpatterns = [
     path('newSpreadsheet/', views.newSpreadsheet, name='db-newSpreadsheet'),
     path('createSpreadsheet/', views.createSpreadsheet, name='db-createSpreadsheet'),
     path('allSpreadsheets/', views.allSpreadsheets, name='db-allSpreadsheets'),
+    path('spreadsheetCounts/<int:id>/', views.spreadsheetCounts, name='db-spreadsheetCounts'),
     path('scheduleProposal', views.scheduleProposal, name='db-scheduleProposal'),
     path('deleteListing/<int:id>/', views.deleteListing, name='db-deleteListing'),
     path('updateListing/', views.updateListing, name='db-updateListing'),

@@ -637,6 +637,30 @@ def allSpreadsheets(request):
 
 
 @permission_required('db.can_schedule')
+def spreadsheetCounts(request,id):
+    from datetime import timedelta
+    sheet = get_object_or_404(Spreadsheet, pk=id)
+    columns = [c[0] for c in json.loads(sheet.columns)]
+    daylist = [(sheet.festival.startDate + timedelta(days=d)) for d in range(0,sheet.festival.numberOfDays)]
+    rows = []
+    for r in sheet.rows.all():
+        vals = json.loads(r.data)
+        if r.entity.entityType == 'proposal':
+            listings = r.entity.proposal.listing_set.order_by('date')
+            numlistings = len(listings)
+            daycountDict = {}
+            for d in daylist:
+                daycountDict[d] = 0
+            for l in listings:
+                daycountDict[l.date] += 1
+            daycount = [daycountDict[d] for d in daylist]
+        else:
+            numlistings = 0
+        rows.append({'title':entityName(r.entity), 'id':r.entity.id, 'values':vals, 'numlistings':numlistings, 'daycount':daycount})
+    context = {'spreadsheet':sheet, 'columns':columns, 'rows':rows, 'daylist':daylist, 'showcounts':1}
+    return render(request,'db/spreadsheet.html',context)
+
+@permission_required('db.can_schedule')
 def spreadsheet(request,id):
     sheet = get_object_or_404(Spreadsheet, pk=id)
     columns = [c[0] for c in json.loads(sheet.columns)]

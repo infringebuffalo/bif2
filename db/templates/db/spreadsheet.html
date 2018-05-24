@@ -21,10 +21,21 @@ TO BE DONE:
 <li>updating spreadsheet when something is added to / removed from a batch
 </ul>
 </p>
+{% if not showcounts %}
+<a href="{% url 'db-spreadsheetCounts' spreadsheet.id %}">[spreadsheet with show counts]</a>
+{% else %}
+<a href="{% url 'db-entity' spreadsheet.id %}">[spreadsheet without show counts]</a>
+{% endif %}
 
 <table>
 <tr>
 <th></th>
+{% if showcounts %}
+<th># of listings</th>
+{% for d in daylist %}
+<th>{{d}}</th>
+{% endfor %}
+{% endif %}
 {% for c in columns %}
 <th>{{c}}</th>
 {% endfor %}
@@ -32,6 +43,12 @@ TO BE DONE:
 {% for r in rows %}
 <tr>
 <td><a href="{% url 'db-entity' r.id %}">{{r.title}}</a></td>
+{% if showcounts %}
+<td>{{r.numlistings}}</td>
+{% for c in r.daycount %}
+<td>{{c}}</td>
+{% endfor %}
+{% endif %}
 {% for v in r.values %}
 <td>{{ v }}</td>
 {% endfor %}
