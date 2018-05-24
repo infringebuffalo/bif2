@@ -24,10 +24,11 @@ def index(request):
 
 @login_required
 def allProposals(request):
+    from django.db.models.functions import Lower
     fest = FestivalInfo.objects.last()
-    confirmed_props = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED)
-    waiting_props = Proposal.objects.filter(festival=fest,status=Proposal.WAITING)
-    deleted_props = Proposal.objects.filter(festival=fest,status=Proposal.DELETED)
+    confirmed_props = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
+    waiting_props = Proposal.objects.filter(festival=fest,status=Proposal.WAITING).order_by(Lower('title'))
+    deleted_props = Proposal.objects.filter(festival=fest,status=Proposal.DELETED).order_by(Lower('title'))
     return render(request,'db/index.html', { 'confirmed_props' : confirmed_props, 'waiting_props' : waiting_props, 'deleted_props': deleted_props })
 
 
