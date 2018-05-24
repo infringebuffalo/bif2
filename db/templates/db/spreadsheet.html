@@ -21,11 +21,13 @@ TO BE DONE:
 <li>updating spreadsheet when something is added to / removed from a batch
 </ul>
 </p>
+<p>
 {% if not showcounts %}
 <a href="{% url 'db-spreadsheetCounts' spreadsheet.id %}">[spreadsheet with show counts]</a>
 {% else %}
 <a href="{% url 'db-entity' spreadsheet.id %}">[spreadsheet without show counts]</a>
 {% endif %}
+</p>
 
 <table>
 <tr>
