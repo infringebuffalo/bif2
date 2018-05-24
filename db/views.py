@@ -634,8 +634,9 @@ def getEntityField(e,label):
 
 @permission_required('db.can_schedule')
 def allSpreadsheets(request):
+    from django.db.models.functions import Lower
     fest = FestivalInfo.objects.last()
-    spreadsheets = Spreadsheet.objects.filter(festival=fest)
+    spreadsheets = Spreadsheet.objects.filter(festival=fest).order_by(Lower('name'))
     return render(request,'db/all_spreadsheets.html', { 'spreadsheets' : spreadsheets })
 
 
