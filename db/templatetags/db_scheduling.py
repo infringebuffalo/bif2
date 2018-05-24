@@ -19,6 +19,19 @@ def db_smallCalendar():
     retval += format_html('</table>')
     return retval
 
+@register.simple_tag
+def db_horizCalendar():
+    fest = FestivalInfo.objects.last()
+    retval = format_html('<table>\n<tr>\n')
+    if fest.startDate.isoweekday() < 7:
+        retval += format_html('<td colspan="{}"></td>\n', fest.startDate.isoweekday())
+    for d in range(0, fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        bg = "background: lightblue" if day.isoweekday() in [6,7] else ""
+        retval += format_html('<td class="calEntry" data-bifday="{}" style="{}"><input type="checkbox" name="{}" value="1" /><br>{}</td>\n', d, bg, day.isoformat(), day.day)
+    retval += format_html('</tr></table>')
+    return retval
+
 
 @register.simple_tag
 def db_dateMenu(**kwargs):

@@ -1,3 +1,5 @@
 div.messages { border: solid; border-width: thin; list-style-type: none; }
 div.success { background: #dfd; }
 div.error { background: #fdd; }
+div.schedulebox { background: lightyellow }
+td.calEntry { width: 3em; text-align: center }
