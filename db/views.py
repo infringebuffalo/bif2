@@ -287,7 +287,8 @@ def user(request,id):
 
 @permission_required('db.can_schedule')
 def allUsers(request):
-    users = BIFUser.objects.all()
+    from django.db.models.functions import Lower
+    users = BIFUser.objects.all().order_by(Lower('user__email'))
     return render(request,'db/all_users.html', { 'users' : users })
 
 
