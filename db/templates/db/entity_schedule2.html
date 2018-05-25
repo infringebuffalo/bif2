@@ -22,16 +22,19 @@
 <table>
 <tr> <td colspan="3"> {% db_horizCalendar %} </td> </tr>
 <tr>
-<td> Start time: {% db_timeMenu 6 28 "starttime" %}
-<br> End time: {% db_timeMenu 6 28 "endtime" %} </td>
+<td> Start: {% db_timeMenu 6 28 "starttime" %}
+<td>End: {% db_timeMenu 6 28 "endtime" %} </td>
+<td><input name="installation" value="1" type="checkbox">Installation
+<tr>
 <td>
 {% if proposal %}
 {% db_venueMenu %}
 {% else %}
 {% db_proposalMenu %}
 {% endif %}
-<br><input type="text" name="venuenote" value="" size="20" placeholder="venue detail"/> </td>
+<td><input type="text" name="venuenote" value="" size="20" placeholder="venue detail"/> </td>
 {# <td>Note:<input type="text" name="note" value="" size="10"/></td> #}
+</tr>
 <td> <input type="submit" value="Add"> </td>
 </tr>
 </table>

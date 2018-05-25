@@ -21,7 +21,7 @@
 <p>Festival contact: {% if prop.orgContact %} {{prop.orgContact.user.email}} {% else %} none {% endif %}</p>
 <p><a href="{% url 'db-editEntity' id=prop.id %}">Edit proposal</a></p>
 
-{% include "./entity_schedule.html" with proposal=prop %}
+{% include "./entity_schedule2.html" with proposal=prop %}
 
 <table class='alternategrey'>
 {% for f in fieldlist %}

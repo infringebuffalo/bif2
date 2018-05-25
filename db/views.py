@@ -809,7 +809,7 @@ def scheduleProposal(request):
     venuenote = request.POST['venuenote'] if 'venuenote' in request.POST.keys() else ''
     starttime = int(request.POST['starttime'])
     endtime = int(request.POST['endtime'])
-    installation = False
+    installation = 'installation' in request.POST.keys()
     listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
     fest = FestivalInfo.objects.last()
     for d in range(0,fest.numberOfDays):
@@ -840,6 +840,7 @@ def updateListing(request):
     l.endtime = int(request.POST['endtime'])
     l.listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
     l.date = request.POST["date"]
+    l.installation = 'installation' in request.POST.keys()
     l.save()
     messages.success(request,"Updated listing: %s on %s at %s"%(l.who.title,l.date,l.where.name))
     logInfo(request, "updated listing {ID:%d}: {ID:%d} at {ID:%d} on %s, %d to %d" % (l.id,l.who.id,l.where.id,l.date,l.starttime,l.endtime))

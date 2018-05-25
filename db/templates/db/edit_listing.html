@@ -17,8 +17,9 @@
   <tr><th>Venue:</th><td> {% db_venueMenu defaultVenue=listing.where.id %} </td></tr>
   <tr><th>Venue detail:</th><td> <input type="text" name="venuenote" size="60" value="{{ listing.venuenote }}" /> </td></tr>
   <tr><th>Date:</th><td> {% db_dateMenu defaultDate=listing.date|date:"c" %} </td></tr>
-  <tr><th>Start time:</th><td> {% db_timeMenu 6 28 "starttime" default=listing.starttime %} </td></tr>
-  <tr><th>End time:</th><td> {% db_timeMenu 6 28 "endtime" default=listing.endtime %} </td></tr>
+  <tr><th>Start:</th><td> {% db_timeMenu 6 28 "starttime" default=listing.starttime %} </td></tr>
+  <tr><th>End:</th><td> {% db_timeMenu 6 28 "endtime" default=listing.endtime %} </td></tr>
+  <tr><th>Installation:</th><td> <input name="installation" type="checkbox" value="1" {% if listing.installation %}checked{%endif%}> </td></tr>
 </table>
 
 

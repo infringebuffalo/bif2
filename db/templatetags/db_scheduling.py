@@ -129,7 +129,11 @@ def timeToString(t):
 def db_listingRow(listing,proposal,venue):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
-    retval = format_html('<tr><td>{}</td><td>{}-{}</td>',listing.date.strftime("%a, %b %d"),timeToString(listing.starttime),timeToString(listing.endtime))
+    retval = format_html('<tr><td>{}</td>',listing.date.strftime("%a, %b %d"))
+    if listing.installation:
+        retval += format_html('<td>installation</td>')
+    else:
+        retval += format_html('<td>{}-{}</td>',timeToString(listing.starttime),timeToString(listing.endtime))
     if not proposal:
         retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
     if not venue:

@@ -28,9 +28,11 @@
 {% else %}
 {% db_proposalMenu %}
 {% endif %}
-<br>Venue detail:<input type="text" name="venuenote" value="" size="20"/> </td>
-<td> Start time: {% db_timeMenu 6 28 "starttime" %}
-<br> End time: {% db_timeMenu 6 28 "endtime" %} </td>
+<br><input type="text" name="venuenote" value="" size="20" placeholder="venue detail"/> </td>
+<td> Start:{% db_timeMenu 6 28 "starttime" %}
+<br> End:{% db_timeMenu 6 28 "endtime" %}
+<br> <input name="installation" value="1" type="checkbox">Installation
+</td>
 {# <td>Note:<input type="text" name="note" value="" size="10"/></td> #}
 <td> <input type="submit" value="Add"> </td>
 </tr>
