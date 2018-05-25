@@ -583,6 +583,10 @@ def newSpreadsheet(request):
             fielddict[f[0]] = f[1]
     fieldlist = list(fielddict.items())
     fieldlist.sort()
+    for i in range(1,fest.numberOfDays+1):
+        for t in ['8am', 'noon', '4pm', '8pm', 'mid']:
+            s = 'available_day%d_%s' % (i,t)
+            fieldlist.append( (s,s) )
     context = {'batches':batches, 'fields':fieldlist}
     return render(request,'db/new_spreadsheet.html', context)
 
@@ -651,7 +655,7 @@ def spreadsheetCounts(request,id):
     for r in sheet.rows.all():
         vals = json.loads(r.data)
         if r.entity.entityType == 'proposal':
-            listings = r.entity.proposal.listing_set
+            listings = r.entity.proposal.listing_set.order_by('date')
             numlistings = len(listings)
             daycountDict = {}
             for d in daylist:
