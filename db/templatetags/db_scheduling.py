@@ -1,6 +1,6 @@
 from django import template
 from db.models import *
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from datetime import *
 
 register = template.Library()
@@ -129,17 +129,23 @@ def timeToString(t):
 def db_listingRow(listing,proposal,venue):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
-    retval = format_html('<tr><td>{}</td>',listing.date.strftime("%a, %b %d"))
+    tdflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
+    retval = format_html('<tr>');
+    retval += format_html('<td{}>{}</td>',tdflags,listing.date.strftime("%a, %b %d"))
     if listing.installation:
-        retval += format_html('<td>installation</td>')
+        retval += format_html('<td{}>installation</td>',tdflags)
     else:
-        retval += format_html('<td>{}-{}</td>',timeToString(listing.starttime),timeToString(listing.endtime))
+        retval += format_html('<td{}>{}-{}</td>',tdflags,timeToString(listing.starttime),timeToString(listing.endtime))
     if not proposal:
-        retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
+        retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
     if not venue:
-        retval += format_html('<td><a href="{}">{}</a>{}</td>',reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
+        retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
     retval += format_html('<td><a href="{}">(edit)</a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
     retval += format_html('<td><a href="{}">(delete)</a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
+    if listing.cancelled:
+        retval += format_html('<td><a href="{}">(uncancel)</a></td>',reverse('db-uncancelListing',kwargs={'id':listing.id}))
+    else:
+        retval += format_html('<td><a href="{}">(cancel)</a></td>',reverse('db-cancelListing',kwargs={'id':listing.id}))
 #    if listing.listingnote != '':
 #        retval += format_html('<td>{}</td>',listing.listingnote)
     retval += format_html('</tr>\n')

@@ -856,6 +856,24 @@ def deleteListing(request,id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @permission_required('db.can_schedule')
+def cancelListing(request,id):
+    listing = get_object_or_404(Listing, pk=id)
+    listing.cancelled = True
+    listing.save()
+    messages.success(request,'Cancelled listing of %s on %s at %s'%(listing.who.title,listing.date.isoformat(),listing.where.name))
+    logInfo(request, 'Cancelled listing of {ID:%d} on %s at {ID:%d}'%(listing.who.id,listing.date.isoformat(),listing.where.id))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@permission_required('db.can_schedule')
+def uncancelListing(request,id):
+    listing = get_object_or_404(Listing, pk=id)
+    listing.cancelled = False
+    listing.save()
+    messages.success(request,'Uncancelled listing of %s on %s at %s'%(listing.who.title,listing.date.isoformat(),listing.where.name))
+    logInfo(request, 'Uncancelled listing of {ID:%d} on %s at {ID:%d}'%(listing.who.id,listing.date.isoformat(),listing.where.id))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@permission_required('db.can_schedule')
 def calendar(request):
     from datetime import timedelta
     from django.db.models.functions import Lower

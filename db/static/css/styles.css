@@ -3,3 +3,4 @@ div.success { background: #dfd; }
 div.error { background: #fdd; }
 div.schedulebox { background: lightyellow }
 td.calEntry { width: 3em; text-align: center }
+td.cancelled { text-decoration: line-through; color: #444 }
