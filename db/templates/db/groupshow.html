@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+
+{% block title %} Group show {{groupshow.title}} {% endblock %}
+{% block style %}
+<style>
+.listings td { padding-right: 10px }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if groupshow %}
+<h1>{{ groupshow.title }}</h1>
+<a href="{% url 'db-editEntity' groupshow.id %}">Edit info</a>
+<ul>
+<li>Venue: <a href="{% url 'db-entity' groupshow.where.id %}">{{ groupshow.where.name }}</a>
+<li>Date: {{ groupshow.date }}
+<li>Start: {% db_time groupshow.starttime %}
+<li>End: {% db_time groupshow.endtime %}
+</ul>
+{% else %}
+<p>No venue found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% if listings %}
+<table class="listings">
+{% for l in listings %}
+{% db_listingRow l 0 0 %}
+{% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}

@@ -40,4 +40,27 @@
 </form>
 </div>
 </div>
+<br>
+{% if venue %}
+<div class="schedulebox">[group show]<br>
+<div class="scheduleForm" id="scheduleGroupShowForm" style="display: block">
+<form method="POST" action="{% url 'db-scheduleGroupShow' %}">
+{% csrf_token %}
+<input type="hidden" name="venue" value="{{venue.id}}" />
+<table>
+<tr> <td colspan="3"> {% db_horizCalendar %} </td> </tr>
+<tr>
+<td>Start: {% db_timeMenu 6 28 "starttime" %}
+<td>End: {% db_timeMenu 6 28 "endtime" %} </td>
+<tr>
+<td><input type="text" name="title" value="" size="20" placeholder="group show title"/> </td>
+</tr>
+<td> <input type="submit" value="Create group show"> </td>
+</tr>
+</table>
+</form>
+</div>
+</div>
+<br>
+{% endif %}
 {% endif %}

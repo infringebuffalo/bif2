@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+
+{% block content %}
+
+{% if groupshow %}
+<h1>Editing group show</h1>
+
+<p>
+<form method="POST" action="{% url 'db-updateGroupShow' %}" name="groupshowform" onsubmit="return validateForm()">
+{% csrf_token %}
+<input type="hidden" name="groupshow_id" value="{{ groupshow.id }}" />
+
+<table cellpadding=3>
+  <tr><th>Title:</th><td> <input type="text" name="title" size="60" value="{{ groupshow.title }}" /> </td></tr>
+  <tr><th>Venue:</th><td> {% db_venueMenu defaultVenue=groupshow.where.id %} </td></tr>
+  <tr><th>Date:</th><td> {% db_dateMenu defaultDate=groupshow.date|date:"c" %} </td></tr>
+  <tr><th>Start:</th><td> {% db_timeMenu 6 28 "starttime" default=groupshow.starttime %} </td></tr>
+  <tr><th>End:</th><td> {% db_timeMenu 6 28 "endtime" default=groupshow.endtime %} </td></tr>
+</table>
+
+<input type="Submit" name="submit" value="Update info" />
+</form>
+</p>
+
+{% else %}
+<p>No group show found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}

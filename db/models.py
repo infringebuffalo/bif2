@@ -61,7 +61,17 @@ class Listing(Entity):
     installation = BooleanField(default=False)
     listingnote = TextField(default='')
     cancelled = BooleanField(default=False)
-    
+
+
+class GroupShow(Entity):
+    title = CharField(max_length=256)
+    where = ForeignKey('Venue', on_delete=CASCADE)
+    date = DateField()
+    starttime = IntegerField()
+    endtime = IntegerField()
+    cancelled = BooleanField(default=False)
+    festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
+
 
 class Note(Entity):
     creator = ForeignKey('BIFUser', on_delete=SET_NULL, null=True)
@@ -143,4 +153,8 @@ def setEntityTypeFormInfo(sender,instance,**kwargs):
 @receiver(post_init,sender=Spreadsheet)
 def setEntityTypeSpreadsheet(sender,instance,**kwargs):
     instance.entityType='spreadsheet'
+
+@receiver(post_init,sender=GroupShow)
+def setEntityTypeGroupShow(sender,instance,**kwargs):
+    instance.entityType='groupshow'
 

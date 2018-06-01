@@ -225,6 +225,38 @@ def update(request):
     return redirect('db-entity',id=id)
 
 
+@permission_required('db.can_schedule')
+def groupshow(request,id):
+    groupshow = get_object_or_404(GroupShow, pk=id)
+    alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date)
+    listings = []
+    for l in alllistings:
+        if max(l.starttime,groupshow.starttime) <= min(l.endtime,groupshow.endtime):
+            listings.append(l)
+    context = {'groupshow':groupshow, 'listings':listings}
+    return render(request,'db/groupshow.html', context)
+
+@permission_required('db.can_schedule')
+def editGroupShow(request,id):
+    groupshow = get_object_or_404(GroupShow, pk=id)
+    context = {'groupshow':groupshow}
+    return render(request,'db/edit_groupshow.html', context)
+
+@permission_required('db.can_schedule')
+def updateGroupShow(request):
+    id = int(request.POST["groupshow_id"])
+    g = get_object_or_404(GroupShow, pk=id)
+    g.title = request.POST["title"]
+    g.where = get_object_or_404(Venue, pk=int(request.POST["venue"]))
+    g.starttime = int(request.POST['starttime'])
+    g.endtime = int(request.POST['endtime'])
+    g.date = request.POST["date"]
+    g.save()
+    messages.success(request,"updated groupshow: %s on %s at %s"%(g.title,g.date,g.where.name))
+    logInfo(request, "updated groupshow {ID:%d}: %s at {ID:%d} on %s, %d to %d" % (g.id,g.title,g.where.id,g.date,g.starttime,g.endtime))
+    return redirect('db-entity',id=id)
+
+
 def newAccount(request):
     return render(request,'db/new_account.html')
 
@@ -693,6 +725,8 @@ def editEntity(request,id):
             return editBatch(request,id)
         elif e.entityType == 'listing':
             return editListing(request,id)
+        elif e.entityType == 'groupshow':
+            return editGroupShow(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
@@ -713,6 +747,8 @@ def entity(request,id):
             return spreadsheet(request,id)
         elif e.entityType == 'bifuser':
             return user(request,id)
+        elif e.entityType == 'groupshow':
+            return groupshow(request,id)
         else:
             return render(request, 'db/entity_error.html', { 'type': e.entityType })
     else:
@@ -820,6 +856,24 @@ def scheduleProposal(request):
             listing.save()
             logInfo(request, "listed {ID:%d} at {ID:%d} on %s at %d" % (proposal.id,venue.id,day,starttime))
     return redirect('db-entity',id=proposal.id)
+
+
+@permission_required('db.can_schedule')
+def scheduleGroupShow(request):
+    from datetime import timedelta
+    venue = get_object_or_404(Venue, pk=int(request.POST['venue']))
+    starttime = int(request.POST['starttime'])
+    endtime = int(request.POST['endtime'])
+    title = request.POST['title']
+    fest = FestivalInfo.objects.last()
+    for d in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        if day.isoformat() in request.POST.keys():
+            messages.success(request,'scheduled groupshow %s on %s at %s'%(title,day.isoformat(),venue.name))
+            groupshow = GroupShow(title=title, where=venue, date=day, starttime=starttime, endtime=endtime, festival=fest)
+            groupshow.save()
+            logInfo(request, "created groupshow {ID:%d} at {ID:%d} on %s at %d" % (groupshow.id,venue.id,day,starttime))
+    return redirect('db-entity',id=venue.id)
 
 
 @permission_required('db.can_schedule')
