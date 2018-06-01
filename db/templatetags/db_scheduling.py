@@ -141,7 +141,7 @@ def db_listingRow(listing,proposal,venue):
     if not venue:
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
     retval += format_html('<td><a href="{}">(edit)</a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
-    retval += format_html('<td><a href="{}">(delete)</a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
+    retval += format_html('<td><a href="{}" onclick="return confirm(\'Are you sure you want to permanently delete this listing?\');">(delete)</a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
     if listing.cancelled:
         retval += format_html('<td><a href="{}">(uncancel)</a></td>',reverse('db-uncancelListing',kwargs={'id':listing.id}))
     else:
