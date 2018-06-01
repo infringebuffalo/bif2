@@ -256,6 +256,16 @@ def updateGroupShow(request):
     logInfo(request, "updated groupshow {ID:%d}: %s at {ID:%d} on %s, %d to %d" % (g.id,g.title,g.where.id,g.date,g.starttime,g.endtime))
     return redirect('db-entity',id=id)
 
+@permission_required('db.can_schedule')
+def deleteGroupShow(request,id):
+    groupshow = get_object_or_404(GroupShow, pk=id)
+    title = groupshow.title
+    venue = groupshow.where
+    groupshow.delete()
+    messages.success(request,"deleted groupshow %s"%title)
+    logInfo(request,"deleted groupshow %s"%title)
+    return redirect('db-entity',id=venue.id)
+
 
 def newAccount(request):
     return render(request,'db/new_account.html')

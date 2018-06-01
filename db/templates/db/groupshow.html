@@ -12,6 +12,8 @@
 
 {% if groupshow %}
 <h1>{{ groupshow.title }}</h1>
+<div class="row">
+<div class="col-sm-8">
 <a href="{% url 'db-editEntity' groupshow.id %}">Edit info</a>
 <ul>
 <li>Venue: <a href="{% url 'db-entity' groupshow.where.id %}">{{ groupshow.where.name }}</a>
@@ -19,9 +21,6 @@
 <li>Start: {% db_time groupshow.starttime %}
 <li>End: {% db_time groupshow.endtime %}
 </ul>
-{% else %}
-<p>No venue found.  (Shouldn't this 404?)</p>
-{% endif %}
 
 {% if listings %}
 <table class="listings">
@@ -30,5 +29,20 @@
 {% endfor %}
 </table>
 {% endif %}
+</div>
 
+{% if perms.db.can_schedule %}
+<div class="col-sm-4">
+<p>
+<form method="get" action="{% url 'db-deleteGroupShow' groupshow.id %}"><button type="submit" onclick="return confirm('permanently delete this group show? (performer listings will not be affected)');">delete group show</button></form>
+<br><br>
+{% include "./entity_notes.html" with entity=groupshow %}
+</div>
+{% endif %}
+
+</div>
+
+{% else %}
+<p>No venue found.  (Shouldn't this 404?)</p>
+{% endif %}
 {% endblock %}

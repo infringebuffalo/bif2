@@ -52,6 +52,7 @@ urlpatterns = [
     path('scheduleProposal', views.scheduleProposal, name='db-scheduleProposal'),
     path('scheduleGroupShow', views.scheduleGroupShow, name='db-scheduleGroupShow'),
     path('updateGroupShow/', views.updateGroupShow, name='db-updateGroupShow'),
+    path('deleteGroupShow/<int:id>/', views.deleteGroupShow, name='db-deleteGroupShow'),
     path('deleteListing/<int:id>/', views.deleteListing, name='db-deleteListing'),
     path('updateListing/', views.updateListing, name='db-updateListing'),
     path('cancelListing/<int:id>/', views.cancelListing, name='db-cancelListing'),
