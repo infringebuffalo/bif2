@@ -251,6 +251,8 @@ def updateGroupShow(request):
     g.starttime = int(request.POST['starttime'])
     g.endtime = int(request.POST['endtime'])
     g.date = request.POST["date"]
+    g.shortdescription = request.POST["shortdescription"]
+    g.description = request.POST["description"]
     g.save()
     messages.success(request,"updated groupshow: %s on %s at %s"%(g.title,g.date,g.where.name))
     logInfo(request, "updated groupshow {ID:%d}: %s at {ID:%d} on %s, %d to %d" % (g.id,g.title,g.where.id,g.date,g.starttime,g.endtime))

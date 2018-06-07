@@ -71,6 +71,8 @@ class GroupShow(Entity):
     endtime = IntegerField()
     cancelled = BooleanField(default=False)
     festival = ForeignKey('FestivalInfo',on_delete=SET_NULL,null=True)
+    description = TextField()
+    shortdescription = TextField()
 
 
 class Note(Entity):

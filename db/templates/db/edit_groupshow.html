@@ -17,6 +17,8 @@
   <tr><th>Date:</th><td> {% db_dateMenu defaultDate=groupshow.date|date:"c" %} </td></tr>
   <tr><th>Start:</th><td> {% db_timeMenu 6 28 "starttime" default=groupshow.starttime %} </td></tr>
   <tr><th>End:</th><td> {% db_timeMenu 6 28 "endtime" default=groupshow.endtime %} </td></tr>
+  <tr><th>Short description:</th><td> <input type="text" name="shortdescription" size="80" value="{{ groupshow.shortdescription }}" /> </td></tr>
+  <tr><th>Description:</th><td><textarea cols="80" name="description">{{ groupshow.description }}</textarea></td></tr>
 </table>
 
 <input type="Submit" name="submit" value="Update info" />
