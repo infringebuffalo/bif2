@@ -812,6 +812,10 @@ def entityName(e):
         return e.batch.name
     elif e.entityType == 'venue':
         return e.venue.name
+    elif e.entityType == 'bifuser':
+        return e.bifuser.user.email
+    elif e.entityType == 'groupshow':
+        return e.groupshow.title
     else:
         return "%s %d" % (e.entityType,e.id)
 
@@ -974,4 +978,29 @@ def logMessage(request,message):
     if request:
         ipaddr = request.META.get('REMOTE_ADDR')
     return "%s %s %s: %s" % (datetime.now().strftime("%Y-%m-%d %X"),ipaddr,username, message)
+
+
+import re
+
+def viewLogLink(match):
+    from django.utils.html import format_html
+    from django.urls import reverse
+    id = int(match.group(1))
+    e = Entity.objects.filter(pk=id)
+    if e:
+        return format_html('<a href="{}">{}</a>', reverse('db-entity',kwargs={'id':e[0].id}), entityName(e[0]))
+    else:
+        return match.group()
+
+@permission_required('db.can_schedule')
+def viewLog(request):
+    from django.conf import settings
+    from django.utils.html import format_html, mark_safe
+    regex = re.compile(r'{ID:([0-9]+)}')
+    f = open(settings.LOGGING['handlers']['file']['filename'], 'r')
+    lines = f.readlines()
+    outlines = []
+    for l in lines[-100:]:
+        outlines.append(mark_safe(regex.sub(viewLogLink,l)))
+    return render(request, 'db/log.html', context={'lines':outlines})
 

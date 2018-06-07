@@ -59,6 +59,7 @@ urlpatterns = [
     path('uncancelListing/<int:id>/', views.uncancelListing, name='db-uncancelListing'),
     path('allUsers/', views.allUsers, name='db-allUsers'),
     path('calendar/', views.calendar, name='db-calendar'),
+    path('log/', views.viewLog, name='db-log'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 

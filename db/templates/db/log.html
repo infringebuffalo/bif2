@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% block title %} Log file {% endblock %}
+
+{% block content %}
+
+{% if lines %}
+<ul>
+{% for l in lines %}
+<li> {{ l }}
+{% endfor %}
+</ul>
+
+{% else %}
+<p>No log entries found.</p>
+{% endif %}
+
+{% endblock %}
