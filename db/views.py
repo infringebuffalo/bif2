@@ -998,11 +998,25 @@ def viewLogLink(match):
 def viewLog(request):
     from django.conf import settings
     from django.utils.html import format_html, mark_safe
-    regex = re.compile(r'{ID:([0-9]+)}')
     f = open(settings.LOGGING['handlers']['file']['filename'], 'r')
     lines = f.readlines()
-    outlines = []
-    for l in lines[-100:]:
-        outlines.append(mark_safe(regex.sub(viewLogLink,l)))
-    return render(request, 'db/log.html', context={'lines':outlines})
+    numlines = int(request.POST['numlines']) if 'numlines' in request.POST.keys() else 100
+    regex = re.compile(r'{ID:([0-9]+)}')
+    if 'searchterm' in request.POST.keys():
+        outlines = []
+        searchterm = request.POST['searchterm'].casefold()
+        for l in reversed(lines):
+            if searchterm in l.casefold():
+                outlines.insert(0,mark_safe(regex.sub(viewLogLink,l)))
+            else:
+                temp = regex.sub(viewLogLink,l)
+                if searchterm in temp.casefold():
+                    outlines.insert(0,mark_safe(temp))
+            if len(outlines) >= numlines:
+                break
+    else:
+        searchterm = ''
+        outlines = [mark_safe(regex.sub(viewLogLink,l)) for l in lines[-numlines:]]
+    context = {'lines':outlines, 'searchterm':searchterm, 'numlines':numlines}
+    return render(request, 'db/log.html', context)
 

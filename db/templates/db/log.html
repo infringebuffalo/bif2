@@ -3,6 +3,13 @@
 
 {% block content %}
 
+<form method="POST" action="{% url 'db-log' %}" name="logform">
+{% csrf_token %}
+<input type="text" name="searchterm" size="60" value="{{searchterm}}" />
+<input type="text" name="numlines" size="5" value="{{numlines}}" />
+<input type="Submit" name="submit" value="search" />
+</form>
+
 {% if lines %}
 <ul>
 {% for l in lines %}
