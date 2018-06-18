@@ -36,7 +36,7 @@
         <h2>{{ next.title }}</h2>
         <p>{{ next.description}}
           {% if next.url %}
-          <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+          <a href="{{ event.url }}"><i class="fas fa-external-link-alt"></i></a>
           {% endif %}
         </p>
       </div>
@@ -52,7 +52,7 @@
           {% for event in next_events_list %}
             <li>{{ event.datetime }} - {{ event.title }}
               {% if event.url %}
-              <a href=\"{{ event.url }}\"><i class="fas fa-external-link-alt"></i></a>
+              <a href="{{ event.url }}"><i class="fas fa-external-link-alt"></i></a>
               {% endif %}
             </li>
           {% endfor %}
