@@ -62,11 +62,11 @@
 
 {% if confirmed_venues %}
 <h2>all confirmed venues</h2>
-    <ul>
+    <table>
     {% for v in confirmed_venues %}
-        <li><a href="/db/{{ v.id }}/">{{ v.name }}</a></li>
+        <tr><td><a href="/db/{{ v.id }}/">{{ v.name }}</a></td><td><a href="{% url 'db-venueSheet' v.id %}">venue sheet</a></td></tr>
     {% endfor %}
-    </ul>
+    </table>
 {% endif %}
 
 {% if waiting_venues %}

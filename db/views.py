@@ -350,6 +350,15 @@ def venue(request,id):
 
 
 @login_required
+def venueSheet(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    infodict = json.loads(ven.info)
+    listings = ven.listing_set.order_by('date','starttime')
+    context = {'venue':ven, 'venue_info':infodict, 'listings':listings}
+    return render(request,'db/venue_sheet.html', context)
+
+
+@login_required
 def editVenue(request, id):
     ven = get_object_or_404(Venue, pk=id)
     infodict = json.loads(ven.info)

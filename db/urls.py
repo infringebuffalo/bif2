@@ -28,6 +28,7 @@ urlpatterns = [
     path('confirmVenue/<int:id>/', views.confirmVenue, name='db-confirmVenue'),
     path('deleteVenue/<int:id>/', views.deleteVenue, name='db-deleteVenue'),
     path('undeleteVenue/<int:id>/', views.undeleteVenue, name='db-undeleteVenue'),
+    path('venueSheet/<int:id>/', views.venueSheet, name='db-venueSheet'),
     path('addtobatch/<int:batchid>/<int:memberid>/', views.addToBatch, name='db-addToBatch'),
     path('addtobatch/', views.addToBatchForm, name='db-addToBatch'),
     path('removefrombatch/<int:batchid>/<int:memberid>/', views.removeFromBatch, name='db-removeFromBatch'),

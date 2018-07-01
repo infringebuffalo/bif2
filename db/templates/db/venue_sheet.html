@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+{% if perms.db.can_schedule %}
+{% load db_scheduling %}
+{% block title %} Venue {{venue.name}} {% endblock %}
+{% block style %}
+<style>
+.listings td { padding-right: 10px; padding-bottom: 2em }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+{% if venue %}
+<h1>{{ venue.name }}</h1>
+<div class="row">
+<p>
+<em>infringement schedule with contact info - DO NOT POST PUBLICLY</em>
+</p>
+<div class="col-sm-8">
+{% if listings %}
+<table class="listings">
+{% for l in listings %}
+{% db_venuesheetlisting l %}
+{% endfor %}
+</table>
+{% endif %}
+</div>
+
+</div>{# end "div class=row" #}
+
+{% else %}
+<p>No venue found.  (Shouldn't this 404?)</p>
+{% endif %}
+
+{% endblock %}
+{% endif %}

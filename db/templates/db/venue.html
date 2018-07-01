@@ -44,6 +44,9 @@
 {% include "./entity_batches.html" with entity=venue %}
 
 <br><br>
+<a href="{% url 'db-venueSheet' venue.id %}">venue sheet</a>
+
+<br><br>
 {% include "./entity_notes.html" with entity=venue %}
 
 </div>{# end div class=col-sm-4 #}
