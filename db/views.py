@@ -961,10 +961,9 @@ def calendar(request):
     for d in range(0,fest.numberOfDays):
         day = fest.startDate + timedelta(days=d)
         listingList = []
-        listings = Listing.objects.filter(date=day).order_by('starttime',Lower('where__name'))
-#        for l in listings:
-#            listingList.append("%d-%d %s at %s (%s)" % (l.starttime,l.endtime,l.who.title,l.where.name,l.venuenote))
-        days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings})
+        listings = Listing.objects.filter(date=day,installation=False).order_by('starttime',Lower('where__name'))
+        installations = Listing.objects.filter(date=day,installation=True).order_by('starttime',Lower('where__name'))
+        days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
     return render(request, 'db/calendar.html', context={'days':days})
 
 

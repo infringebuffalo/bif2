@@ -11,8 +11,14 @@ td { padding-right: 10px }
 
 {% block content %}
 {% for d in days %}
+<h1>{{d.date}}</h1>
 <table class="listings">
+<tr><td colspan="2">Performances:</td></tr>
 {% for l in d.listings %}
+{% db_listingRow l proposal venue %}
+{% endfor %}
+<tr><td colspan="2">Installations:</td></tr>
+{% for l in d.installations %}
 {% db_listingRow l proposal venue %}
 {% endfor %}
 </table>
