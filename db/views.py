@@ -981,7 +981,8 @@ def brochure(request):
         shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
         if len(shortdesc) > 144:
             shortdesc = shortdesc[:140] + "..."
-        genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'listings':listings, 'numlistings':3})
+        url = infodict['website'] if 'website' in infodict.keys() else ''
+        genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'url': url, 'listings':listings, 'numlistings':3})
     genres = genredict.values()
     return render(request, 'db/brochure.html', context={'genres':genres})
 
