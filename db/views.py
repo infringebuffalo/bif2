@@ -966,6 +966,25 @@ def calendar(request):
         days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
     return render(request, 'db/calendar.html', context={'days':days})
 
+@permission_required('db.can_schedule')
+def brochure(request):
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    forminfos = FormInfo.objects.filter(festival=fest)
+    genredict = {}
+    for fi in forminfos:
+        genredict[fi.showType] = {'name':fi.showType, 'proposals': []}
+    proposals = Proposal.objects.filter(festival=fest).order_by(Lower('title'))
+    for prop in proposals:
+        listings = prop.listing_set.order_by('date','starttime')
+        infodict = json.loads(prop.info)
+        shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
+        if len(shortdesc) > 144:
+            shortdesc = shortdesc[:140] + "..."
+        genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'listings':listings, 'numlistings':3})
+    genres = genredict.values()
+    return render(request, 'db/brochure.html', context={'genres':genres})
+
 
 import logging
 

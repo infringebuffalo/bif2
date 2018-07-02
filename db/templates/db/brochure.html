@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+{% block style %}
+{% endblock %}
+
+{% block title %} Brochure text {% endblock %}
+
+{% block content %}
+{% for g in genres %}
+<h1>{{g.name}}</h1>
+{% for p in g.proposals %}
+<h2>{{p.title}}</h2>
+<p>
+{{p.description}}
+</p>
+{% for l in p.listings %}
+{% db_brochurelistingRow l %} <br>
+{% endfor %}
+<br><br>
+{% endfor %}
+{% endfor %}
+
+{% endblock %}
