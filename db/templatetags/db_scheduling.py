@@ -173,7 +173,7 @@ def db_brochurelistingRow(listing):
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     spanflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<span{}>',spanflags)
-    retval += format_html('{} ',listing.date.strftime("%a, %b %d"))
+    retval += format_html('<b>{}</b> ',listing.date.strftime("%a, %b %d"))
     if listing.installation:
         retval += format_html('installation ')
     else:

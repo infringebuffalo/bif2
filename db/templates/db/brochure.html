@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %}
 {% load db_scheduling %}
 {% block style %}
+<style>
+h1 { background: lightgrey}
+</style>
 {% endblock %}
 
 {% block title %} Brochure text {% endblock %}
@@ -10,10 +13,8 @@
 <h1>{{g.name}}</h1>
 {% for p in g.proposals %}
 <h2>{{p.title}}</h2>
-<p>
 {{p.description}}<br>
-{{p.url}}
-</p>
+{{p.url}}<br>
 {% for l in p.listings %}
 {% db_brochurelistingRow l %} <br>
 {% endfor %}

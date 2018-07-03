@@ -974,7 +974,7 @@ def brochure(request):
     genredict = {}
     for fi in forminfos:
         genredict[fi.showType] = {'name':fi.showType, 'proposals': []}
-    proposals = Proposal.objects.filter(festival=fest).order_by(Lower('title'))
+    proposals = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
     for prop in proposals:
         listings = prop.listing_set.order_by('date','starttime')
         infodict = json.loads(prop.info)
@@ -982,7 +982,8 @@ def brochure(request):
         if len(shortdesc) > 144:
             shortdesc = shortdesc[:140] + "..."
         url = infodict['website'] if 'website' in infodict.keys() else ''
-        genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'url': url, 'listings':listings, 'numlistings':3})
+        if len(listings) > 0:
+            genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'url': url, 'listings':listings, 'numlistings':3})
     genres = genredict.values()
     return render(request, 'db/brochure.html', context={'genres':genres})
 
