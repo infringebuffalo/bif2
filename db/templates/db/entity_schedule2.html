@@ -6,6 +6,9 @@
 {% for l in listings %}
 {% db_listingRow l proposal venue %}
 {% endfor %}
+{% for l in installations %}
+{% db_listingRow l proposal venue %}
+{% endfor %}
 </table>
 {% endif %}
 

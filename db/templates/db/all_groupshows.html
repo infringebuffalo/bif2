@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>all group shows</h1>
+<ul>
+{% for g in groupshows %}
+<li><a href="/db/{{ g.id }}/">{{ g.title }}</a>
+{% endfor %}
+</ul>
+
+{% endblock %}

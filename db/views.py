@@ -268,6 +268,13 @@ def deleteGroupShow(request,id):
     logInfo(request,"deleted groupshow %s"%title)
     return redirect('db-entity',id=venue.id)
 
+@permission_required('db.can_schedule')
+def allGroupshows(request):
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    groupshows = GroupShow.objects.filter(festival=fest).order_by(Lower('title'))
+    return render(request,'db/all_groupshows.html', { 'groupshows' : groupshows })
+
 
 def newAccount(request):
     return render(request,'db/new_account.html')
@@ -344,8 +351,9 @@ def venue(request,id):
     inbatches = ven.batches.all()
     batches = Batch.objects.all()
     notes = ven.notes.all()
-    listings = ven.listing_set.order_by('date','starttime')
-    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings}
+    listings = ven.listing_set.filter(installation=False).order_by('date','starttime')
+    installations = ven.listing_set.filter(installation=True).order_by('date','starttime')
+    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings, 'installations':installations}
     return render(request,'db/venue.html', context)
 
 

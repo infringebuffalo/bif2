@@ -136,7 +136,8 @@ def db_listingRow(listing,proposal,venue):
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     tdflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<tr>')
-    groupshows = GroupShow.objects.filter(where=venue,date=listing.date) if venue else []
+#    groupshows = GroupShow.objects.filter(where=venue,date=listing.date) if venue else []
+    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
     groupshowlinks = []
     for g in groupshows:
         if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
@@ -170,6 +171,11 @@ def db_listingRow(listing,proposal,venue):
 @register.simple_tag
 def db_brochurelistingRow(listing):
     from django.urls import reverse
+    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
+    groupshowname = None
+    for g in groupshows:
+        if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+            groupshowname = g.title
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     spanflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<span{}>',spanflags)
@@ -178,7 +184,9 @@ def db_brochurelistingRow(listing):
         retval += format_html('installation ')
     else:
         retval += format_html('{}-{} ',timeToString(listing.starttime),timeToString(listing.endtime))
-    retval += format_html('{} {} ',listing.where.name,venuenote)
+    retval += format_html('<em>{} {}</em> ',listing.where.name,venuenote)
+    if groupshowname:
+        retval += format_html('[part of "{}"]',groupshowname)
     retval += format_html('</span>\n')
     return retval
 
