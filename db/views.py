@@ -361,8 +361,19 @@ def venue(request,id):
 def venueSheet(request,id):
     ven = get_object_or_404(Venue, pk=id)
     infodict = json.loads(ven.info)
-    listings = ven.listing_set.order_by('date','starttime')
-    context = {'venue':ven, 'venue_info':infodict, 'listings':listings}
+    listings = list(ven.listing_set.order_by('date','starttime'))
+    groupshows = list(ven.groupshow_set.order_by('date','starttime'))
+    allListings = []
+    while len(groupshows) > 0 and len(listings) > 0:
+        if groupshows[0].date <= listings[0].date and groupshows[0].starttime <= listings[0].starttime:
+            allListings.append(groupshows.pop(0))
+        else:
+            allListings.append(listings.pop(0))
+    while len(groupshows) > 0:
+        allListings.append(groupshows.pop(0))
+    while len(listings) > 0:
+        allListings.append(listings.pop(0))
+    context = {'venue':ven, 'venue_info':infodict, 'listings':allListings}
     return render(request,'db/venue_sheet.html', context)
 
 

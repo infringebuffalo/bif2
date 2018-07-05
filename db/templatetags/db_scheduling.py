@@ -197,15 +197,19 @@ venuesheet_prevlisting = None
 def db_venuesheetlisting(listing):
     from json import loads
     global venuesheet_prevlisting
-    infodict = loads(listing.who.info)
     retval = format_html('<tr>\n')
     if not venuesheet_prevlisting or venuesheet_prevlisting.date != listing.date:
         retval += format_html('<td colspan="2"><b>{}</b></td>\n</tr>\n<tr>\n',listing.date.strftime("%a, %b %d"))
-    if listing.installation:
-        retval += format_html('<td valign="top">installation</td>\n')
+    if listing.entityType == 'listing':
+        if listing.installation:
+            retval += format_html('<td valign="top">installation</td>\n')
+        else:
+            retval += format_html('<td valign="top">{}-{}</td>\n',timeToString(listing.starttime),timeToString(listing.endtime))
+        infodict = loads(listing.who.info)
+        retval += format_html('<td><b>{}</b><br>{}<br>email: {}<br>phone: {}<br>social media: {}<br>best contact method: {}</td>\n',listing.who.title,infodict['contactname'],infodict['contactemail'],infodict['contactphone'],infodict['contactfacebook'],infodict['bestcontactmethod'])
     else:
         retval += format_html('<td valign="top">{}-{}</td>\n',timeToString(listing.starttime),timeToString(listing.endtime))
-    retval += format_html('<td><b>{}</b><br>{}<br>email: {}<br>phone: {}<br>social media: {}<br>best contact method: {}</td>\n',listing.who.title,infodict['contactname'],infodict['contactemail'],infodict['contactphone'],infodict['contactfacebook'],infodict['bestcontactmethod'])
+        retval += format_html('<td><b>GROUP SHOW: {}</b></td>',listing.title)
     retval += format_html('</tr>\n')
     venuesheet_prevlisting = listing
     return retval
