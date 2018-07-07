@@ -3,7 +3,14 @@
 {% block content %}
 
 <h1>Sign in</h1>
-<p><em>Please note: this is a new system; accounts from past years do not work - you will have to create a new one if you want to sign in.</em></p>
+<em>Please note: 
+<ol>
+<li>this is a new system; accounts from past years do not work - you will have to create a new one if you want to sign in
+<li>the e-mail address you sign in with is case sensitive - if you created your account as "JaneDoe@Example.com", "janedoe@example.com" won't work; you must log in with the exact same capitalization
+<li>if you still have trouble logging in even after checking issues 1 &amp; 2 above, contact depape@buffalo.edu for assistance
+</ol>
+</em>
+
 {% if form.errors %}
 <p>Your e-mail address and password didn't match. Please try again.</p>
 {% endif %}
