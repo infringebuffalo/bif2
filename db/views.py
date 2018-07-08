@@ -353,7 +353,10 @@ def venue(request,id):
     notes = ven.notes.all()
     listings = ven.listing_set.filter(installation=False).order_by('date','starttime')
     installations = ven.listing_set.filter(installation=True).order_by('date','starttime')
-    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings, 'installations':installations}
+    can_see = {}
+    can_see['editlink'] = request.user.has_perm('db.can_schedule')
+    can_see['schedule'] = request.user.has_perm('db.can_schedule')
+    context = {'venue':ven, 'venue_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'listings':listings, 'installations':installations, 'can_see': can_see}
     return render(request,'db/venue.html', context)
 
 
@@ -831,7 +834,10 @@ def proposal(request,id):
     listings = prop.listing_set.order_by('date','starttime')
     owner = prop.permit_who.filter(permission=UserPermission.OWNER).first()
     if owner: owner = owner.bifuser
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner}
+    can_see = {}
+    can_see['editlink'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
+    can_see['schedule'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see}
     return render(request,'db/proposal.html', context)
 
 

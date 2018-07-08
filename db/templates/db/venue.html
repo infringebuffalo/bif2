@@ -18,7 +18,9 @@
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if venue.status == venue.WAITING %} waiting for confirmation {% elif venue.status == venue.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
+{% if can_see.editlink %}
 <p><a href="{% url 'db-editEntity' venue.id %}">Edit info</a></p>
+{% endif %}
 
 {% include "./entity_schedule2.html" with venue=venue %}
 

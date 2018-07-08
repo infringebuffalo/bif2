@@ -1,6 +1,5 @@
-{% if perms.db.can_schedule %}
 {% load db_scheduling %}
-
+{% if can_see.schedule or perms.db.can_schedule %}
 {% if listings %}
 <table class="listings">
 {% for l in listings %}
@@ -11,7 +10,9 @@
 {% endfor %}
 </table>
 {% endif %}
+{% endif %}
 
+{% if perms.db.can_schedule %}
 <div class="schedulebox">[scheduling]<br>
 <div class="scheduleForm" id="scheduleEventForm" style="display: block">
 <form method="POST" action="{% url 'db-scheduleProposal' %}">
