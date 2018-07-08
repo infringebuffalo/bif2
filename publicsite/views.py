@@ -129,3 +129,63 @@ def faq(request):
     ["Do organizers get paid?",
     "You must be joking."]]}
     return render(request,'publicsite/faq.html', {'qnas' : qnas})
+
+
+from db.models import *
+import json
+
+def schedule(request):
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    shows = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
+    return render(request,'publicsite/schedule.html', { 'shows': shows })
+
+def entityInfo(request,id):
+    e = get_object_or_404(Entity, pk=id)
+    if e.entityType == 'proposal':
+        return showInfo(request,e.proposal)
+    elif e.entityType == 'venue':
+        return venueInfo(request,e.venue)
+    elif e.entityType == 'groupshow':
+        return groupshowInfo(request,e.groupshow)
+    else:
+        return render(request, 'db/no_view.html')
+
+def looksLikeURL(s):
+    s = s.casefold()
+    if s.find(' ') > -1:
+        return False
+    if s[0:4] == 'www.':
+        return True
+    elif s[0:12] == 'facebook.com':
+        return True
+    elif s[0:13] == 'instagram.com':
+        return True
+    elif s[0:14] == 'soundcloud.com':
+        return True
+    return False
+
+def showInfo(request,proposal):
+    infodict = json.loads(proposal.info)
+    url = infodict['website']
+    if not url.startswith('http'):
+        url = 'http://' + url
+    socialmedia = infodict['facebook']
+    if socialmedia.startswith('http'):
+        socialmediaurl = socialmedia
+    elif looksLikeURL(socialmedia):
+        socialmediaurl = 'http://' + socialmedia
+    else:
+        socialmediaurl = ''
+    listings = proposal.listing_set.order_by('date','starttime')
+    return render(request,'publicsite/showInfo.html', { 'show': proposal, 'info': infodict, 'url': url, 'socialmediaurl': socialmediaurl, 'listings':listings })
+
+def venueInfo(request,venue):
+    infodict = json.loads(venue.info)
+    listings = venue.listing_set.filter(installation=False).order_by('date','starttime')
+    installations = venue.listing_set.filter(installation=True).order_by('date','starttime')
+    return render(request,'publicsite/venueInfo.html', { 'venue': venue, 'info': infodict, 'listings': listings, 'installations': installations })
+
+def groupshowInfo(request,groupshow):
+    return render(request,'publicsite/schedule.html', { })
+

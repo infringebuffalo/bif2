@@ -1,0 +1,40 @@
+{% extends "base_public.html" %}
+{% load bif_schedule %}
+
+{% block title %}{{show.title}} - Buffalo Infringement Festival Schedule{% endblock %}
+
+{% block style %}
+<style>
+.listings td { padding-right: 10px }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>{{show.title}}</h1>
+        <p> {{ info.description_long }} </p>
+{% if info.website %}
+        <p> Website: <a href="{{url}}">{{ info.website }}</a> </p>
+{% endif %}
+{% if info.facebook %}
+        <p> Social media: {% if socialmediaurl %}<a href="{{socialmediaurl}}">{% endif %}{{ info.facebook }}{% if socialmediaurl %}</a>{% endif %} </p>
+{% endif %}
+{% if listings %}
+<table class="listings">
+{% for l in listings %}
+{% bif_listingRow l show 0 %}
+{% endfor %}
+</table>
+{% endif %}
+      </div>
+    </div>
+  </article>
+</div>
+
+{% endblock %}

@@ -9,4 +9,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),
     path('history/', views.history, name='history'),
+    path('schedule/', views.schedule, name='schedule'),
+    path('schedule/<int:id>/', views.entityInfo, name='entityInfo'),
 ]

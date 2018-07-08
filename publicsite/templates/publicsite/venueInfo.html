@@ -1,0 +1,43 @@
+{% extends "base_public.html" %}
+{% load bif_schedule %}
+
+{% block title %}{{venue.name}} - Buffalo Infringement Festival Schedule{% endblock %}
+
+{% block style %}
+<style>
+.listings td { padding-right: 10px }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>{{venue.name}}</h1>
+        <p> {{ info.description_long }} </p>
+{% if info.address %}
+        <p> Address: {{ info.address }} </p>
+{% endif %}
+{% if info.website %}
+        <p> Website: <a href="{{url}}">{{ info.website }}</a> </p>
+{% endif %}
+<table class="listings">
+{% for l in listings %}
+{% bif_listingRow l 0 venue %}
+{% endfor %}
+</table>
+<table class="listings">
+{% for l in installations %}
+{% bif_listingRow l 0 venue %}
+{% endfor %}
+</table>
+      </div>
+    </div>
+  </article>
+</div>
+
+{% endblock %}

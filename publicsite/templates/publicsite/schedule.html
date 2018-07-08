@@ -1,0 +1,24 @@
+{% extends "base_public.html" %}
+
+{% block title %}Buffalo Infringement Festival Schedule{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>Shows</h1>
+<ul>
+{% for s in shows %}
+<li><a href="/">{{ s.title|default:"UNTITLED" }}</li>
+{% endfor %}
+</ul>
+      </div>
+    </div>
+  </article>
+</div>
+
+{% endblock %}
