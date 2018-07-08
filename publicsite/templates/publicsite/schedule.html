@@ -13,7 +13,7 @@
         <h1>Shows</h1>
 <ul>
 {% for s in shows %}
-<li><a href="/">{{ s.title|default:"UNTITLED" }}</li>
+<li><a href="/schedule/{{ s.id}}">{{ s.title|default:"UNTITLED" }}</li>
 {% endfor %}
 </ul>
       </div>
