@@ -9,40 +9,40 @@ from .models import CalendarEvent
 # import json
 
 def index(request):
-	ordered_by_date = CalendarEvent.objects.order_by('datetime')
-	just_upcoming = list(filter(lambda e: e.is_upcoming_event(), ordered_by_date))
-	if len(just_upcoming) > 0:
-		next_event = [just_upcoming[0]]
-	else:
-		next_event = []
-	next_events_list = just_upcoming[1:]
-	context = { 'next_event' : next_event, 'next_events_list' : next_events_list }
-	return render(request,'publicsite/index.html', context)
+    ordered_by_date = CalendarEvent.objects.order_by('datetime')
+    just_upcoming = list(filter(lambda e: e.is_upcoming_event(), ordered_by_date))
+    if len(just_upcoming) > 0:
+        next_event = [just_upcoming[0]]
+    else:
+        next_event = []
+    next_events_list = just_upcoming[1:]
+    context = { 'next_event' : next_event, 'next_events_list' : next_events_list }
+    return render(request,'publicsite/index.html', context)
 
 def about(request):
-	return render(request,'publicsite/about.html', { })
+    return render(request,'publicsite/about.html', { })
 
 def contact(request):
-	organizers = [
-		{'name' : "David Adamczyk", 'role' : "Street", 'email' : "dga8787@aol.com"},
-		{'name' : "Amy Duengfelder + Cat McCarthy ", 'role' : "Art", 'email' : "visualinfringement@live.com"},
-		{'name' : "Leslie Fineberg", 'role' : "Dance", 'email' : "danceundertheradar@gmail.com"},
-		{'name' : "Eddie Gomez", 'role' : "Literary", 'email' : "eddiegoofball@yahoo.com"},
-		{'name' : "Jessica Knoerl", 'role' : "Theater", 'email' : "jessicaknoerl@gmail.com"},
-		{'name' : "Dave Pape", 'role' : "Treasurer, Database, Web", 'email' : "depape@buffalo.edu"},
-		{'name' : "Curt Rotterdam", 'role' : "Music, Meeting Chair", 'email' : "merlinsbooking@gmail.com"},
-		{'name' : "Bill Smythe", 'role' : "Venues", 'email' : "whsmythe@gmail.com"},
-		{'name' : "Tom Stoll", 'role' : "Web", 'email' : "tms@kitefishlabs.com"},
-		{'name' : "Pam Swarts", 'role' : "Poster", 'email' : ""},
-		{'name' : "Janna Willoughby-Lohr", 'role' : "Paper Schedule Design", 'email' : ""},]
-	return render(request,'publicsite/contact.html', { 'orgs' : organizers })
+    organizers = [
+        {'name' : "David Adamczyk", 'role' : "Street", 'email' : "dga8787@aol.com"},
+        {'name' : "Amy Duengfelder + Cat McCarthy ", 'role' : "Art", 'email' : "visualinfringement@live.com"},
+        {'name' : "Leslie Fineberg", 'role' : "Dance", 'email' : "danceundertheradar@gmail.com"},
+        {'name' : "Eddie Gomez", 'role' : "Literary", 'email' : "eddiegoofball@yahoo.com"},
+        {'name' : "Jessica Knoerl", 'role' : "Theater", 'email' : "jessicaknoerl@gmail.com"},
+        {'name' : "Dave Pape", 'role' : "Treasurer, Database, Web", 'email' : "depape@buffalo.edu"},
+        {'name' : "Curt Rotterdam", 'role' : "Music, Meeting Chair", 'email' : "merlinsbooking@gmail.com"},
+        {'name' : "Bill Smythe", 'role' : "Venues", 'email' : "whsmythe@gmail.com"},
+        {'name' : "Tom Stoll", 'role' : "Web", 'email' : "tms@kitefishlabs.com"},
+        {'name' : "Pam Swarts", 'role' : "Poster", 'email' : ""},
+        {'name' : "Janna Willoughby-Lohr", 'role' : "Paper Schedule Design", 'email' : ""},]
+    return render(request,'publicsite/contact.html', { 'orgs' : organizers })
 
 def history(request):
-	return render(request,'publicsite/history.html', { })
+    return render(request,'publicsite/history.html', { })
 
 def faq(request):
-	qnas = {'General Information':
-	[["What is the Buffalo Infringement Festival?",
+    qnas = {'General Information':
+    [["What is the Buffalo Infringement Festival?",
     "The Buffalo Infringement Festival is a celebration of all art forms in a multitude of locations around the city of Buffalo. The artists are primarily local talent, but they also include regional and international artists. The festival covers a huge variety of art from traditional, family-orientated, and political, eclectic, controversial, and experimental."],
     ["How does it happen?",
     "Many volunteer hours are put in to secure venues, manage availability, and schedule artists. A group of volunteer organizers plan and schedule the eleven days of events, and do fundraising and awareness events throughout the year. We can always use more participants, though, and please consider volunteering!"],
@@ -55,14 +55,14 @@ def faq(request):
     ["What kind of events occur during Infringement?",
     "Every kind of artistic discipline is represented in this festival--including artists who defy categorization. Music of all varieties including acoustic, folk, progressive, rock, metal, punk, indie, noise, electronic, jazz, and world. Dance, including modern, movement, jazz, step, belly-dancing, swing, African, and many World dances. Theater, from serious to lighthearted. Poetry, spoken word, and other litera. Film: full-length features, short films, and multimedia. Visual art: painting, sculpture, drawing, metal work, wood working, pottery, crafting, DIY, conceptual art, installation, and public art. Street performers like mimes, balloon arts, and juggling. Audience participation events like workshops, demonstrations, and interactive theater"]],
     'Audience Members':
-	[["Where is the schedule available?",
+    [["Where is the schedule available?",
     "The schedule is available online and in The Public. The Public schedule comes out the day before Infringement. There are also schedules available at most of the venues. Check online at infringebuffalo.org to stay abreast of any changes!"],
     ["When can we see the schedule?",
     "Look for the schedule in The Public the week of the festival. In 2018 the schedule will appear in the Public on July 25."],
     ["What about last minute changes and cancellations?",
     "The printed schedule is designed several weeks before the actual events, so there are likely to be changes. The online schedule is the most up-to-date source for changes, cancellations, added performances, and contains detailed descriptions of installations and performances."]],
     'Artists':
-	[["What does Infringement provide for artists?",
+    [["What does Infringement provide for artists?",
     "We schedule your shows, provide some logistics, and generally promote the festival. Organizers are also take on the job of creating a paper schedule published in the Public and an online schedule."],
     ["When do I sign up?",
     "BIF accepts proposals up until May 1. Actual dates may vary from year to year, so check for calls for work early."],
@@ -91,7 +91,7 @@ def faq(request):
     ["Can you help bands/artists transport their gear?",
     "We can help, but it's ultimately the performers' responsibility to get themselves and their gear to their shows themselves."]],
     'Venues':
-	[["What does Infringement provide for a venue?",
+    [["What does Infringement provide for a venue?",
     "BIF organizers schedule performances and art appropriate to your venue, based on responses to venue questionaires and communication with organizers."],
     ["When can I find out the schedule for my venue?",
     "We finalize the schedule by July 1st, but most scheduling is done in early to mid June."],
@@ -114,7 +114,7 @@ def faq(request):
     ["Can my gallery/space collect fees from visual artists selling their works or bands selling CDs?",
     "BIF requests that each venue charge no more than a 20\% commission on fine art. As an artist-run festival, we encourage direct compensation of artists, but we recognize that galleries and other spaces are literally giving us the space to use for free. Those artists selling CDs or DVDs should not be charged any fee."]],
     'Volunteering, Organizing and Contributing the Festival':
-	[["Do you accept donations?",
+    [["Do you accept donations?",
     "Yes. You may currently make a donation via IndieGoGo. Click above. All money goes to local vendors to pay for printing the schedule and securing paid technical and security assistance with some of our larger venues."],
     ["Do you need volunteers?",
     "Yes. All organizers are volunteers. One way to get more involved with the organization of the festival is through volunteering. We have all kinds of tasks that need your help."],
@@ -128,4 +128,4 @@ def faq(request):
     "We produce the festival plus a few fundraisers throughout the year. We have a presence at Music is Art and some other events around town. Our organizers are involved in all kinds of events and organizations."],
     ["Do organizers get paid?",
     "You must be joking."]]}
-	return render(request,'publicsite/faq.html', {'qnas' : qnas})
+    return render(request,'publicsite/faq.html', {'qnas' : qnas})
