@@ -131,7 +131,7 @@ def db_time(t):
 
 
 @register.simple_tag
-def db_listingRow(listing,proposal,venue):
+def db_listingRow(listing,proposal,venue,user=None):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     tdflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
@@ -157,14 +157,15 @@ def db_listingRow(listing,proposal,venue):
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('db-entity',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
     if not venue:
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('db-entity',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
-    retval += format_html('<td><a href="{}"><i class="material-icons">edit</i></a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
-    retval += format_html('<td><a href="{}" onclick="return confirm(\'Are you sure you want to permanently delete this listing?\');"><i class="material-icons">delete_forever</i></a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
-    if listing.cancelled:
-        retval += format_html('<td><a href="{}"><i class="material-icons">restore</i></a></td>',reverse('db-uncancelListing',kwargs={'id':listing.id}))
-    else:
-        retval += format_html('<td><a href="{}"><i class="material-icons">cancel</i></a></td>',reverse('db-cancelListing',kwargs={'id':listing.id}))
-#    if listing.listingnote != '':
-#        retval += format_html('<td>{}</td>',listing.listingnote)
+    if user and user.has_perm("db.can_schedule"):
+        retval += format_html('<td><a href="{}"><i class="material-icons">edit</i></a></td>',reverse('db-editEntity',kwargs={'id':listing.id}))
+        retval += format_html('<td><a href="{}" onclick="return confirm(\'Are you sure you want to permanently delete this listing?\');"><i class="material-icons">delete_forever</i></a></td>',reverse('db-deleteListing',kwargs={'id':listing.id}))
+        if listing.cancelled:
+            retval += format_html('<td><a href="{}"><i class="material-icons">restore</i></a></td>',reverse('db-uncancelListing',kwargs={'id':listing.id}))
+        else:
+            retval += format_html('<td><a href="{}"><i class="material-icons">cancel</i></a></td>',reverse('db-cancelListing',kwargs={'id':listing.id}))
+#       if listing.listingnote != '':
+#           retval += format_html('<td>{}</td>',listing.listingnote)
     retval += format_html('</tr>\n')
     return retval
 

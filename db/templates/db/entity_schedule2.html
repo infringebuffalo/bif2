@@ -3,10 +3,10 @@
 {% if listings %}
 <table class="listings">
 {% for l in listings %}
-{% db_listingRow l proposal venue %}
+{% db_listingRow l proposal venue user %}
 {% endfor %}
 {% for l in installations %}
-{% db_listingRow l proposal venue %}
+{% db_listingRow l proposal venue user %}
 {% endfor %}
 </table>
 {% endif %}
