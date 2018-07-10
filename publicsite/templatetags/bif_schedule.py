@@ -30,22 +30,12 @@ def timeToString(t):
 
 
 @register.simple_tag
-def bif_listingRow(listing,proposal,venue,user=None):
+def bif_listingRow(listing,proposal,venue,groupshow):
     from django.urls import reverse
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     tdflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<tr>')
-    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
-    groupshowlinks = []
-    for g in groupshows:
-        if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
-            groupshowlinks.append(format_html('<a href="{}">{}</a> ',reverse('entityInfo',kwargs={'id':g.id}),g.title))
-    if len(groupshowlinks) > 0:
-        retval += format_html('<td class="groupshow">')
-        for g in groupshowlinks:
-            retval += g
-    else:
-        retval += format_html('<td></td>')
+
     retval += format_html('<td{}>{}</td>',tdflags,listing.date.strftime("%a, %b %d"))
     if listing.installation:
         retval += format_html('<td{}>installation</td>',tdflags)
@@ -55,6 +45,20 @@ def bif_listingRow(listing,proposal,venue,user=None):
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('entityInfo',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
     if not venue:
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('entityInfo',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
+
+    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
+    groupshowlinks = []
+    if not listing.installation and not groupshow:
+        for g in groupshows:
+            if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+                groupshowlinks.append(format_html('({}<a href="{}">{}</a>)','part of ' if proposal else '',reverse('entityInfo',kwargs={'id':g.id}),g.title))
+        if len(groupshowlinks) > 0:
+            retval += format_html('<td class="groupshow">')
+            for g in groupshowlinks:
+                retval += g
+        else:
+            retval += format_html('<td></td>')
+
     retval += format_html('</tr>\n')
     return retval
 
