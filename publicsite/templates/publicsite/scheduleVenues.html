@@ -1,0 +1,24 @@
+{% extends "base_public.html" %}
+
+{% block title %}Venues - Buffalo Infringement Festival{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>All venues</h1>
+<ul>
+{% for v in venues %}
+<li><a href="/schedule/{{v.id}}">{{v.name|default:"UNTITLED" }}</a></li>
+{% endfor %}
+</ul>
+      </div>
+    </div>
+  </article>
+</div>
+
+{% endblock %}

@@ -26,9 +26,10 @@
         <p> Social media: {% if socialmediaurl %}<a href="{{socialmediaurl}}">{% endif %}{{ info.facebook }}{% if socialmediaurl %}</a>{% endif %} </p>
 {% endif %}
 {% if listings %}
+<h2>Schedule</h2>
 <table class="listings">
 {% for l in listings %}
-{% bif_listingRow l show 0 %}
+{% bif_listingRow l show 0 0 %}
 {% endfor %}
 </table>
 {% endif %}

@@ -1,6 +1,6 @@
 {% extends "base_public.html" %}
 
-{% block title %}Buffalo Infringement Festival Schedule{% endblock %}
+{% block title %}Schedule - Buffalo Infringement Festival{% endblock %}
 
 {% block content %}
 
@@ -10,11 +10,15 @@
   <article>
     <div class="row">
       <div class="col-sm-12">
-        <h1>Shows</h1>
-<ul>
-{% for s in shows %}
-<li><a href="/schedule/{{ s.id}}">{{ s.title|default:"UNTITLED" }}</li>
-{% endfor %}
+        <h1>Schedule</h1>
+<p>
+The 2018 Infringement Festival consists of over 300 shows in 80 venues.
+<p>
+You can view the schedule as:
+<li><a href="/schedule/allshows/">a list of all shows</a>
+<li><a href="/schedule/allgenres/">a list of shows by genre</a>
+<li><a href="/schedule/allvenues/">a list of all venues</a>
+<li><a href="/schedule/calendar/">a daily calendar</a>
 </ul>
       </div>
     </div>

@@ -10,5 +10,9 @@ urlpatterns = [
     path('faq/', views.faq, name='faq'),
     path('history/', views.history, name='history'),
     path('schedule/', views.schedule, name='schedule'),
+    path('schedule/allshows/', views.scheduleShows, name='scheduleShows'),
+    path('schedule/allvenues/', views.scheduleVenues, name='scheduleVenues'),
+    path('schedule/allgenres/', views.scheduleGenres, name='scheduleGenres'),
+    path('schedule/calendar/', views.scheduleCalendar, name='scheduleCalendar'),
     path('schedule/<int:id>/', views.entityInfo, name='entityInfo'),
 ]

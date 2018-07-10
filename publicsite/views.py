@@ -135,10 +135,37 @@ from db.models import *
 import json
 
 def schedule(request):
+    return render(request,'publicsite/schedule.html', { })
+
+def scheduleShows(request):
     from django.db.models.functions import Lower
     fest = FestivalInfo.objects.last()
     shows = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
-    return render(request,'publicsite/schedule.html', { 'shows': shows })
+    return render(request,'publicsite/scheduleShows.html', { 'shows': shows })
+
+def scheduleVenues(request):
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    venues = Venue.objects.filter(status=Venue.ACCEPTED).order_by(Lower('name'))
+    return render(request,'publicsite/scheduleVenues.html', { 'venues': venues })
+
+def scheduleGenres(request):
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    forms = FormInfo.objects.filter(festival=fest).order_by(Lower('showType'))
+    shows = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
+    genres = []
+    for f in forms:
+        genreshows = []
+        for s in shows:
+            infodict = json.loads(s.info)
+            if infodict['type'] == f.showType:
+                genreshows.append(s)
+        genres.append({'name':f.showType, 'shows':genreshows})
+    return render(request,'publicsite/scheduleGenres.html', { 'genres': genres })
+
+def scheduleCalendar(request):
+    return render(request,'publicsite/scheduleCalendar.html', { })
 
 def entityInfo(request,id):
     e = get_object_or_404(Entity, pk=id)
@@ -187,5 +214,10 @@ def venueInfo(request,venue):
     return render(request,'publicsite/venueInfo.html', { 'venue': venue, 'info': infodict, 'listings': listings, 'installations': installations })
 
 def groupshowInfo(request,groupshow):
-    return render(request,'publicsite/schedule.html', { })
+    alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date).order_by('starttime')
+    listings = []
+    for l in alllistings:
+        if max(l.starttime,groupshow.starttime) <= min(l.endtime,groupshow.endtime):
+            listings.append(l)
+    return render(request,'publicsite/groupshowInfo.html', { 'groupshow': groupshow, 'listings': listings })
 

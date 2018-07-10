@@ -1,0 +1,27 @@
+{% extends "base_public.html" %}
+
+{% block title %}Genres - Buffalo Infringement Festival{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="col-md-12">  
+  <article>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>Shows by genre</h1>
+{% for g in genres %}
+<h2>{{g.name|default:"UNTITLED" }}</h2>
+<ul>
+{% for s in g.shows %}
+<li><a href="/schedule/{{s.id}}">{{s.title|default:"UNTITLED" }}</a></li>
+{% endfor %}
+</ul>
+{% endfor %}
+      </div>
+    </div>
+  </article>
+</div>
+
+{% endblock %}
