@@ -136,16 +136,18 @@ def db_listingRow(listing,proposal,venue,user=None):
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     tdflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<tr>')
-#    groupshows = GroupShow.objects.filter(where=venue,date=listing.date) if venue else []
-    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
     groupshowlinks = []
-    for g in groupshows:
-        if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
-            groupshowlinks.append(format_html('<a href="{}">{}</a> ',reverse('db-entity',kwargs={'id':g.id}),g.title))
+    if not listing.installation:
+#        groupshows = GroupShow.objects.filter(where=venue,date=listing.date) if venue else []
+        groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
+        for g in groupshows:
+            if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+                groupshowlinks.append(format_html('<a href="{}">{}</a> ',reverse('db-entity',kwargs={'id':g.id}),g.title))
     if len(groupshowlinks) > 0:
         retval += format_html('<td class="groupshow">')
         for g in groupshowlinks:
             retval += g
+        retval += format_html('</td>')
     else:
         retval += format_html('<td></td>')
     retval += format_html('<td{}>{}</td>',tdflags,listing.date.strftime("%a, %b %d"))
@@ -172,11 +174,12 @@ def db_listingRow(listing,proposal,venue,user=None):
 @register.simple_tag
 def db_brochurelistingRow(listing):
     from django.urls import reverse
-    groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
     groupshowname = None
-    for g in groupshows:
-        if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
-            groupshowname = g.title
+    if not listing.installation:
+        groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
+        for g in groupshows:
+            if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+                groupshowname = g.title
     venuenote = ' (%s)'%listing.venuenote if listing.venuenote != '' else ''
     spanflags = mark_safe(' class="cancelled"') if listing.cancelled else ""
     retval = format_html('<span{}>',spanflags)

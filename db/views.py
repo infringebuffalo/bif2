@@ -228,7 +228,7 @@ def update(request):
 @permission_required('db.can_schedule')
 def groupshow(request,id):
     groupshow = get_object_or_404(GroupShow, pk=id)
-    alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date).order_by('starttime')
+    alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date, installation=False).order_by('starttime')
     listings = []
     for l in alllistings:
         if max(l.starttime,groupshow.starttime) <= min(l.endtime,groupshow.endtime):
