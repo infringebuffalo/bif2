@@ -63,6 +63,7 @@ urlpatterns = [
     path('calendar/', views.calendar, name='db-calendar'),
     path('brochure/', views.brochure, name='db-brochure'),
     path('log/', views.viewLog, name='db-log'),
+    path('search/', views.searchProposals, name='db-search'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 

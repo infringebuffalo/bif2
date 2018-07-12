@@ -1013,6 +1013,18 @@ def brochure(request):
     return render(request, 'db/brochure.html', context={'genres':genres})
 
 
+@permission_required('db.can_schedule')
+def searchProposals(request):
+    from django.db.models.functions import Lower
+    if 'searchterm' in request.POST.keys():
+        fest = FestivalInfo.objects.last()
+        searchterm = request.POST['searchterm'].casefold()
+        props = Proposal.objects.filter(festival=fest,info__icontains=searchterm).order_by(Lower('title'))
+    else:
+        props = []
+    return render(request,'db/search.html', { 'proposals' : props })
+
+
 import logging
 
 def logInfo(request,message):

@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% block title %} Search proposals {% endblock %}
+
+{% block content %}
+
+<form method="POST" action="{% url 'db-search' %}" name="searchform">
+{% csrf_token %}
+<input type="text" name="searchterm" size="60" value="{{searchterm}}" />
+<input type="Submit" name="submit" value="search" />
+</form>
+
+{% if proposals %}
+<ul>
+{% for p in proposals %}
+<li><a href="/db/{{ p.id }}/">{{ p.title|default:"NEEDS A TITLE" }}</a>
+{% endfor %}
+</ul>
+
+{% else %}
+<p>No proposals found.</p>
+{% endif %}
+
+{% endblock %}
