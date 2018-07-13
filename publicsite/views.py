@@ -167,7 +167,17 @@ def scheduleGenres(request):
     return render(request,'publicsite/scheduleGenres.html', { 'genres': genres })
 
 def scheduleCalendar(request):
-    return render(request,'publicsite/scheduleCalendar.html', { })
+    from datetime import timedelta
+    from django.db.models.functions import Lower
+    days = []
+    fest = FestivalInfo.objects.last()
+    for d in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        listingList = []
+        listings = Listing.objects.filter(date=day,installation=False).order_by('starttime',Lower('where__name'))
+        installations = Listing.objects.filter(date=day,installation=True).order_by('starttime',Lower('where__name'))
+        days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
+    return render(request,'publicsite/scheduleCalendar.html', {'days':days })
 
 def entityInfo(request,id):
     e = get_object_or_404(Entity, pk=id)
