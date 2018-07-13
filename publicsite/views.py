@@ -162,6 +162,8 @@ def scheduleGenres(request):
             if infodict['type'] == f.showType:
                 genreshows.append(s)
         genres.append({'name':f.showType, 'shows':genreshows})
+    groupshows = GroupShow.objects.filter(festival=fest).order_by(Lower('title'))
+    genres.append({'name': 'Group shows', 'shows':list(groupshows)})
     return render(request,'publicsite/scheduleGenres.html', { 'genres': genres })
 
 def scheduleCalendar(request):
