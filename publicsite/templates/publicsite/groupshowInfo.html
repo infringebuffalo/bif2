@@ -19,11 +19,12 @@
       <div class="col-sm-12">
         <h1>{{groupshow.title}}</h1>
         <p> {{ groupshow.description }} </p>
+        <p> at <a href="/schedule/{{ groupshow.where.id }}/">{{ groupshow.where.name }}</a> </p>
 {% if listings %}
 <h2>Schedule</h2>
 <table class="listings">
 {% for l in listings %}
-{% bif_listingRow l 0 0 groupshow %}
+{% bif_listingRow l 0 groupshow.where groupshow %}
 {% endfor %}
 </table>
 {% endif %}

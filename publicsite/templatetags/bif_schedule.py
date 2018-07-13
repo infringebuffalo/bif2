@@ -42,9 +42,11 @@ def bif_listingRow(listing,proposal,venue,groupshow):
     else:
         retval += format_html('<td{}>{}-{}</td>',tdflags,timeToString(listing.starttime),timeToString(listing.endtime))
     if not proposal:
-        retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('entityInfo',kwargs={'id':listing.who.id}),listing.who.title,venuenote if venue else '')
+        retval += format_html('<td{}><a href="{}">{}</a></td>',tdflags,reverse('entityInfo',kwargs={'id':listing.who.id}),listing.who.title)
     if not venue:
         retval += format_html('<td{}><a href="{}">{}</a>{}</td>',tdflags,reverse('entityInfo',kwargs={'id':listing.where.id}),listing.where.name,venuenote)
+    else:
+        retval += format_html('<td{}>{}</td>',tdflags,venuenote)
 
     groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
     groupshowlinks = []
