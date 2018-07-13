@@ -1,4 +1,13 @@
 {% extends "base_public.html" %}
+{% load bif_schedule %}
+
+{% block style %}
+<style>
+th { padding-right: 10px }
+td { padding-right: 10px }
+td:nth-child(1)  {white-space: nowrap;}
+</style>
+{% endblock %}
 
 {% block title %}Calendar - Buffalo Infringement Festival{% endblock %}
 
@@ -11,8 +20,22 @@
     <div class="row">
       <div class="col-sm-12">
         <h1>Daily calendar</h1>
-<p>
-TBD
+
+{% for d in days %}
+<h2>{{d.date}}</h2>
+<table class="listings">
+<tr><td colspan="2">Performances:</td></tr>
+{% for l in d.listings %}
+{% bif_calendarRow l %}
+{% endfor %}
+<tr><td colspan="2">Installations:</td></tr>
+{% for l in d.installations %}
+{% bif_calendarRow l %}
+{% endfor %}
+</table>
+<br>
+{% endfor %}
+
       </div>
     </div>
   </article>
