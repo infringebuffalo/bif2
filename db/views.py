@@ -999,6 +999,7 @@ def brochure(request):
     genredict = {}
     for fi in forminfos:
         genredict[fi.showType] = {'name':fi.showType, 'proposals': []}
+    genredict['groupshows'] = {'name': "group shows", 'proposals': []}
     proposals = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
     for prop in proposals:
         listings = prop.listing_set.order_by('date','starttime')
@@ -1008,7 +1009,16 @@ def brochure(request):
             shortdesc = shortdesc[:140] + "..."
         url = infodict['website'] if 'website' in infodict.keys() else ''
         if len(listings) > 0:
-            genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'url': url, 'listings':listings, 'numlistings':3})
+            genredict[infodict['type']]['proposals'].append({'title':prop.title, 'description':shortdesc, 'url': url, 'listings':listings})
+    groupshows = GroupShow.objects.filter(festival=fest).order_by(Lower('title'))
+    for g in groupshows:
+        alllistings = Listing.objects.filter(who__festival=fest, where=g.where, date=g.date, installation=False).order_by('starttime')
+        performers = []
+        for l in alllistings:
+            if max(l.starttime,g.starttime) <= min(l.endtime,g.endtime):
+                performers.append(l.who.title)
+        description = g.description + "<br>Featuring: " + ', '.join(performers)
+        genredict['groupshows']['proposals'].append({'title':g.title, 'description':description, 'url':'', 'listings':[g]})
     genres = genredict.values()
     return render(request, 'db/brochure.html', context={'genres':genres})
 

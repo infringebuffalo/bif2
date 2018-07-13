@@ -13,10 +13,12 @@ h1 { background: lightgrey}
 <h1>{{g.name}}</h1>
 {% for p in g.proposals %}
 <h2>{{p.title}}</h2>
-{{p.description}}<br>
+{{p.description|safe}}<br>
 {{p.url}}<br>
 {% for l in p.listings %}
+{% if not l.cancelled %}
 {% db_brochurelistingRow l %} <br>
+{% endif %}
 {% endfor %}
 <br><br>
 {% endfor %}
