@@ -3,9 +3,12 @@
 
 {% block style %}
 <style>
-th { padding-right: 10px }
+th { padding-right: 10px; vertical-align: center }
 td { padding-right: 10px }
-td:nth-child(1)  {white-space: nowrap;}
+td.show0 { background-color: #f0f0f0 }
+td.show1 { background-color: #f7f7f7 }
+td.groupshow0 { background-color: #f0f000; text-align:center }
+td.groupshow1 { background-color: #f7f700 }
 </style>
 {% endblock %}
 
@@ -23,12 +26,15 @@ td:nth-child(1)  {white-space: nowrap;}
 
 {% for d in days %}
 <h2>{{d.date}}</h2>
-<table class="listings">
-<tr><td colspan="2">Performances:</td></tr>
-{% for l in d.listings %}
-{% bif_calendarRow l %}
+<table rules="none" style="table-layout: fixed">
+{% bif_calendarTimeHeader d.firsttime d.lasttime %}
+{% for v in d.venues %}
+{% bif_calendarVenueRow v d.firsttime d.lasttime %}
+<tr><td>&nbsp;</td></tr>
 {% endfor %}
-<tr><td colspan="2">&nbsp;</td></tr>
+</table>
+<br>
+<table>
 <tr><td colspan="2">Installations:</td></tr>
 {% for l in d.installations %}
 {% bif_calendarRow l %}

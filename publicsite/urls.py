@@ -14,5 +14,6 @@ urlpatterns = [
     path('schedule/allvenues/', views.scheduleVenues, name='scheduleVenues'),
     path('schedule/allgenres/', views.scheduleGenres, name='scheduleGenres'),
     path('schedule/calendar/', views.scheduleCalendar, name='scheduleCalendar'),
+    path('schedule/calendar2/', views.scheduleCalendar2, name='scheduleCalendar2'),
     path('schedule/<int:id>/', views.entityInfo, name='entityInfo'),
 ]

@@ -179,6 +179,34 @@ def scheduleCalendar(request):
         days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
     return render(request,'publicsite/scheduleCalendar.html', {'days':days })
 
+def scheduleCalendar2(request):
+    from datetime import timedelta
+    from django.db.models.functions import Lower
+    days = []
+    fest = FestivalInfo.objects.last()
+    for d in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        firstTime = 2800
+        lastTime = 0
+        listings = Listing.objects.filter(date=day,installation=False).order_by(Lower('where__name'),'starttime')
+        prevVenue = None
+        venueList = []
+        listingsAtVenue = []
+        groupshows = []
+        for l in listings:
+            if l.where != prevVenue:
+                if prevVenue:
+                    venueList.append({'name':prevVenue.name, 'id':prevVenue.id, 'listings':listingsAtVenue, 'groupshows':groupshows})
+                listingsAtVenue = []
+                groupshows = GroupShow.objects.filter(date=day,where=l.where).order_by('starttime')
+                prevVenue = l.where
+            listingsAtVenue.append(l)
+            firstTime = min(firstTime, l.starttime)
+            lastTime = max(lastTime, l.endtime)
+        installations = Listing.objects.filter(date=day,installation=True).order_by('starttime',Lower('where__name'))
+        days.append({'date': day.strftime("%A, %B %-d"), 'firsttime': firstTime, 'lasttime': lastTime, 'venues': venueList, 'installations':installations})
+    return render(request,'publicsite/scheduleCalendar2.html', {'days':days })
+
 def entityInfo(request,id):
     e = get_object_or_404(Entity, pk=id)
     if e.entityType == 'proposal':
