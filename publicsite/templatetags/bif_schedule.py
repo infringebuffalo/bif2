@@ -92,7 +92,9 @@ def bif_calendarRow(listing):
 
     groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
     groupshowlinks = []
-    if not listing.installation:
+    if listing.cancelled:
+        retval += format_html('<td>cancelled</td>')
+    elif not listing.installation:
         for g in groupshows:
             if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
                 groupshowlinks.append(format_html('(part of <a href="{}">{}</a>)',reverse('entityInfo',kwargs={'id':g.id}),g.title))
@@ -162,7 +164,11 @@ def calendarListingRow(listings,firsttime,lasttime):
             if lstartq > q:
                 retval += format_html('<td colspan="{}"></td>',lstartq-q)
             lendq = timeToQuarterHour(l.endtime)
-            retval += format_html('<td colspan="{}" class="show{}"><a href="{}">{}</a></td>',lendq-lstartq,showclassnum,reverse('entityInfo',kwargs={'id':l.who.id}),l.who.title)
+            if l.cancelled:
+                tdclass = 'cancelled'
+            else:
+                tdclass = 'show%d' % showclassnum
+            retval += format_html('<td colspan="{}" class="{}"><a href="{}">{}</a></td>',lendq-lstartq,tdclass,reverse('entityInfo',kwargs={'id':l.who.id}),l.who.title)
             showclassnum = (showclassnum+1) % 2
             q = lendq
     retval += format_html('\n');

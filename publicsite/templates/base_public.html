@@ -10,10 +10,13 @@
 {% load static %}
 <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'publicsite/style.css' %}">
-
+<style>
+td.cancelled { text-decoration: line-through; color: #444 }
+</style>
 {% block style %}{% endblock %}
 </head>
 
+<body>
  <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -39,7 +42,6 @@
   </div>
 </nav> 
 
-<body>
   <div class="container-fluid">
     <div class="row">
       {% block content %}{% endblock %}
