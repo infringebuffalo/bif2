@@ -1017,7 +1017,7 @@ def brochure(request):
         for l in alllistings:
             if max(l.starttime,g.starttime) <= min(l.endtime,g.endtime):
                 performers.append(l.who.title)
-        description = g.description + "<br>Featuring: " + ', '.join(performers)
+        description = g.shortdescription + "<br>Featuring: " + ', '.join(performers)
         genredict['groupshows']['proposals'].append({'title':g.title, 'description':description, 'url':'', 'listings':[g]})
     genres = genredict.values()
     return render(request, 'db/brochure.html', context={'genres':genres})
