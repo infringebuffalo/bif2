@@ -35,4 +35,16 @@ h2 { font-family: 'Times'; font-size: 24px; color: #000 }
 {% endfor %}
 </dl>
 
+<h1>Daily schedule</h1>
+{% for d in days %}
+<h3>{{d.date}}</h3>
+<dl>
+{% for s in d.shows %}
+<dt>{{s.title}}
+<dd>{{s.venue}} // {{s.time}}
+<br><br>
+{% endfor %}
+</dl>
+{% endfor %}
+
 {% endblock %}

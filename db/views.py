@@ -991,9 +991,50 @@ def calendar(request):
         days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
     return render(request, 'db/calendar.html', context={'days':days})
 
+
+def timeToString(t):
+    t = int(t)
+    if t == 1200:
+        return 'noon'
+    elif t == 2400:
+        return 'midnight'
+    h = int(t/100)
+    m = t - h*100
+    h = h % 24
+    if h >= 12:
+        suffix = ' pm'
+        if h > 12:
+            h = h - 12
+    else:
+        suffix = ' am'
+        if h == 0:
+            h = 12
+    if m != 0:
+        return '%d:%02d%s' % (h,m,suffix)
+    else:
+        return '%d%s' % (h,suffix)
+
+def timeSpanToString(t0,t1):
+    start = timeToString(t0)
+    end = timeToString(t1)
+    if start[-2:] == "am" and end[-2:] == "am":
+        return start[:-3] + "-" + end
+    elif start[-2:] == "pm" and end[-2:] == "pm":
+        return start[:-3] + "-" + end
+    else:
+        return start + "-" + end
+
+
+def listingGroupShow(listing,groupshows):
+    for g in groupshows:
+        if listing['venue']==g.where.name and max(listing['starttime'],g.starttime) <= min(listing['endtime'],g.endtime):
+            return g
+    return None
+
 @permission_required('db.can_schedule')
 def brochure(request):
     from django.db.models.functions import Lower
+    from datetime import timedelta
     fest = FestivalInfo.objects.last()
     forminfos = FormInfo.objects.filter(festival=fest)
     genredict = {}
@@ -1024,7 +1065,32 @@ def brochure(request):
     for v in Venue.objects.filter(status=Venue.ACCEPTED).order_by(Lower('name')):
         infodict = json.loads(v.info)
         venues.append({'name':v.name, 'address':infodict['address'], 'website':infodict['website']})
-    return render(request, 'db/brochure.html', context={'genres':genres, 'venues':venues})
+    days = []
+    fest = FestivalInfo.objects.last()
+    for d in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=d)
+        listinglist = []
+        allgroupshows = list(GroupShow.objects.filter(date=day,cancelled=False).order_by('starttime',Lower('where__name')))
+        groupshows = [{'title':g.title, 'venue': g.where.name, 'time': timeSpanToString(g.starttime,g.endtime), 'starttime':g.starttime, 'endtime':g.endtime} for g in allgroupshows]
+        alllistings = Listing.objects.filter(date=day,cancelled=False,installation=False).order_by('starttime',Lower('where__name'))
+        listings = [{'title':l.who.title, 'venue': l.where.name, 'time': timeSpanToString(l.starttime,l.endtime), 'starttime':l.starttime, 'endtime':l.endtime} for l in alllistings]
+        showlist = []
+        while len(groupshows)>0 and len(listings)>0:
+            if listings[0]['starttime'] < groupshows[0]['starttime']:
+                if not listingGroupShow(listings[0],allgroupshows):
+                    showlist.append(listings[0])
+                listings.pop(0)
+            else:
+                showlist.append(groupshows.pop(0))
+        while len(groupshows) > 0:
+            showlist.append(groupshows.pop(0))
+        while len(listings) > 0:
+            if not listingGroupShow(listings[0],allgroupshows):
+                showlist.append(listings[0])
+            listings.pop(0)
+        days.append({'date': day.strftime("%A, %B %-d"), 'shows': showlist})
+
+    return render(request, 'db/brochure.html', context={'genres':genres, 'venues':venues, 'days':days})
 
 
 @permission_required('db.can_schedule')
