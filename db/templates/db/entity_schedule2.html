@@ -1,6 +1,6 @@
 {% load db_scheduling %}
 {% if can_see.schedule or perms.db.can_schedule %}
-{% if listings %}
+{% if listings or installations %}
 <table class="listings">
 {% for l in listings %}
 {% db_listingRow l proposal venue user %}
