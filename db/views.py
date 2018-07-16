@@ -1020,7 +1020,11 @@ def brochure(request):
         description = g.shortdescription + "<br>Featuring: " + ', '.join(performers)
         genredict['groupshows']['proposals'].append({'title':g.title, 'description':description, 'url':'', 'listings':[g]})
     genres = genredict.values()
-    return render(request, 'db/brochure.html', context={'genres':genres})
+    venues = []
+    for v in Venue.objects.filter(status=Venue.ACCEPTED).order_by(Lower('name')):
+        infodict = json.loads(v.info)
+        venues.append({'name':v.name, 'address':infodict['address'], 'website':infodict['website']})
+    return render(request, 'db/brochure.html', context={'genres':genres, 'venues':venues})
 
 
 @permission_required('db.can_schedule')

@@ -25,4 +25,14 @@ h2 { font-family: 'Times'; font-size: 24px; color: #000 }
 {% endfor %}
 {% endfor %}
 
+<h1>Venues</h1>
+<dl>
+{% for v in venues %}
+<dt> {{v.name}}
+<dd> {{v.address}}
+<dd> {{v.website}}
+<br><br>
+{% endfor %}
+</dl>
+
 {% endblock %}
