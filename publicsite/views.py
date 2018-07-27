@@ -166,12 +166,12 @@ def scheduleGenres(request):
     genres.append({'name': 'Group shows', 'shows':list(groupshows)})
     return render(request,'publicsite/scheduleGenres.html', { 'genres': genres })
 
-def scheduleCalendar(request):
+def scheduleCalendar(request,daynum=None):
     from datetime import timedelta
     from django.db.models.functions import Lower
     days = []
     fest = FestivalInfo.objects.last()
-    for d in range(0,fest.numberOfDays):
+    for d in range(0,fest.numberOfDays) if daynum is None else [daynum]:
         day = fest.startDate + timedelta(days=d)
         listingList = []
         listings = Listing.objects.filter(date=day,installation=False).order_by('starttime',Lower('where__name'))
@@ -179,12 +179,16 @@ def scheduleCalendar(request):
         days.append({'date': day.strftime("%A, %B %-d"), 'listings': listings, 'installations':installations})
     return render(request,'publicsite/scheduleCalendar.html', {'days':days })
 
-def scheduleCalendar2(request):
+def scheduleCalendar2(request,daynum=None):
     from datetime import timedelta
     from django.db.models.functions import Lower
     days = []
     fest = FestivalInfo.objects.last()
-    for d in range(0,fest.numberOfDays):
+    if daynum is not None:
+        dayrange = [daynum]
+    else:
+        dayrange = range(0,fest.numberOfDays)
+    for d in dayrange:
         day = fest.startDate + timedelta(days=d)
         firstTime = 2800
         lastTime = 0
