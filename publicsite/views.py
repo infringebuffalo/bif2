@@ -251,7 +251,10 @@ def venueInfo(request,venue):
     infodict = json.loads(venue.info)
     listings = venue.listing_set.filter(installation=False).order_by('date','starttime')
     installations = venue.listing_set.filter(installation=True).order_by('date','starttime')
-    return render(request,'publicsite/venueInfo.html', { 'venue': venue, 'info': infodict, 'listings': listings, 'installations': installations })
+    url = infodict['website']
+    if not url.startswith('http'):
+        url = 'http://' + url
+    return render(request,'publicsite/venueInfo.html', { 'venue': venue, 'info': infodict, 'listings': listings, 'installations': installations, 'url': url })
 
 def groupshowInfo(request,groupshow):
     alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date).order_by('starttime')
