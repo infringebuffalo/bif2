@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'publicsite/style.css' %}">
 <style>
 td.cancelled { text-decoration: line-through; color: #444 }
+@media print {
+a[href]:after { content: none }
+}
 </style>
 {% block style %}{% endblock %}
 </head>

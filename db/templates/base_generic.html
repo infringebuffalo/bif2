@@ -12,6 +12,11 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 {% block style %}{% endblock %}
+<style>
+@media print {
+a[href]:after { content: none }
+}
+</style>
 </head>
 
 <body>
