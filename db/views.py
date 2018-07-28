@@ -647,6 +647,27 @@ def deleteBatch(request, id):
 
 
 @permission_required('db.can_schedule')
+def callList(request,daynum,batchid=0):
+    from datetime import timedelta
+    from django.db.models.functions import Lower
+    fest = FestivalInfo.objects.last()
+    day = fest.startDate + timedelta(days=daynum)
+    title = day.strftime("%A, %B %-d")
+    batch = None
+    if batchid != 0:
+        batch = get_object_or_404(Batch, pk=batchid)
+        title += ' (%s)' % batch.name
+    listings = Listing.objects.filter(date=day,installation=False).order_by('starttime',Lower('where__name'))
+    shows = []
+    for l in listings:
+        if not batch or len(batch.members.filter(id=l.who.id)) > 0:
+            infodict = json.loads(l.who.info)
+            shows.append({'person':infodict['contactname'], 'phone':infodict['contactphone'], 'email':infodict['contactemail'], 'facebook':infodict['contactfacebook'], 'id':l.who.id, 'title':l.who.title, 'venue':l.where.name, 'time':l.starttime, 'best':infodict['bestcontactmethod']})
+    context = {'title':title, 'date':day, 'shows':shows}
+    return render(request,'db/calllist.html', context)
+
+
+@permission_required('db.can_schedule')
 def newSpreadsheet(request):
     batches = Batch.objects.all()
     fest = FestivalInfo.objects.last()

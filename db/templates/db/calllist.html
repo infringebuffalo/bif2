@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% load db_scheduling %}
+
+{% block title %} Call list: {{title}} {% endblock %}
+{% block style %}
+<style>
+td { padding-right: 5px }
+td.bestcontact { background:yellow }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Call list: {{ title }}</h1>
+<p>{{ date }}</p>
+<table>
+<tr><th>name</th><th>phone</th><th>email</th><th>show</th><th>venue</th><th>time</th></tr>
+{% for s in shows %}
+<tr>
+<td>{{ s.person }}</td>
+<td {% if s.best == 'phone' %}class="bestcontact"{%endif%}>{{ s.phone }}</td>
+<td {% if s.best == 'email' %}class="bestcontact"{%endif%}>{{ s.email }}</td>
+<td><a href="/db/{{ s.id }}">{{ s.title }}</a></td>
+<td>{{ s.venue }}</td>
+<td>{% db_time s.time %}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

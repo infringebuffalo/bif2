@@ -1,7 +1,12 @@
 {% extends "base_generic.html" %}
+{% block style %}
+<style>
+.calllist td { padding-left: 5px }
+td.weekend { background: lightblue }
+</style>
+{% endblock %}
 
 {% block content %}
-
 
 {% if batch %}
 <h1>{{ batch.name }}</h1>
@@ -25,6 +30,21 @@
 <p><a href="{% url 'db-autoBatch' batch.id %}">auto-add</a></p>
 <p><a href="{% url 'db-batchEmails' batch.id %}">email addresses</a></p>
 <p><a href="{% url 'db-composeMailToBatch' batch.id %}">send email</a></p>
+<p>Call lists:<br>
+<table class="calllist"><tr>
+<td><a href="{% url 'db-callList' 0 batch.id %}">26</a>
+<td><a href="{% url 'db-callList' 1 batch.id %}">27</a>
+<td class="weekend"><a href="{% url 'db-callList' 2 batch.id %}">28</a>
+<td class="weekend"><a href="{% url 'db-callList' 3 batch.id %}">29</a>
+<td><a href="{% url 'db-callList' 4 batch.id %}">30</a>
+<td><a href="{% url 'db-callList' 5 batch.id %}">31</a>
+<td><a href="{% url 'db-callList' 6 batch.id %}">1</a>
+<td><a href="{% url 'db-callList' 7 batch.id %}">2</a>
+<td><a href="{% url 'db-callList' 8 batch.id %}">3</a>
+<td class="weekend"><a href="{% url 'db-callList' 9 batch.id %}">4</a>
+<td class="weekend"><a href="{% url 'db-callList' 10 batch.id %}">5</a>
+</tr></table>
+</p>
 </div>
 {% endif %}
 

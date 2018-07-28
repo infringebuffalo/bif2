@@ -64,6 +64,8 @@ urlpatterns = [
     path('brochure/', views.brochure, name='db-brochure'),
     path('log/', views.viewLog, name='db-log'),
     path('search/', views.searchProposals, name='db-search'),
+    path('calllist/<int:daynum>/<int:batchid>/', views.callList, name='db-callList'),
+    path('calllist/<int:daynum>/', views.callList, name='db-callList'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 
