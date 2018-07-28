@@ -248,8 +248,11 @@ def showInfo(request,proposal):
         socialmediaurl = 'http://' + socialmedia
     else:
         socialmediaurl = ''
+    description = infodict['description_long']
+    if len(description) == 0:
+        description = infodict['description_short']
     listings = proposal.listing_set.order_by('date','starttime')
-    return render(request,'publicsite/showInfo.html', { 'show': proposal, 'info': infodict, 'url': url, 'socialmediaurl': socialmediaurl, 'listings':listings })
+    return render(request,'publicsite/showInfo.html', { 'show': proposal, 'info': infodict, 'url': url, 'socialmediaurl': socialmediaurl, 'description': description, 'listings':listings })
 
 def venueInfo(request,venue):
     infodict = json.loads(venue.info)
