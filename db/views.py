@@ -663,7 +663,7 @@ def callList(request,daynum,batchid=0):
         if not batch or len(batch.members.filter(id=l.who.id)) > 0:
             infodict = json.loads(l.who.info)
             shows.append({'person':infodict['contactname'], 'phone':infodict['contactphone'], 'email':infodict['contactemail'], 'facebook':infodict['contactfacebook'], 'id':l.who.id, 'title':l.who.title, 'venue':l.where.name, 'time':l.starttime, 'best':infodict['bestcontactmethod']})
-    context = {'title':title, 'date':day, 'shows':shows}
+    context = {'title':title, 'shows':shows}
     return render(request,'db/calllist.html', context)
 
 
