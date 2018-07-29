@@ -207,6 +207,8 @@ def scheduleCalendar2(request,daynum=None):
             listingsAtVenue.append(l)
             firstTime = min(firstTime, l.starttime)
             lastTime = max(lastTime, l.endtime)
+        if prevVenue:
+            venueList.append({'name':prevVenue.name, 'id':prevVenue.id, 'listings':listingsAtVenue, 'groupshows':groupshows})
         installations = Listing.objects.filter(date=day,installation=True).order_by('starttime',Lower('where__name'))
         days.append({'date': day.strftime("%A, %B %-d"), 'firsttime': firstTime, 'lasttime': lastTime, 'venues': venueList, 'installations':installations})
     return render(request,'publicsite/scheduleCalendar2.html', {'days':days })
