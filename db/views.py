@@ -439,6 +439,21 @@ def undeleteVenue(request,id):
 
 
 @permission_required('db.can_schedule')
+def setLatLon(request,id):
+    ven = get_object_or_404(Venue, pk=id)
+    lat = request.POST['lat']
+    lon = request.POST['lon']
+    infodict = json.loads(ven.info)
+    infodict['lat'] = lat
+    infodict['lon'] = lon
+    infojson = json.dumps(infodict)
+    ven.info = infojson
+    ven.save()
+    logInfo(request, "set lat/lon for venue {ID:%d} ('%s')" % (ven.id,ven.name))
+    return redirect('db-entity',id=id)
+
+
+@permission_required('db.can_schedule')
 def newBatch(request):
     return render(request,'db/new_batch.html')
 
