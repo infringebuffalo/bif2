@@ -127,9 +127,9 @@ def bif_calendarTimeHeader(firsttime,lasttime):
     retval = format_html('<tr><th>venue</th>')
     for q in range(timeToQuarterHour(firsttime), timeToQuarterHour(lasttime)+1):
         if q % 4 == 0:
-            retval += format_html('<td style="white-space:nowrap; width:5%">{}</td>',timeToString(quarterHourToTime(q)))
+            retval += format_html('<th style="white-space:nowrap; width:5%">{}</th>',timeToString(quarterHourToTime(q)))
         else:
-            retval += format_html('<td style="width:5%"></td>')
+            retval += format_html('<th style="width:5%"></th>')
     retval += format_html('</tr>')
     return retval
 

@@ -3,6 +3,7 @@
 
 {% block style %}
 <style>
+thead th { background-color: #f5edff }
 th { padding-right: 10px; vertical-align: center }
 td { padding-right: 10px }
 td.show0 { background-color: #f0f0f0 }
@@ -27,8 +28,10 @@ td.groupshow1 { background-color: #f7f700 }
 {% for d in days %}
 <h2>{{d.date}}</h2>
 <table rules="none" style="table-layout: fixed">
-{% bif_calendarTimeHeader d.firsttime d.lasttime %}
 {% for v in d.venues %}
+{% if forloop.counter0|divisibleby:5 %}
+<thead> {% bif_calendarTimeHeader d.firsttime d.lasttime %} </thead>
+{% endif %}
 {% bif_calendarVenueRow v d.firsttime d.lasttime %}
 <tr><td>&nbsp;</td></tr>
 {% endfor %}
