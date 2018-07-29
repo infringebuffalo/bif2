@@ -27,8 +27,8 @@
 {% if perms.db.can_schedule %}
 <form method="POST" action="{% url 'db-setLatLon' venue.id %}">
 {% csrf_token %}
-lat:<input name="lat" value="{{venue_info.lat}}" type="text" size="6">
-lon:<input name="lon" value="{{venue_info.lon}}" type="text" size="6">
+lat:<input name="lat" value="{{venue_info.lat}}" type="text" size="8">
+lon:<input name="lon" value="{{venue_info.lon}}" type="text" size="8">
 <input type="submit" value="set">
 </form>
 <br>

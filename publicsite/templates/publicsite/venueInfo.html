@@ -35,7 +35,7 @@
       <div class="col-sm-4">
       <div id="mapid" style="width: 400px; height: 300px; border:solid"></div>
 <script>
-    var mymap = L.map('mapid').setView([{{info.lat}},{{info.lon}}], 18);
+    var mymap = L.map('mapid').setView([{{info.lat}},{{info.lon}}], 16);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGF2ZXBhcGUiLCJhIjoiY2pqb215dmVyN29ncTNxcDFxanBkejJ6aiJ9.evYo8HLbCPqVBzkmylgqbA', {
         maxZoom: 18, id: 'mapbox.streets'
     }).addTo(mymap);
