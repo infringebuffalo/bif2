@@ -29,7 +29,7 @@
     }).addTo(mymap);
 {% for m in markers %}
     var marker = L.marker([{{m.lat}},{{m.lon}}]).addTo(mymap);
-    marker.bindPopup("{{m.text}}");
+    marker.bindPopup('{{m.text}}');
 {% endfor %}
 </script>
       </div>

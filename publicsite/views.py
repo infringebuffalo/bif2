@@ -277,6 +277,7 @@ def scheduleMap(request):
     from datetime import date
     from django.db.models.functions import Lower
     from django.utils.html import format_html, mark_safe
+    from django.urls import reverse
     days = []
     fest = FestivalInfo.objects.last()
     day = date.today()
@@ -286,12 +287,12 @@ def scheduleMap(request):
     venues = {}
     for l in listings:
         if l.where not in venues:
-            venues[l.where] = format_html('<b>{}:</b>',l.where.name)
-        venues[l.where] += format_html('{}<br>',l.who.title)
+            venues[l.where] = format_html('<b><a href="{}">{}</a>:</b><br>',reverse('entityInfo',kwargs={'id':l.where.id}),l.where.name)
+        venues[l.where] += format_html('<a href="{}">{}</a><br>',reverse('entityInfo',kwargs={'id':l.who.id}),l.who.title)
     for l in installations:
         if l.where not in venues:
-            venues[l.where] = format_html('<b>{}:</b>',l.where.name)
-        venues[l.where] += format_html('{}<br>',l.who.title)
+            venues[l.where] = format_html('<b><a href="{}">{}</a>:</b><br>',reverse('entityInfo',kwargs={'id':l.where.id}),l.where.name)
+        venues[l.where] += format_html('<a href="{}">{}</a><br>',reverse('entityInfo',kwargs={'id':l.who.id}),l.who.title)
     for v in venues.keys():
         infodict = json.loads(v.info)
         if 'lat' in infodict and 'lon' in infodict:
