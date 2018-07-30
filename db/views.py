@@ -231,7 +231,7 @@ def groupshow(request,id):
     alllistings = Listing.objects.filter(who__festival=groupshow.festival, where=groupshow.where, date=groupshow.date, installation=False).order_by('starttime')
     listings = []
     for l in alllistings:
-        if max(l.starttime,groupshow.starttime) <= min(l.endtime,groupshow.endtime):
+        if max(l.starttime,groupshow.starttime) < min(l.endtime,groupshow.endtime):
             listings.append(l)
     context = {'groupshow':groupshow, 'listings':listings}
     return render(request,'db/groupshow.html', context)
@@ -1063,7 +1063,7 @@ def timeSpanToString(t0,t1):
 
 def listingGroupShow(listing,groupshows):
     for g in groupshows:
-        if listing['venue']==g.where.name and max(listing['starttime'],g.starttime) <= min(listing['endtime'],g.endtime):
+        if listing['venue']==g.where.name and max(listing['starttime'],g.starttime) < min(listing['endtime'],g.endtime):
             return g
     return None
 
@@ -1092,7 +1092,7 @@ def brochure(request):
         alllistings = Listing.objects.filter(who__festival=fest, where=g.where, date=g.date, installation=False).order_by('starttime')
         performers = []
         for l in alllistings:
-            if max(l.starttime,g.starttime) <= min(l.endtime,g.endtime):
+            if max(l.starttime,g.starttime) < min(l.endtime,g.endtime):
                 performers.append(l.who.title)
         description = g.shortdescription + "<br>Featuring: " + ', '.join(performers)
         genredict['groupshows']['proposals'].append({'title':g.title, 'description':description, 'url':'', 'listings':[g]})

@@ -61,7 +61,7 @@ def bif_listingRow(listing,proposal,venue,groupshow):
     groupshowlinks = []
     if not listing.installation and not groupshow:
         for g in groupshows:
-            if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+            if max(listing.starttime,g.starttime) < min(listing.endtime,g.endtime):
                 groupshowlinks.append(format_html('({}<a href="{}">{}</a>)','part of ' if proposal else '',reverse('entityInfo',kwargs={'id':g.id}),g.title))
         if len(groupshowlinks) > 0:
             retval += format_html('<td class="groupshow">')
@@ -96,7 +96,7 @@ def bif_calendarRow(listing):
         retval += format_html('<td>cancelled</td>')
     elif not listing.installation:
         for g in groupshows:
-            if max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime):
+            if max(listing.starttime,g.starttime) < min(listing.endtime,g.endtime):
                 groupshowlinks.append(format_html('(part of <a href="{}">{}</a>)',reverse('entityInfo',kwargs={'id':g.id}),g.title))
         if len(groupshowlinks) > 0:
             retval += format_html('<td class="groupshow">')
