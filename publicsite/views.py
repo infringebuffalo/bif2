@@ -273,3 +273,27 @@ def groupshowInfo(request,groupshow):
             listings.append(l)
     return render(request,'publicsite/groupshowInfo.html', { 'groupshow': groupshow, 'listings': listings })
 
+def scheduleMap(request):
+    from datetime import date
+    from django.db.models.functions import Lower
+    from django.utils.html import format_html, mark_safe
+    days = []
+    fest = FestivalInfo.objects.last()
+    day = date.today()
+    listings = Listing.objects.filter(date=day,installation=False).order_by('starttime',Lower('where__name'))
+    installations = Listing.objects.filter(date=day,installation=True).order_by('starttime',Lower('where__name'))
+    markers = []
+    venues = {}
+    for l in listings:
+        if l.where not in venues:
+            venues[l.where] = format_html('<b>{}:</b>',l.where.name)
+        venues[l.where] += format_html('{}<br>',l.who.title)
+    for l in installations:
+        if l.where not in venues:
+            venues[l.where] = format_html('<b>{}:</b>',l.where.name)
+        venues[l.where] += format_html('{}<br>',l.who.title)
+    for v in venues.keys():
+        infodict = json.loads(v.info)
+        if 'lat' in infodict and 'lon' in infodict:
+            markers.append({'lat':infodict['lat'], 'lon':infodict['lon'], 'text': venues[v]})
+    return render(request,'publicsite/scheduleMap.html', {'markers':markers, 'listings':listings, 'installations':installations })
