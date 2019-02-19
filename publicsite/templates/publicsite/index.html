@@ -7,13 +7,16 @@
 <!-- {% load static %} -->
 
 <div class="col-md-12">
-  <div class="row home sticky" id="sticky_0">
-    <div class="box-content">
-      <img class="fit-image" src="{% static 'publicsite/img/bif2019_600.jpg' %}" width="300" alt="bif2019 logo" align="right">
-      <h2>2019 Festival: July 25 - August 4</h2>
-      <p>The Buffalo Infringement Festival will take place from Thursday, July 25 to Sunday, August 4.
+  {% if announcements %}
+    {% for announcement in announcements %}
+    <div class="row home sticky" id="sticky_0">
+      <div class="box-content">
+        <img class="fit-image" src="{{ announcement.image_url }}" width="300" alt="bif2018 logo" align="right">
+        <div>{{ announcement.description_html | safe }}</div>
+      </div>
     </div>
-  </div>
+    {% endfor %}
+  {% endif %}
 
   {% if next_event %}
     {% for next in next_event %}
@@ -27,14 +30,10 @@
       </div>
       <div class="box-content">
         <h2>{{ next.title }}</h2>
-        <p>{{ next.description}}
-          {% if next.url %}
-          <a href="{{ event.url }}"><i class="fas fa-external-link-alt"></i></a>
-          {% endif %}
-        </p>
+        <div>{{ next.description_html | safe }}</div>
       </div>
     </div>
-  {% endfor %}  
+    {% endfor %}  
   {% endif %}
 
   <div class="row home upcoming-event-list" id="calendar_1">
@@ -58,16 +57,5 @@
   <div class="row home sticky-bottom" id="bottom_0">
     {% include 'publicsite/social_links.html' %}
   </div>
-  <div class="row home past-event" id="past_0">
-    <div class="box-content">
-      <h2>Poster Contest Winner</h2>
-      <img class="fit-image"
-           src="{% static 'publicsite/img/bif2019_600.jpg' %}"
-           width="300"
-           alt="bif2019 logo">
-      <p>The 2019 Official Festival Poster Design Contest is over. The winner is Jonathan Woolley. The design will be used for the 2019 festival poster, t-shirts, web, and print materials.</p>
-    </div>
-  </div>
-</div>
 
 {% endblock %}
