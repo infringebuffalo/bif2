@@ -9,7 +9,15 @@ from .models import Announcement,CalendarEvent
 # import json
 
 def index(request):
-    announcements = [Announcement.objects.order_by('last_updated')[0]]
+    
+    announcements = Announcement.objects.order_by('order_index')
+    if len(announcements) > 0:
+        main_announcement = [announcements[0]]
+    else:
+        main_announcement = []
+    announcements_list = announcements[1:]
+    print(len(announcements))
+
     ordered_by_date = CalendarEvent.objects.order_by('datetime')
     just_upcoming = list(filter(lambda e: e.is_upcoming_event(), ordered_by_date))
     if len(just_upcoming) > 0:
@@ -17,7 +25,8 @@ def index(request):
     else:
         next_event = []
     next_events_list = just_upcoming[1:]
-    context = { 'announcements' : announcements, 'next_event' : next_event, 'next_events_list' : next_events_list }
+    
+    context = { 'main_announcement' : main_announcement, 'announcements_list': announcements_list, 'next_event' : next_event, 'next_events_list' : next_events_list }
     return render(request,'publicsite/index.html', context)
 
 def about(request):

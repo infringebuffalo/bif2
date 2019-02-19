@@ -7,11 +7,11 @@
 <!-- {% load static %} -->
 
 <div class="col-md-12">
-  {% if announcements %}
-    {% for announcement in announcements %}
+  {% if main_announcement %}
+    {% for announcement in main_announcement %}
     <div class="row home sticky" id="sticky_0">
       <div class="box-content">
-        <img class="fit-image" src="{{ announcement.image_url }}" width="300" alt="bif2018 logo" align="right">
+        <img class="fit-image" src="{{ announcement.image_url }}" width="300" alt="" align="right">
         <div>{{ announcement.description_html | safe }}</div>
       </div>
     </div>
@@ -36,6 +36,19 @@
     {% endfor %}  
   {% endif %}
 
+
+  {% if announcements_list %}
+    {% for announcement in announcements_list %}
+    <div class="row home sticky" id="sticky_n">
+      <div class="box-content">
+        <img class="fit-image" src="{{ announcement.image_url }}" width="300" alt="" align="right">
+        <div>{{ announcement.description_html | safe }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+
+
   <div class="row home upcoming-event-list" id="calendar_1">
     <div class="box-content">
       <h2>Upcoming Events</h2>
@@ -54,6 +67,7 @@
       {% endif %}
     </div>
   </div>
+
   <div class="row home sticky-bottom" id="bottom_0">
     {% include 'publicsite/social_links.html' %}
   </div>

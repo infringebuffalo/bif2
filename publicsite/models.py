@@ -11,12 +11,13 @@ from django.db.models.signals import pre_save
 
 class Announcement(models.Model):
 	last_updated = models.DateTimeField('last_updated', editable=False)
+	order_index = models.IntegerField('order_index')
 	title = models.TextField('title') # not displayed on site
 	image_url = models.URLField('url', max_length=128, blank=True, null=True)
 	description = MarkdownxField()
 	description_html = models.TextField('description_url', editable=False)
 	def __str__(self):
-		return ' - '.join([self.last_updated.__str__(), self.title])
+		return ' - '.join([self.last_updated.__str__(), str(self.order_index), self.title])
 
 @receiver(pre_save, sender=Announcement)
 def mark_it_down_now(sender, instance, **kwargs):
