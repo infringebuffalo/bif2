@@ -7,20 +7,16 @@
 <!-- {% load static %} -->
 
 <div class="col-md-12">
-  <div class="row home sticky" id="sticky_0">
-    <div class="box-content">
-      <img class="fit-image" src="{% static 'publicsite/img/bif2018_600.jpg' %}" width="300" alt="bif2018 logo" align="right">
-      <h2>2018 Festival: July 26 - August 5</h2>
-      <p>The Buffalo Infringement Festival will take place from Thursday, July 26 to Sunday, August 5.
-      <h2>SCHEDULE</h2>
-      <p>The schedule is now available.  You can:
-        <ul>
-        <li> find it in print in <a href="http://dailypublic.com/">The Public</a> this week (July 25 - 31 issue)
-        <li> browse it <a href="{% url 'schedule' %}">here online (infringebuffalo.org{% url 'schedule' %})</a>
-        <li> download <a href="https://issuu.com/dailypublic.com/docs/bif__18_schedule__final_web">the online copy of the Public's schedule</a>
-        </ul>
+  {% if announcements %}
+    {% for announcement in announcements %}
+    <div class="row home sticky" id="sticky_0">
+      <div class="box-content">
+        <img class="fit-image" src="{{ announcement.image_url }}" width="300" alt="bif2018 logo" align="right">
+        <div>{{ announcement.description_html | safe }}</div>
+      </div>
     </div>
-  </div>
+    {% endfor %}
+  {% endif %}
 
   {% if next_event %}
     {% for next in next_event %}
@@ -34,14 +30,10 @@
       </div>
       <div class="box-content">
         <h2>{{ next.title }}</h2>
-        <p>{{ next.description}}
-          {% if next.url %}
-          <a href="{{ event.url }}"><i class="fas fa-external-link-alt"></i></a>
-          {% endif %}
-        </p>
+        <div>{{ next.description_html | safe }}</div>
       </div>
     </div>
-  {% endfor %}  
+    {% endfor %}  
   {% endif %}
 
   <div class="row home upcoming-event-list" id="calendar_1">
@@ -65,19 +57,5 @@
   <div class="row home sticky-bottom" id="bottom_0">
     {% include 'publicsite/social_links.html' %}
   </div>
-  <div class="row home past-event" id="past_0">
-    <div class="datetime">
-      <span>Fri Dec 1, 2017</span>
-    </div>
-    <div class="box-content">
-      <h2>Poster Contest Winner</h2>
-      <img class="fit-image"
-           src="{% static 'publicsite/img/bif2018_600.jpg' %}"
-           width="300"
-           alt="bif2018 logo">
-      <p>The 2018 Official Festival Poster Design Contest is over. The winner is artist, performer, and super-human promoter of the arts in Buffalo--- Pam Swarts! Congratulations, Pam. Her design will be used for the 2018 festival poster, t-shirts, web, and print materials.</p>
-    </div>
-  </div>
-</div>
 
 {% endblock %}

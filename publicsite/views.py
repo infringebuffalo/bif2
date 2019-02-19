@@ -4,11 +4,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 # from django.template import loader
 # from django.core.mail import EmailMultiAlternatives
 
-from .models import CalendarEvent
+from .models import Announcement,CalendarEvent
 
 # import json
 
 def index(request):
+    announcements = [Announcement.objects.order_by('last_updated')[0]]
     ordered_by_date = CalendarEvent.objects.order_by('datetime')
     just_upcoming = list(filter(lambda e: e.is_upcoming_event(), ordered_by_date))
     if len(just_upcoming) > 0:
@@ -16,7 +17,7 @@ def index(request):
     else:
         next_event = []
     next_events_list = just_upcoming[1:]
-    context = { 'next_event' : next_event, 'next_events_list' : next_events_list }
+    context = { 'announcements' : announcements, 'next_event' : next_event, 'next_events_list' : next_events_list }
     return render(request,'publicsite/index.html', context)
 
 def about(request):
