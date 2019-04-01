@@ -161,7 +161,7 @@ def undeleteProposal(request,id):
 
 
 def proposalForm(request, template):
-    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+    days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times}
     return render(request, template, context)
@@ -199,7 +199,7 @@ def editProposal(request, id):
         infodict = json.loads(prop.info)
         infodict['title'] = prop.title
         template = "db/edit_%s_form.html" % infodict['type']
-        days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+        days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
         times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
         context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
         return render(request, template, context)
@@ -386,7 +386,7 @@ def editVenue(request, id):
     infodict = json.loads(ven.info)
     infodict['name'] = ven.name
     template = "db/edit_venue_form.html"
-    days = ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]
+    days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
     context = {'daylist':days, 'venue_info':infodict, 'venue_id':id}
     return render(request, template, context)
 

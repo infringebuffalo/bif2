@@ -90,14 +90,20 @@
 {% endif %}
 {% else %}
 <img src="/static/bif2018_300px.jpg" align="right">
-    <p>Welcome to the new proposal submission system for the 2018 Buffalo Infringement Festival.</p>
+    <p>Welcome to the proposal submission system for the 2019 Buffalo Infringement Festival.</p>
     <p>Be aware that you do NOT need to sign in to submit a proposal - just fill out a form below.</p>
 {% endif %}
 
 <h2>Submit a proposal</h2>
 <ul>
-{# <li><a href="/db/workshopForm/">Education / Workshop</a> #}
-<li> Proposals are now closed
+<li><a href="/db/musicForm/">Music</a>
+<li><a href="/db/theatreForm/">Theatre</a>
+<li><a href="/db/visualartForm/">Visual Art</a>
+<li><a href="/db/danceForm/">Dance</a>
+<li><a href="/db/literaryForm/">Literary</a>
+<li><a href="/db/filmForm/">Film / Video</a>
+<li><a href="/db/workshopForm/">Education / Workshop</a>
+{# <li> Proposals are now closed #}
 </ul>
 
 {% if perms.db.can_schedule %}
