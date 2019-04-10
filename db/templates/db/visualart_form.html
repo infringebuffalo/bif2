@@ -195,6 +195,7 @@ $(document).ready(readyFunc)
 <td><textarea name='collaboration_details' rows='4' cols='60' placeholder=''></textarea></td>
 </tr>
 </table></div>
+<!--
 <div class="projectForm">
 <h3>Availability  (click all boxes that apply for each day.)</h3>
 <table class="avail">
@@ -212,6 +213,12 @@ $(document).ready(readyFunc)
 {% endfor %}
 </table>
 </div>
+-->
+{% for d in daylist %}
+{% for name,text in timelist %}
+<input type="hidden" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="yes">
+{% endfor %}
+{% endfor %}
 
 <div class='projectForm'>
 <h3>Art specifics</h3>
