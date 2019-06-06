@@ -872,7 +872,8 @@ def proposal(request,id):
     if owner: owner = owner.bifuser
     can_see = {}
     can_see['editlink'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
-    can_see['schedule'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
+#    can_see['schedule'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
+    can_see['schedule'] = request.user.has_perm('db.can_schedule')
     context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see}
     return render(request,'db/proposal.html', context)
 
