@@ -141,7 +141,7 @@ def db_listingRow(listing,proposal,venue,user=None):
 #        groupshows = GroupShow.objects.filter(where=venue,date=listing.date) if venue else []
         groupshows = GroupShow.objects.filter(where=listing.where,date=listing.date)
         for g in groupshows:
-            if max(listing.starttime,g.starttime) < min(listing.endtime,g.endtime):
+            if (max(listing.starttime,g.starttime) <= min(listing.endtime,g.endtime)) and (listing.starttime != g.endtime):
                 groupshowlinks.append(format_html('<a href="{}">{}</a> ',reverse('db-entity',kwargs={'id':g.id}),g.title))
     if len(groupshowlinks) > 0:
         retval += format_html('<td class="groupshow">')

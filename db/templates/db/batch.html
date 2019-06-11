@@ -18,6 +18,8 @@ td.weekend { background: lightblue }
 <tr><td><a href="/db/{{ e.id }}">{{ e.name }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>
 {% endfor %}
 </table>
+<p></p>
+<p>[{{members|length}} entries]</p>
 {% else %}
 <p>No batch found.  (Shouldn't this 404?)</p>
 {% endif %}
