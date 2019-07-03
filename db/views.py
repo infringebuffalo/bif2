@@ -233,7 +233,8 @@ def groupshow(request,id):
     for l in alllistings:
         if max(l.starttime,groupshow.starttime) < min(l.endtime,groupshow.endtime):
             listings.append(l)
-    context = {'groupshow':groupshow, 'listings':listings}
+    notes = groupshow.notes.all()
+    context = {'groupshow':groupshow, 'listings':listings, 'notes':notes}
     return render(request,'db/groupshow.html', context)
 
 @permission_required('db.can_schedule')
@@ -858,6 +859,9 @@ def userCanEdit(u, e):
 def proposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
+    shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
+    if len(shortdesc) > 144:
+            infodict['description_short'] = shortdesc[:140] + "..."
     forminfo = FormInfo.objects.get(showType=infodict['type'])
     formfields = json.loads(forminfo.fields)
     fieldlist = []
