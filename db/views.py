@@ -860,7 +860,7 @@ def proposal(request,id):
     prop = get_object_or_404(Proposal, pk=id)
     infodict = json.loads(prop.info)
     shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
-    if len(shortdesc) > 144:
+    if len(shortdesc) > 140:
             infodict['description_short'] = shortdesc[:140] + "..."
     forminfo = FormInfo.objects.get(showType=infodict['type'])
     formfields = json.loads(forminfo.fields)
@@ -1087,7 +1087,7 @@ def brochure(request):
         listings = prop.listing_set.order_by('date','starttime')
         infodict = json.loads(prop.info)
         shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
-        if len(shortdesc) > 144:
+        if len(shortdesc) > 140:
             shortdesc = shortdesc[:140] + "..."
         url = infodict['website'] if 'website' in infodict.keys() else ''
         if len(listings) > 0:
