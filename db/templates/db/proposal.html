@@ -2,6 +2,9 @@
 {% block title %} Proposal {{prop.title}} {% endblock %}
 {% block style %}
 <style>
+h1.waiting { background-color: #ff0 }
+h1.deleted { background-color: #f00 }
+h1.accepted { }
 .avail td { padding: 20px }
 .avail tr:nth-child(odd) { background-color: #f0f0f0 }
 .alternategrey tr:nth-child(odd) { background-color: #f0f0f0 }
@@ -13,7 +16,7 @@
 {% block content %}
 {% if prop %}
 
-<h1>{{ prop.title }}</h1>
+<h1 class="{% if prop.status == prop.WAITING %}waiting{% elif prop.status == prop.ACCEPTED %}accepted{% else %}deleted{% endif %}">{{ prop.title }}</h1>
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>
