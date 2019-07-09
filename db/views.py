@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.template import loader
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
+from django.utils.html import format_html, mark_safe
 
 from .models import *
 
@@ -862,6 +863,7 @@ def proposal(request,id):
     shortdesc = infodict['description_short'] if 'description_short' in infodict.keys() else ''
     if len(shortdesc) > 140:
             infodict['description_short'] = shortdesc[:140] + "..."
+    url = infodict['website'] if 'website' in infodict.keys() else ''
     forminfo = FormInfo.objects.get(showType=infodict['type'])
     formfields = json.loads(forminfo.fields)
     fieldlist = []
@@ -878,7 +880,7 @@ def proposal(request,id):
     can_see['editlink'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
 #    can_see['schedule'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
     can_see['schedule'] = request.user.has_perm('db.can_schedule')
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see}
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see, 'brochure_info': mark_safe(shortdesc + '<br>' + url)}
     return render(request,'db/proposal.html', context)
 
 

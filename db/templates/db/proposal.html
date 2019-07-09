@@ -26,6 +26,11 @@ h1.accepted { }
 <p><a href="{% url 'db-editEntity' id=prop.id %}">Edit proposal</a></p>
 {% endif %}
 
+<div style="outline: 1px solid grey">
+<span style="font-style:italic">Description for print brochure:</span><br>
+{{ brochure_info }}
+</div>
+
 {% include "./entity_schedule2.html" with proposal=prop %}
 
 <table class='alternategrey'>
