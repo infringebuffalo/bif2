@@ -1187,7 +1187,7 @@ def viewLogLink(match):
 def viewLog(request):
     from django.conf import settings
     from django.utils.html import format_html, mark_safe
-    f = open(settings.LOGGING['handlers']['file']['filename'], 'r')
+    f = open(settings.LOGGING['handlers']['file']['filename'], 'r', encoding='utf-8')
     lines = f.readlines()
     numlines = int(request.POST['numlines']) if 'numlines' in request.POST.keys() else 100
     regex = re.compile(r'{ID:([0-9]+)}')
