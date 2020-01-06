@@ -1209,3 +1209,32 @@ def viewLog(request):
     context = {'lines':outlines, 'searchterm':searchterm, 'numlines':numlines}
     return render(request, 'db/log.html', context)
 
+
+#
+#
+## code to delete all proposals (and notes, batches, groupshows, spreadsheets), when starting a new database
+## saving here for reference
+#
+# from db.models import *
+# props = Proposal.objects.all()
+# for i in props:
+#    i.delete()
+# notes = Note.objects.all()
+# for i in notes:
+#    i.delete()
+# batches = Batch.objects.all()
+# for i in batches:
+#    i.delete()
+# groups = GroupShow.objects.all()
+# for i in groups:
+#    i.delete()
+# sheets = Spreadsheet.objects.all()
+# for i in sheets:
+#    i.delete()
+#
+## put all venues in "waiting" state, rather than deleting
+# venues = Venue.objects.all()
+# for i in venues:
+#    i.status = Venue.WAITING
+#    i.save()
+#
