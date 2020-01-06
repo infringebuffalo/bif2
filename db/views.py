@@ -161,8 +161,17 @@ def undeleteProposal(request,id):
     return redirect('db-entity',id=id)
 
 
+def listOfFestivalDays():
+    from datetime import timedelta
+    fest = FestivalInfo.objects.last()
+    days = []
+    for daynum in range(0,fest.numberOfDays):
+        day = fest.startDate + timedelta(days=daynum)
+        days.append(day.strftime('%b %d (%a)'))
+    return days
+
 def proposalForm(request, template):
-    days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
+    days = listOfFestivalDays()
     times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
     context = {'daylist':days, 'timelist':times}
     return render(request, template, context)
@@ -200,7 +209,7 @@ def editProposal(request, id):
         infodict = json.loads(prop.info)
         infodict['title'] = prop.title
         template = "db/edit_%s_form.html" % infodict['type']
-        days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
+        days = listOfFestivalDays()
         times = [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]
         context = {'daylist':days, 'timelist':times, 'prop_info':infodict, 'prop_id':id}
         return render(request, template, context)
@@ -388,7 +397,7 @@ def editVenue(request, id):
     infodict = json.loads(ven.info)
     infodict['name'] = ven.name
     template = "db/edit_venue_form.html"
-    days = ["July 25 (Thu)", "July 26 (Fri)","July 27 (Sat)","July 28 (Sun)","July 29 (Mon)","July 30 (Tue)","July 31 (Wed)","Aug 1 (Thu)","Aug 2 (Fri)","Aug 3 (Sat)","Aug 4 (Sun)"]
+    days = listOfFestivalDays()
     context = {'daylist':days, 'venue_info':infodict, 'venue_id':id}
     return render(request, template, context)
 
@@ -880,7 +889,8 @@ def proposal(request,id):
     can_see['editlink'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
     can_see['schedule'] = request.user.has_perm('db.can_schedule')
 #    can_see['schedule'] = request.user.has_perm('db.can_schedule') or owner == request.user.bifuser
-    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see, 'brochure_info': mark_safe(shortdesc + '<br>' + url)}
+    days = listOfFestivalDays()
+    context = {'prop':prop, 'prop_info':infodict, 'inbatches':inbatches, 'batches':batches, 'notes':notes, 'fieldlist':fieldlist, 'listings':listings, 'owner':owner, 'can_see': can_see, 'brochure_info': mark_safe(shortdesc + '<br>' + url), 'daylist': days}
     return render(request,'db/proposal.html', context)
 
 
