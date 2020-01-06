@@ -97,9 +97,6 @@ def availabilitySection():
 <h3>Availability  (click all boxes that apply for each day.)</h3>
 <table class="avail">
 """)
-#    counter = 0
-#        counter = counter+1
-#    for d in ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]:
     for daynum in range(0,11):
         print("<tr><th>{{daylist.%d}}</th>" % daynum)
         for name,text in [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]:
