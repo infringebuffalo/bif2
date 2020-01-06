@@ -8,7 +8,7 @@ textInput("Organization affiliation", "organization")
 textInput("Website (not Facebook)", "website")
 textInput("Social media address(es)", "facebook", placeholder="facebook / instagram / twitter")
 textInput("Web link to best example of what you plan to do", "work_samples_website", "a good link will answer most of our questions, to program you effectively")
-textarea("Short description (140 chars)", "description_short", 2)
+shorttextarea("Short description (140 chars)", "description_short", 2)
 textarea("Long description (for website &amp; press releases)", "description_long", 6)
 textarea("Are you part of any other proposals? Explain.", "proposaloverlap", 2)
 yesnoInput("Is everyone in the proposal over 21?", "over21")
@@ -23,7 +23,7 @@ yesnoInput("Are you interested in collaborating (performing in combination with 
 textarea("If yes, describe the kinds of proposals that might work, and any other info to guide us.", "collaboration_details")
 print("</table></div>")
 
-availabilitySection()
+availabilityDefaultAll()
 
 print("<div class='projectForm'>\n<h3>Art specifics</h3>\n<table class='alternategrey'>\n")
 textInput("Number of art pieces:", "numberpieces")

@@ -199,7 +199,7 @@ $(document).ready(readyFunc)
 <h3>Availability  (click all boxes that apply for each day.)</h3>
 <table class="avail">
 
-<tr><th>July 25 (Thu)</th>
+<tr><th>{{daylist.0}}</th>
 <td>
 <input type="hidden" name="available_day1_8am" value="no">
 <input type="checkbox" name="available_day1_8am" value="yes"{% if prop_info.available_day1_8am == "yes" %} checked{% endif %}>
@@ -226,7 +226,7 @@ $(document).ready(readyFunc)
 <label for="available_day1_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 26 (Fri)</th>
+<tr><th>{{daylist.1}}</th>
 <td>
 <input type="hidden" name="available_day2_8am" value="no">
 <input type="checkbox" name="available_day2_8am" value="yes"{% if prop_info.available_day2_8am == "yes" %} checked{% endif %}>
@@ -253,7 +253,7 @@ $(document).ready(readyFunc)
 <label for="available_day2_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 27 (Sat)</th>
+<tr><th>{{daylist.2}}</th>
 <td>
 <input type="hidden" name="available_day3_8am" value="no">
 <input type="checkbox" name="available_day3_8am" value="yes"{% if prop_info.available_day3_8am == "yes" %} checked{% endif %}>
@@ -280,7 +280,7 @@ $(document).ready(readyFunc)
 <label for="available_day3_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 28 (Sun)</th>
+<tr><th>{{daylist.3}}</th>
 <td>
 <input type="hidden" name="available_day4_8am" value="no">
 <input type="checkbox" name="available_day4_8am" value="yes"{% if prop_info.available_day4_8am == "yes" %} checked{% endif %}>
@@ -307,7 +307,7 @@ $(document).ready(readyFunc)
 <label for="available_day4_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 29 (Mon)</th>
+<tr><th>{{daylist.4}}</th>
 <td>
 <input type="hidden" name="available_day5_8am" value="no">
 <input type="checkbox" name="available_day5_8am" value="yes"{% if prop_info.available_day5_8am == "yes" %} checked{% endif %}>
@@ -334,7 +334,7 @@ $(document).ready(readyFunc)
 <label for="available_day5_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 30 (Tue)</th>
+<tr><th>{{daylist.5}}</th>
 <td>
 <input type="hidden" name="available_day6_8am" value="no">
 <input type="checkbox" name="available_day6_8am" value="yes"{% if prop_info.available_day6_8am == "yes" %} checked{% endif %}>
@@ -361,7 +361,7 @@ $(document).ready(readyFunc)
 <label for="available_day6_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>July 31 (Wed)</th>
+<tr><th>{{daylist.6}}</th>
 <td>
 <input type="hidden" name="available_day7_8am" value="no">
 <input type="checkbox" name="available_day7_8am" value="yes"{% if prop_info.available_day7_8am == "yes" %} checked{% endif %}>
@@ -388,7 +388,7 @@ $(document).ready(readyFunc)
 <label for="available_day7_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>Aug 1 (Thu)</th>
+<tr><th>{{daylist.7}}</th>
 <td>
 <input type="hidden" name="available_day8_8am" value="no">
 <input type="checkbox" name="available_day8_8am" value="yes"{% if prop_info.available_day8_8am == "yes" %} checked{% endif %}>
@@ -415,7 +415,7 @@ $(document).ready(readyFunc)
 <label for="available_day8_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>Aug 2 (Fri)</th>
+<tr><th>{{daylist.8}}</th>
 <td>
 <input type="hidden" name="available_day9_8am" value="no">
 <input type="checkbox" name="available_day9_8am" value="yes"{% if prop_info.available_day9_8am == "yes" %} checked{% endif %}>
@@ -442,7 +442,7 @@ $(document).ready(readyFunc)
 <label for="available_day9_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>Aug 3 (Sat)</th>
+<tr><th>{{daylist.9}}</th>
 <td>
 <input type="hidden" name="available_day10_8am" value="no">
 <input type="checkbox" name="available_day10_8am" value="yes"{% if prop_info.available_day10_8am == "yes" %} checked{% endif %}>
@@ -469,7 +469,7 @@ $(document).ready(readyFunc)
 <label for="available_day10_mid">midnight-4am</label>
 </td>
 </tr>
-<tr><th>Aug 4 (Sun)</th>
+<tr><th>{{daylist.10}}</th>
 <td>
 <input type="hidden" name="available_day11_8am" value="no">
 <input type="checkbox" name="available_day11_8am" value="yes"{% if prop_info.available_day11_8am == "yes" %} checked{% endif %}>

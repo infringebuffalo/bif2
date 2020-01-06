@@ -70,7 +70,7 @@ $(document).ready(readyFunc)
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
-<form method="POST" action="{%% url 'update' %%}" name="proposalform" onsubmit="return validateForm()">
+<form method="POST" action="{%% url 'db-update' %%}" name="proposalform" onsubmit="return validateForm()">
 {%% csrf_token %%}
 
 <input type="hidden" name="prop_id" value="{{ prop_id }}" />
@@ -97,12 +97,13 @@ def availabilitySection():
 <h3>Availability  (click all boxes that apply for each day.)</h3>
 <table class="avail">
 """)
-    counter = 0
-    for d in ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]:
-        counter = counter+1
-        print("<tr><th>%s</th>" % d)
+#    counter = 0
+#        counter = counter+1
+#    for d in ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]:
+    for daynum in range(0,11):
+        print("<tr><th>{{daylist.%d}}</th>" % daynum)
         for name,text in [("8am", "8am-noon"), ("noon", "noon-4pm"), ("4pm", "4pm-8pm"), ("8pm", "8pm-midnight"), ("mid", "midnight-4am")]:
-            inputname = "available_day%d_%s" % (counter,name)            
+            inputname = "available_day%d_%s" % (daynum+1,name)            
             print("""<td>
 <input type="hidden" name="%s" value="no">
 <input type="checkbox" name="%s" value="yes"{%% if prop_info.%s == "yes" %%} checked{%% endif %%}>
@@ -133,6 +134,15 @@ def textInput(label,name,placeholder=''):
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
     print("<td><input type='text' name='%s' size='60' placeholder='%s' value='{{ prop_info.%s }}'/></td>" % (name,placeholder,name))
+    print("</tr>")
+
+def shorttextarea(label,name,rows=4,maxlen=140,placeholder=''):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
+    checkName(name)
+    print("<tr>")
+    print("<th width='25%%'>%s</th>" % label)
+    print("<td><textarea name='%s' rows='%d' cols='60' maxlength='%d' placeholder='%s'>{{ prop_info.%s }}</textarea></td>" % (name,rows,maxlen,placeholder,name))
     print("</tr>")
 
 def textarea(label,name,rows=4,placeholder=''):

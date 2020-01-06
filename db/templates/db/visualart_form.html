@@ -138,7 +138,7 @@ $(document).ready(readyFunc)
 </tr>
 <tr>
 <th width='25%'>* Short description (140 chars)</th>
-<td><textarea name='description_short' rows='2' cols='60' placeholder=''></textarea></td>
+<td><textarea name='description_short' rows='2' cols='60' maxlength='140' placeholder=''></textarea></td>
 </tr>
 <tr>
 <th width='25%'>Long description (for website &amp; press releases)</th>
@@ -195,25 +195,6 @@ $(document).ready(readyFunc)
 <td><textarea name='collaboration_details' rows='4' cols='60' placeholder=''></textarea></td>
 </tr>
 </table></div>
-<!--
-<div class="projectForm">
-<h3>Availability  (click all boxes that apply for each day.)</h3>
-<table class="avail">
-{% for d in daylist %}
-<tr>
-<th>{{ d }}</th>
-{% for name,text in timelist %}
-<td>
-<input type="hidden" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="no">
-<input type="checkbox" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="yes">
-<label for="available_day{{forloop.parentloop.counter}}_{{name}}">{{text}}</label>
-</td>
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
-</div>
--->
 {% for d in daylist %}
 {% for name,text in timelist %}
 <input type="hidden" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="yes">

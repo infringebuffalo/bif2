@@ -73,7 +73,7 @@ $(document).ready(readyFunc)
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
-<form method="POST" action="{%% url 'submit' %%}" name="proposalform" onsubmit="return validateForm()">
+<form method="POST" action="{%% url 'db-submit' %%}" name="proposalform" onsubmit="return validateForm()">
 {%% csrf_token %%}
 
 <input type="hidden" name="type" value="%s" />
@@ -112,6 +112,14 @@ def availabilitySection():
 {% endfor %}
 </table>
 </div>
+""")
+
+def availabilityDefaultAll():
+    print("""{% for d in daylist %}
+{% for name,text in timelist %}
+<input type="hidden" name="available_day{{forloop.parentloop.counter}}_{{name}}" value="yes">
+{% endfor %}
+{% endfor %}
 """)
 
 def endPage():
@@ -158,6 +166,16 @@ def textInput(label,name,placeholder=''):
     print("<tr>")
     print("<th width='25%%'>%s</th>" % label)
     print("<td><input type='text' name='%s' size='60' placeholder='%s'/></td>" % (name,placeholder))
+    print("</tr>")
+    formfields.add(name,label)
+
+def shorttextarea(label,name,rows=4,maxlen=140,placeholder=''):
+    global all_required_fields
+    if name in all_required_fields: label = '* ' + label
+    checkName(name)
+    print("<tr>")
+    print("<th width='25%%'>%s</th>" % label)
+    print("<td><textarea name='%s' rows='%d' cols='60' maxlength='%d' placeholder='%s'></textarea></td>" % (name,rows,maxlen,placeholder))
     print("</tr>")
     formfields.add(name,label)
 

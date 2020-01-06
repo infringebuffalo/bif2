@@ -8,7 +8,7 @@ textInput("Affiliations? Part of a collective? if so what group...", "organizati
 textInput("Website (not Facebook)", "website")
 textInput("Social media address(es)", "facebook", placeholder="facebook / instagram / twitter")
 textInput("Web link to best example of what you plan to do", "work_samples_website", "a good link will answer most of our questions, to program you effectively")
-textarea("Short description (140 chars)", "description_short", 2, placeholder="This is what people will see in the free weekly paper.  Limited to 140 characters; be succinct.")
+shorttextarea("Short description (140 chars)", "description_short", 2, placeholder="This is what people will see in the free weekly paper.  Limited to 140 characters; be succinct.")
 textarea("Long description (for website &amp; press releases)", "description_long", 6, placeholder="This text will be shown publicly on our website.  This is what potential audiences see in the schedule on our site.")
 textInput("How many members in proposal? (#)", "numberperformers")
 textarea("Who are they and what do they do?", "membersinfo", 6)
