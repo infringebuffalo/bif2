@@ -85,11 +85,9 @@ def availabilitySection():
 <h3>Availability</h3>
 <table class="avail">
 """)
-    counter = 0
-    for d in ["July 26 (Thu)", "July 27 (Fri)","July 28 (Sat)","July 29 (Sun)","July 30 (Mon)","July 31 (Tue)","Aug 1 (Wed)","Aug 2 (Thu)","Aug 3 (Fri)","Aug 4 (Sat)","Aug 5 (Sun)"]:
-        counter = counter+1
-        print("<tr><th>%s</th>" % d)
-        inputname = "available_day%d" % (counter)            
+    for daynum in range(0,11):
+        print("<tr><th>{{daylist.%d}}</th>" % daynum)
+        inputname = "available_day%d" % (daynum+1)            
         print("""<td>
 <input type="text" name="%s" value="{{ venue_info.%s }}">
 </td>""" % (inputname,inputname))
