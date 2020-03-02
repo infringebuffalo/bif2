@@ -4,7 +4,6 @@ from formtools import *
 
 startPage("Music",formtype="music",requiredfields=["organization","work_samples_website","numberperformers","membersinfo","out_of_town","proposaloverlap","agesensitive"])
 textInput("Band name / title", "title")
-textInput("Affiliations? Part of a collective? if so what group...", "organization")
 textInput("Website (not Facebook)", "website")
 textInput("Social media address(es)", "facebook", placeholder="facebook / instagram / twitter")
 textInput("Web link to best example of what you plan to do", "work_samples_website", "a good link will answer most of our questions, to program you effectively")
