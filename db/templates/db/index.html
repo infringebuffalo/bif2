@@ -91,9 +91,15 @@
 {% else %}
 <img src="/static/bif2018_300px.jpg" align="right">
     <p>Welcome to the proposal submission system for the 2020 Buffalo Infringement Festival.</p>
+{% if closed %}
+{% else %}
     <p>Be aware that you do NOT need to sign in to submit a proposal - just fill out a form below.</p>
 {% endif %}
+{% endif %}
 
+{% if closed %}
+Submissions for the festival are now closed.
+{% else %}
 <h2>Submit a proposal</h2>
 <ul>
 <li><a href="/db/musicForm/">Music</a>
@@ -104,6 +110,7 @@
 <li><a href="/db/filmForm/">Film / Video</a>
 <li><a href="/db/workshopForm/">Education / Workshop</a>
 </ul>
+{% endif %}
 
 {% if perms.db.can_schedule %}
 <h2>Venues</h2>

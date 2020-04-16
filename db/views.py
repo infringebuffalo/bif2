@@ -11,6 +11,8 @@ from .models import *
 
 import json
 
+submissionsClosed = 1
+
 def index(request):
     if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
         owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.ACCEPTED)
@@ -20,7 +22,7 @@ def index(request):
         owned = None
         deleted = None
         waiting = None
-    return render(request,'db/index.html', { 'owned':owned, 'deleted':deleted, 'waiting':waiting })
+    return render(request,'db/index.html', { 'owned':owned, 'deleted':deleted, 'waiting':waiting, 'closed':submissionsClosed })
 
 
 @login_required
@@ -30,7 +32,7 @@ def allProposals(request):
     confirmed_props = Proposal.objects.filter(festival=fest,status=Proposal.ACCEPTED).order_by(Lower('title'))
     waiting_props = Proposal.objects.filter(festival=fest,status=Proposal.WAITING).order_by(Lower('title'))
     deleted_props = Proposal.objects.filter(festival=fest,status=Proposal.DELETED).order_by(Lower('title'))
-    return render(request,'db/index.html', { 'confirmed_props' : confirmed_props, 'waiting_props' : waiting_props, 'deleted_props': deleted_props })
+    return render(request,'db/index.html', { 'confirmed_props' : confirmed_props, 'waiting_props' : waiting_props, 'deleted_props': deleted_props, 'closed':submissionsClosed })
 
 
 @login_required
@@ -39,7 +41,7 @@ def allVenues(request):
     confirmed_venues = Venue.objects.filter(status=Venue.ACCEPTED).order_by(Lower('name'))
     waiting_venues = Venue.objects.filter(status=Venue.WAITING).order_by(Lower('name'))
     deleted_venues = Venue.objects.filter(status=Venue.DELETED).order_by(Lower('name'))
-    return render(request,'db/index.html', { 'confirmed_venues' : confirmed_venues, 'waiting_venues' : waiting_venues, 'deleted_venues': deleted_venues })
+    return render(request,'db/index.html', { 'confirmed_venues' : confirmed_venues, 'waiting_venues' : waiting_venues, 'deleted_venues': deleted_venues, 'closed':submissionsClosed })
 
 
 @login_required
