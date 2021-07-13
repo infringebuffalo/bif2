@@ -1003,7 +1003,10 @@ def updateListing(request):
     l.save()
     messages.success(request,"Updated listing: %s on %s at %s"%(l.who.title,l.date,l.where.name))
     logInfo(request, "updated listing {ID:%d}: {ID:%d} at {ID:%d} on %s, %d to %d" % (l.id,l.who.id,l.where.id,l.date,l.starttime,l.endtime))
-    return redirect('db-entity',id=int(request.POST["return_entity"]))
+    if request.POST["return_entity"] == 'calendar':
+        return redirect('db-calendar')
+    else:
+        return redirect('db-entity',id=int(request.POST["return_entity"]))
 
 @permission_required('db.can_schedule')
 def deleteListing(request,id):

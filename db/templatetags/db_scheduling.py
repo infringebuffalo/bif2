@@ -228,5 +228,8 @@ def db_entityFromURL(url):
     from urllib.parse import urlparse
     from django.urls import resolve
     r = resolve(urlparse(url).path)
-    retval = format_html('{}',r.kwargs['id'])
+    if 'id' in r.kwargs.keys():
+        retval = format_html('{}',r.kwargs['id'])
+    else:
+        retval = format_html('calendar')
     return retval
