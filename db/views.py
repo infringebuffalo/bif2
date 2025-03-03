@@ -58,12 +58,13 @@ def submit(request):
         if k in infodict.keys():
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()
-
+    
+    fest = FestivalInfo.objects.last()
     defaultContact = None
     defaultBatch = None
     if 'type' in infodict.keys():
         try:
-            formInfo = FormInfo.objects.get(showType=infodict['type'])
+            formInfo = FormInfo.objects.get(showType=infodict['type'], festival=fest)
             defaultContact = formInfo.defaultContact
             defaultBatch = formInfo.defaultBatch
         except:
@@ -699,7 +700,7 @@ def callList(request,daynum,batchid=0):
 def newSpreadsheet(request):
     batches = Batch.objects.all()
     fest = FestivalInfo.objects.last()
-    forminfos = FormInfo.objects.all()
+    forminfos = FormInfo.objects.filter(festival=fest)
     fielddict = {}
     for fi in forminfos:
         fields = json.loads(fi.fields)
@@ -875,7 +876,8 @@ def proposal(request,id):
     if len(shortdesc) > 140:
             infodict['description_short'] = shortdesc[:140] + "..."
     url = infodict['website'] if 'website' in infodict.keys() else ''
-    forminfo = FormInfo.objects.get(showType=infodict['type'])
+    fest = FestivalInfo.objects.last()
+    forminfo = FormInfo.objects.get(showType=infodict['type'], festival=fest)
     formfields = json.loads(forminfo.fields)
     fieldlist = []
     for f in formfields:
