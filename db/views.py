@@ -6,6 +6,7 @@ from django.template import loader
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html, mark_safe
+from django.contrib.auth.models import Group
 
 from .models import *
 
@@ -14,6 +15,7 @@ import json
 submissionsClosed = 1
 
 def index(request):
+    print(request)
     if request and hasattr(request,'user') and hasattr(request.user,'bifuser'):
         owned = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.ACCEPTED)
         deleted = request.user.bifuser.permit_what.filter(permission=UserPermission.OWNER,entity__entityType='proposal',entity__proposal__status=Proposal.DELETED)
@@ -57,14 +59,16 @@ def submit(request):
     for k in ['title','csrfmiddlewaretoken','submit']:
         if k in infodict.keys():
             del infodict[k]
-    infodict["contactemail"] = infodict["contactemail"].strip()
-    
-    fest = FestivalInfo.objects.last()
+    if 'contactemail' in infodict.keys():
+        infodict["contactemail"] = infodict["contactemail"].strip()
+    else:
+        infodict["contactemail"] = "NO EMAIL"
+
     defaultContact = None
     defaultBatch = None
     if 'type' in infodict.keys():
         try:
-            formInfo = FormInfo.objects.get(showType=infodict['type'], festival=fest)
+            formInfo = FormInfo.objects.get(showType=infodict['type'])
             defaultContact = formInfo.defaultContact
             defaultBatch = formInfo.defaultBatch
         except:
@@ -72,7 +76,7 @@ def submit(request):
 
     infojson = json.dumps(infodict)
     fest = FestivalInfo.objects.last()
-    prop = Proposal(title=request.POST["title"], info=infojson, status=Proposal.WAITING, orgContact=defaultContact, festival=fest)
+    prop = Proposal(title=request.POST.get("title","no title"), info=infojson, status=Proposal.WAITING, orgContact=defaultContact, festival=fest)
     prop.save()
     logInfo(request, "saved proposal {ID:%d} ('%s')" % (prop.id,prop.title))
 
@@ -222,7 +226,7 @@ def editProposal(request, id):
 
 @login_required
 def update(request):
-    id = int(request.POST["prop_id"])
+    id = int(request.POST.get("prop_id",0))
     prop = get_object_or_404(Proposal, pk=id)
     infodict = {}
     infodict = request.POST.copy()
@@ -231,7 +235,7 @@ def update(request):
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()
     infojson = json.dumps(infodict)
-    prop.title = request.POST["title"]
+    prop.title = request.POST.get("title", "no title")
     prop.info = infojson
     prop.save()
     logInfo(request, "updated proposal {ID:%d} ('%s')" % (prop.id,prop.title))
@@ -258,15 +262,15 @@ def editGroupShow(request,id):
 
 @permission_required('db.can_schedule')
 def updateGroupShow(request):
-    id = int(request.POST["groupshow_id"])
+    id = int(request.POST.get("groupshow_id",0))
     g = get_object_or_404(GroupShow, pk=id)
-    g.title = request.POST["title"]
-    g.where = get_object_or_404(Venue, pk=int(request.POST["venue"]))
-    g.starttime = int(request.POST['starttime'])
-    g.endtime = int(request.POST['endtime'])
-    g.date = request.POST["date"]
-    g.shortdescription = request.POST["shortdescription"]
-    g.description = request.POST["description"]
+    g.title = request.POST.get("title", "no title")
+    g.where = get_object_or_404(Venue, pk=int(request.POST.get("venue",0)))
+    g.starttime = int(request.POST.get('starttime',0))
+    g.endtime = int(request.POST.get('endtime',0))
+    g.date = request.POST.get("date")
+    g.shortdescription = request.POST.get("shortdescription")
+    g.description = request.POST.get("description")
     g.save()
     messages.success(request,"updated groupshow: %s on %s at %s"%(g.title,g.date,g.where.name))
     logInfo(request, "updated groupshow {ID:%d}: %s at {ID:%d} on %s, %d to %d" % (g.id,g.title,g.where.id,g.date,g.starttime,g.endtime))
@@ -298,9 +302,9 @@ from django.contrib.auth.models import User
 
 def createAccount(request):
     from django.db.utils import IntegrityError
-    email = request.POST['email'].strip()
-    password = request.POST['password']
-    name = request.POST['name']
+    email = request.POST.get('email','').strip()
+    password = request.POST.get('password','')
+    name = request.POST.get('name','')
     try:
         djuser = User.objects.create_user(email, email, password, first_name=name)
     except IntegrityError:
@@ -335,7 +339,7 @@ def createVenue(request):
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()
     infojson = json.dumps(infodict)
-    ven = Venue(name=request.POST["name"], info=infojson, status=Venue.WAITING)
+    ven = Venue(name=request.POST.get("name", "no name"), info=infojson, status=Venue.WAITING)
     ven.save()
     logInfo(request, "saved venue {ID:%d} ('%s')" % (ven.id,ven.name))
     return redirect('db-index')
@@ -407,7 +411,7 @@ def editVenue(request, id):
 
 @login_required
 def updateVenue(request):
-    id = int(request.POST["venue_id"])
+    id = int(request.POST.get("venue_id",0))
     ven = get_object_or_404(Venue, pk=id)
     infodict = {}
     infodict = request.POST.copy()
@@ -416,7 +420,7 @@ def updateVenue(request):
             del infodict[k]
     infodict["contactemail"] = infodict["contactemail"].strip()
     infojson = json.dumps(infodict)
-    ven.name = request.POST["name"]
+    ven.name = request.POST.get("name", "no name")
     ven.info = infojson
     ven.save()
     logInfo(request, "updated venue {ID:%d} ('%s')" % (ven.id,ven.name))
@@ -455,8 +459,8 @@ def undeleteVenue(request,id):
 @permission_required('db.can_schedule')
 def setLatLon(request,id):
     ven = get_object_or_404(Venue, pk=id)
-    lat = request.POST['lat']
-    lon = request.POST['lon']
+    lat = request.POST.get('lat')
+    lon = request.POST.get('lon')
     infodict = json.loads(ven.info)
     infodict['lat'] = lat
     infodict['lon'] = lon
@@ -474,8 +478,8 @@ def newBatch(request):
 
 @permission_required('db.can_schedule')
 def createBatch(request):
-    name = request.POST['name']
-    description = request.POST['description']
+    name = request.POST.get('name', 'no-name')
+    description = request.POST.get('description', 'no description')
     try:
         batch = Batch(name=name, description=description, festival=None)
     except:
@@ -512,8 +516,8 @@ def addToBatch(request,batchid,memberid):
 
 @permission_required('db.can_schedule')
 def addToBatchForm(request):
-    batchid = int(request.POST['batch'])
-    memberid = int(request.POST['show'])
+    batchid = int(request.POST.get('batch',0))
+    memberid = int(request.POST.get('show',0))
     return addToBatch(request,batchid,memberid)
 
 
@@ -538,10 +542,10 @@ def editBatch(request, id):
 
 @permission_required('db.can_schedule')
 def updateBatch(request):
-    id = int(request.POST["batch_id"])
+    id = int(request.POST.get("batch_id",0))
     b = get_object_or_404(Batch, pk=id)
-    b.name = request.POST['name']
-    b.description = request.POST['description']
+    b.name = request.POST.get('name','no name')
+    b.description = request.POST.get('description')
     b.save()
     logInfo(request, "updated batch {ID:%d} ('%s')" % (b.id,b.name))
     return redirect('db-entity',id=id)
@@ -604,9 +608,9 @@ def composeMailToBatch(request, id):
 def mailBatch(request):
     from django.core.validators import validate_email
     from django.core.exceptions import ValidationError
-    id = int(request.POST["batch_id"])
+    id = int(request.POST.get("batch_id",0))
     b = get_object_or_404(Batch, pk=id)
-    sender = request.POST["sender"]
+    sender = request.POST.get("sender")
     addrs = getBatchEmailAddresses(b)
     validaddrs = []
     for a in addrs:
@@ -616,8 +620,8 @@ def mailBatch(request):
         except ValidationError:
             logInfo(request, "email '%s' is invalid" % a)
             messages.error(request, "email '%s' is invalid" % a)
-    mail_subject = request.POST["subject"]
-    mail_body = request.POST["message"]
+    mail_subject = request.POST.get("subject", "no subject")
+    mail_body = request.POST.get("message")
     EmailMultiAlternatives(mail_subject, mail_body, None, [sender], reply_to=[sender], bcc=validaddrs).send()
     logInfo(request, "sent mail to '%s'" % ', '.join(validaddrs))
     messages.success(request, "sent mail to %s" % ', '.join(validaddrs))
@@ -635,19 +639,19 @@ def autoBatch(request, id):
 
 @permission_required('db.can_schedule')
 def autoBatchRun(request):
-    id = int(request.POST["batch_id"])
+    id = int(request.POST.get("batch_id",0))
     b = get_object_or_404(Batch, pk=id)
-    frombatchid = int(request.POST["frombatchid"])
+    frombatchid = int(request.POST.get("frombatchid",0))
     fest = FestivalInfo.objects.last()
     if frombatchid == 0:
         proposals = Proposal.objects.filter(festival=fest)
     else:
         frombatch = get_object_or_404(Batch, pk=frombatchid)
         proposals = frombatch.members.filter(entityType='proposal')
-    field = request.POST['field']
-    exactlabel = ('exactlabel' in request.POST.keys()) and (request.POST['exactlabel'] == '1')
-    value = request.POST['value']
-    exactvalue = ('exactvalue' in request.POST.keys()) and (request.POST['exactvalue'] == '1')
+    field = request.POST.get('field')
+    exactlabel = (request.POST.get('exactlabel') == '1')
+    value = request.POST.get('value')
+    exactvalue = (request.POST.get('exactvalue') == '1')
     for p in proposals:
         infodict = json.loads(p.proposal.info)
         for label in infodict.keys():
@@ -700,7 +704,7 @@ def callList(request,daynum,batchid=0):
 def newSpreadsheet(request):
     batches = Batch.objects.all()
     fest = FestivalInfo.objects.last()
-    forminfos = FormInfo.objects.filter(festival=fest)
+    forminfos = FormInfo.objects.all()
     fielddict = {}
     for fi in forminfos:
         fields = json.loads(fi.fields)
@@ -718,10 +722,10 @@ def newSpreadsheet(request):
 
 @permission_required('db.can_schedule')
 def createSpreadsheet(request):
-    name = request.POST['name']
+    name = request.POST.get('name','no name')
     fest = FestivalInfo.objects.last()
-    description = request.POST['description']
-    batchid = int(request.POST['batch'])
+    description = request.POST.get('description')
+    batchid = int(request.POST.get('batch',0))
     frombatch = get_object_or_404(Batch, pk=batchid)
     columnname = request.POST.getlist('columnname[]')
     propfield = request.POST.getlist('propfield[]')
@@ -876,8 +880,7 @@ def proposal(request,id):
     if len(shortdesc) > 140:
             infodict['description_short'] = shortdesc[:140] + "..."
     url = infodict['website'] if 'website' in infodict.keys() else ''
-    fest = FestivalInfo.objects.last()
-    forminfo = FormInfo.objects.get(showType=infodict['type'], festival=fest)
+    forminfo = FormInfo.objects.get(showType=infodict['type'])
     formfields = json.loads(forminfo.fields)
     fieldlist = []
     for f in formfields:
@@ -924,8 +927,8 @@ def entityStatus(e):
 
 @permission_required('db.can_schedule')
 def addNote(request):
-    entityid = int(request.POST['entity'])
-    notetext = request.POST['note']
+    entityid = int(request.POST.get('entity',0))
+    notetext = request.POST.get('note')
     try:
         creator = request.user.bifuser
     except:
@@ -947,13 +950,13 @@ def addNote(request):
 @permission_required('db.can_schedule')
 def scheduleProposal(request):
     from datetime import timedelta
-    proposal = get_object_or_404(Proposal, pk=int(request.POST['proposal']))
-    venue = get_object_or_404(Venue, pk=int(request.POST['venue']))
-    venuenote = request.POST['venuenote'] if 'venuenote' in request.POST.keys() else ''
-    starttime = int(request.POST['starttime'])
-    endtime = int(request.POST['endtime'])
+    proposal = get_object_or_404(Proposal, pk=int(request.POST.get('proposal',0)))
+    venue = get_object_or_404(Venue, pk=int(request.POST.get('venue',0)))
+    venuenote = request.POST.get('venuenote','')
+    starttime = int(request.POST.get('starttime',0))
+    endtime = int(request.POST.get('endtime',0))
     installation = 'installation' in request.POST.keys()
-    listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
+    listnote = request.POST.get('note','')
     fest = FestivalInfo.objects.last()
     for d in range(0,fest.numberOfDays):
         day = fest.startDate + timedelta(days=d)
@@ -968,10 +971,10 @@ def scheduleProposal(request):
 @permission_required('db.can_schedule')
 def scheduleGroupShow(request):
     from datetime import timedelta
-    venue = get_object_or_404(Venue, pk=int(request.POST['venue']))
-    starttime = int(request.POST['starttime'])
-    endtime = int(request.POST['endtime'])
-    title = request.POST['title']
+    venue = get_object_or_404(Venue, pk=int(request.POST.get('venue',0)))
+    starttime = int(request.POST.get('starttime',0))
+    endtime = int(request.POST.get('endtime',0))
+    title = request.POST.get('title','no title')
     fest = FestivalInfo.objects.last()
     for d in range(0,fest.numberOfDays):
         day = fest.startDate + timedelta(days=d)
@@ -993,22 +996,22 @@ def editListing(request,id):
 
 @permission_required('db.can_schedule')
 def updateListing(request):
-    id = int(request.POST["listing_id"])
+    id = int(request.POST.get("listing_id",0))
     l = get_object_or_404(Listing, pk=id)
-    l.where = get_object_or_404(Venue, pk=int(request.POST["venue"]))
-    l.venuenote = request.POST['venuenote'] if 'venuenote' in request.POST.keys() else ''
-    l.starttime = int(request.POST['starttime'])
-    l.endtime = int(request.POST['endtime'])
-    l.listnote = request.POST['note'] if 'note' in request.POST.keys() else ''
-    l.date = request.POST["date"]
+    l.where = get_object_or_404(Venue, pk=int(request.POST.get("venue",0)))
+    l.venuenote = request.POST.get('venuenote','')
+    l.starttime = int(request.POST.get('starttime',0))
+    l.endtime = int(request.POST.get('endtime',0))
+    l.listnote = request.POST.get('note','')
+    l.date = request.POST.get("date")
     l.installation = 'installation' in request.POST.keys()
     l.save()
     messages.success(request,"Updated listing: %s on %s at %s"%(l.who.title,l.date,l.where.name))
     logInfo(request, "updated listing {ID:%d}: {ID:%d} at {ID:%d} on %s, %d to %d" % (l.id,l.who.id,l.where.id,l.date,l.starttime,l.endtime))
-    if request.POST["return_entity"] == 'calendar':
+    if request.POST.get("return_entity") == 'calendar':
         return redirect('db-calendar')
     else:
-        return redirect('db-entity',id=int(request.POST["return_entity"]))
+        return redirect('db-entity',id=int(request.POST.get("return_entity")))
 
 @permission_required('db.can_schedule')
 def deleteListing(request,id):
@@ -1158,7 +1161,7 @@ def searchProposals(request):
     from django.db.models.functions import Lower
     if 'searchterm' in request.POST.keys():
         fest = FestivalInfo.objects.last()
-        searchterm = request.POST['searchterm'].casefold()
+        searchterm = request.POST.get('searchterm','').casefold()
         props = Proposal.objects.filter(festival=fest,info__icontains=searchterm).order_by(Lower('title'))
     else:
         props = []
@@ -1206,11 +1209,11 @@ def viewLog(request):
     from django.utils.html import format_html, mark_safe
     f = open(settings.LOGGING['handlers']['file']['filename'], 'r', encoding='utf-8')
     lines = f.readlines()
-    numlines = int(request.POST['numlines']) if 'numlines' in request.POST.keys() else 100
+    numlines = int(request.POST.get('numlines',100))
     regex = re.compile(r'{ID:([0-9]+)}')
     if 'searchterm' in request.POST.keys():
         outlines = []
-        searchterm = request.POST['searchterm'].casefold()
+        searchterm = request.POST.get('searchterm','').casefold()
         for l in reversed(lines):
             if searchterm in l.casefold():
                 outlines.insert(0,mark_safe(regex.sub(viewLogLink,l)))
@@ -1225,6 +1228,26 @@ def viewLog(request):
         outlines = [mark_safe(regex.sub(viewLogLink,l)) for l in lines[-numlines:]]
     context = {'lines':outlines, 'searchterm':searchterm, 'numlines':numlines}
     return render(request, 'db/log.html', context)
+
+
+
+@permission_required('auth.change_user')
+def makeScheduler(request,id):
+    bifuser = get_object_or_404(BIFUser, pk=id)
+    theuser = bifuser.user
+    scheduler_group = Group.objects.get(name='schedulers')
+    scheduler_group.user_set.add(theuser)
+    logInfo(request, "added {ID:%d} to schedulers group" % (id,))
+    return redirect('db-entity',id)
+
+@permission_required('auth.change_user')
+def removeScheduler(request,id):
+    bifuser = get_object_or_404(BIFUser, pk=id)
+    theuser = bifuser.user
+    scheduler_group = Group.objects.get(name='schedulers')
+    scheduler_group.user_set.remove(theuser)
+    logInfo(request, "removed {ID:%d} from schedulers group" % (id,))
+    return redirect('db-entity',id)
 
 
 #

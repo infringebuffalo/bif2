@@ -67,6 +67,8 @@ urlpatterns = [
     path('calllist/<int:daynum>/<int:batchid>/', views.callList, name='db-callList'),
     path('calllist/<int:daynum>/', views.callList, name='db-callList'),
     path('setLatLon/<int:id>/', views.setLatLon, name='db-setLatLon'),
+    path('makescheduler/<int:id>/', views.makeScheduler, name='db-makeScheduler'),
+    path('removescheduler/<int:id>/', views.removeScheduler, name='db-removeScheduler'),
     path('<int:id>/', views.entity, name='db-entity')
 ]
 
