@@ -1,8 +1,8 @@
 Hello,
 
-We have received the following proposal for a show at the 2022 Buffalo Infringement Festival.
+We have received the following proposal for a show at the 2025 Buffalo Infringement Festival.
 {% if prop %}
-To confirm the proposal, please click on this link: http://bif22.infringebuffalo.org/db/confirm/{{prop.id}}/
+To confirm the proposal, please click on this link: https://bif25.infringebuffalo.org/db/confirm/{{prop.id}}/
 
 
 Title: {{ prop.title }}

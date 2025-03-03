@@ -70,7 +70,7 @@ $(document).ready(readyFunc)
 
 <div style="background:#f88; text-align:center">Note: all fields marked with * must be filled in before this form is submitted.</div>
 
-<form method="POST" action="{%% url 'db-createVenue' %%}" name="proposalform" onsubmit="return validateForm()">
+<form method="POST" enctype="multipart/form-data" action="{%% url 'db-createVenue' %%}" name="proposalform" onsubmit="return validateForm()">
 {%% csrf_token %%}
 
 <input type="hidden" name="type" value="%s" />

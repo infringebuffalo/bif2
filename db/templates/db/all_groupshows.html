@@ -5,7 +5,7 @@
 <h1>all group shows</h1>
 <ul>
 {% for g in groupshows %}
-<li><a href="/db/{{ g.id }}/">{{ g.title }}</a>
+<li><a href="/db/{{ g.id }}/">{{ g.title|default:"NEEDS A TITLE" }}</a>
 {% endfor %}
 </ul>
 

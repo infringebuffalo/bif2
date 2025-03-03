@@ -24,7 +24,7 @@ else
 {% block content %}
 <h1>Create a batch</h1>
 
-<form method="POST" action="{% url 'db-createBatch' %}" name="batchform" onsubmit="return validateForm()">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-createBatch' %}" name="batchform" onsubmit="return validateForm()">
 {% csrf_token %}
 
 <table cellpadding=3>

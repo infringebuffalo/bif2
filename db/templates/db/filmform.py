@@ -15,7 +15,7 @@ textInput("Are you based within 60 miles of Buffalo area? Will you need help wit
 textarea("Are any of your members in other proposals? Explain.", "proposaloverlap", 2)
 yesnoInput("Would you like to be scheduled for outdoor performances (sidewalks, porches, yards, parking lots, etc)?", "outdoorperformaces")
 menuInput("Where do prefer to be scheduled?", "street_preferred", ["all indoor", "mostly indoor", "either indoor or outdoor", "mostly outdoor", "all outdoor"])
-menuInput("Desired number of performances", "numberperformances", [1,2,3,4,5])
+menuInput("Desired number of performances", "numberperformances", [1,2,3])
 textInput("Length of screening: (in minutes)", "showlength")
 textInput("Do you have a prearranged venue?", "prearrangedvenue")
 textInput("Do you have an ideal venue in mind?", "idealvenue")

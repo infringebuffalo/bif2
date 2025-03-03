@@ -25,7 +25,7 @@
 {% include "./entity_schedule2.html" with venue=venue %}
 
 {% if perms.db.can_schedule %}
-<form method="POST" action="{% url 'db-setLatLon' venue.id %}">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-setLatLon' venue.id %}">
 {% csrf_token %}
 lat:<input name="lat" value="{{venue_info.lat}}" type="text" size="8">
 lon:<input name="lon" value="{{venue_info.lon}}" type="text" size="8">

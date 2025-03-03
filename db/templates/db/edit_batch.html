@@ -7,7 +7,7 @@
 <h1>Editing batch</h1>
 
 <p>
-<form method="POST" action="{% url 'db-updateBatch' %}" name="batchform" onsubmit="return validateForm()">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-updateBatch' %}" name="batchform" onsubmit="return validateForm()">
 {% csrf_token %}
 <input type="hidden" name="batch_id" value="{{ batch.id }}" />
 
@@ -28,7 +28,7 @@
 </table>
 <form method="get" action="{% url 'db-entity' batch.id %}"><button type="submit">done</button></form>
 
-<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-addToBatch' %}" name="addform">
 {% csrf_token %}
 <input type="hidden" name="batch" value="{{ batch.id }}">
 <select name="show">

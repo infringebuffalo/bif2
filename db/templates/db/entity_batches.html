@@ -9,7 +9,7 @@
 {% endif %}
 
 {% if batches %}
-<form method="POST" action="{% url 'db-addToBatch' %}" name="addform">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-addToBatch' %}" name="addform">
 {% csrf_token %}
 <input type="hidden" name="show" value="{{ entity.id }}">
 <select name="batch">

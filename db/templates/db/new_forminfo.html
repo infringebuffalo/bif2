@@ -24,7 +24,7 @@ else
 {% block content %}
 <h1>Create/change form info </h1>
 
-<form method="POST" action="{% url 'db-createForminfo' %}" name="forminfoform" onsubmit="return validateForm()">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-createForminfo' %}" name="forminfoform" onsubmit="return validateForm()">
 {% csrf_token %}
 
 <table cellpadding=3>

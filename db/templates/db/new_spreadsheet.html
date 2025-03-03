@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 <div class="row">
 <div class="col-sm-6">
-<form method="POST" action="{% url 'db-createSpreadsheet' %}" onsubmit="return validateForm(this)">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-createSpreadsheet' %}" onsubmit="return validateForm(this)">
 {% csrf_token %}
 
 <table class="formtable" cellpadding=3>

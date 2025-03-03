@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<form method="POST" action="{% url 'db-search' %}" name="searchform">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-search' %}" name="searchform">
 {% csrf_token %}
 <input type="text" name="searchterm" size="60" value="{{searchterm}}" />
 <input type="Submit" name="submit" value="search" />

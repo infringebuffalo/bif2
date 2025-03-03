@@ -11,7 +11,7 @@
 
 <div class="schedulebox">[scheduling]<br>
 <div class="scheduleForm" id="scheduleEventForm" style="display: block">
-<form method="POST" action="{% url 'db-scheduleProposal' %}">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-scheduleProposal' %}">
 {% csrf_token %}
 {% if proposal %}
 <input type="hidden" name="proposal" value="{{proposal.id}}" />

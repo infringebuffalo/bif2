@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<form method="POST" action="{% url 'db-log' %}" name="logform">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-log' %}" name="logform">
 {% csrf_token %}
 <input type="text" name="searchterm" size="60" value="{{searchterm}}" />
 <input type="text" name="numlines" size="5" value="{{numlines}}" />

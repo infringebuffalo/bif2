@@ -15,7 +15,7 @@ td.weekend { background: lightblue }
 <p>{{ batch.description }}</p>
 <table>
 {% for e in members %}
-<tr><td><a href="/db/{{ e.id }}">{{ e.name }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>
+<tr><td><a href="/db/{{ e.id }}">{{ e.name|default:"NEEDS A TITLE" }}</a>{% if e.status == 2 %} (deleted){% elif e.status == 0 %} (waiting){% endif %}</td></tr>
 {% endfor %}
 </table>
 <p></p>

@@ -7,7 +7,7 @@
 <h1>Editing listing</h1>
 
 <p>
-<form method="POST" action="{% url 'db-updateListing' %}" name="listingform" onsubmit="return validateForm()">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-updateListing' %}" name="listingform" onsubmit="return validateForm()">
 {% csrf_token %}
 <input type="hidden" name="listing_id" value="{{ listing.id }}" />
 <input type="hidden" name="return_entity" value="{% db_entityFromURL request.META.HTTP_REFERER %}" />

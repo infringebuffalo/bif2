@@ -16,7 +16,7 @@ h1.accepted { }
 {% block content %}
 {% if prop %}
 
-<h1 class="{% if prop.status == prop.WAITING %}waiting{% elif prop.status == prop.ACCEPTED %}accepted{% else %}deleted{% endif %}">{{ prop.title }}</h1>
+<h1 class="{% if prop.status == prop.WAITING %}waiting{% elif prop.status == prop.ACCEPTED %}accepted{% else %}deleted{% endif %}">{{ prop.title|default:"NEEDS A TITLE" }}</h1>
 <div class="row">
 <div class="col-sm-8">
 <p>Status: {% if prop.status == prop.WAITING %} waiting for confirmation {% elif prop.status == prop.ACCEPTED %} accepted {% else %} deleted {% endif %}</p>

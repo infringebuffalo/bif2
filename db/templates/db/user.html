@@ -3,27 +3,42 @@
 {% block content %}
 
 {% if theuser %}
-<h1>{{ theuser.first_name }} {{ theuser.last_name }}</h1>
+<h1>{{ theuser.first_name|default:"<em>noname</em>" }} {{ theuser.last_name }}</h1>
 <div class="row">
 <div class="col-sm-8">
 <table>
 <tr><th> email</th><td> {{ theuser.email }} </td></tr>
 <tr><th> last login</th><td> {{ theuser.last_login }} </td></tr>
 <tr><th> date joined</th><td> {{ theuser.date_joined }} </td></tr>
-<tr><th>
-groups</th><td> {% for g in theuser.groups.all %} {{g.name }} {% endfor %}
-</td></tr>
-<tr><th>
-flags</th><td> {% if theuser.is_active %} is_active {% endif %}
-{% if theuser.is_staff %} is_staff {% endif %}
-{% if theuser.is_superuser %} is_superuser {% endif %}
+<tr><th>groups</th>
+<td>
+{% for g in theuser.groups.all %}
+{{g.name }}
+{% if perms.auth.change_user and g.name == "schedulers" %}
+   <form method="POST" enctype="multipart/form-data" action="{% url 'db-removeScheduler' bifuser.id %}">{% csrf_token %}<input type="submit" value="remove scheduler"></form></a>
+{% endif %}
+{% endfor %}
+{% if perms.auth.change_user %}
+  {% if "schedulers" not in theuser.groups.all|join:" " %}
+   <form method="POST" enctype="multipart/form-data" action="{% url 'db-makeScheduler' bifuser.id %}">{% csrf_token %}<input type="submit" value="make scheduler"></form></a>
+  {% endif %}
+{% endif %}
+</td>
+</tr>
+<tr><th>flags</th>
+<td> {% if theuser.is_active %} is_active {% endif %}
+     {% if theuser.is_staff %} is_staff {% endif %}
+     {% if theuser.is_superuser %} is_superuser {% endif %}
 </td>
 </tr>
 </table>
+
 <h2>proposals</h2>
 <ul>
 {% for p in proposals %}
 <li> <a href="{% url 'db-entity' p.entity.id %}">{{p.entity.proposal.title|default:"NEEDS A TITLE"}}</a> ({%if p.entity.proposal.status == p.entity.proposal.ACCEPTED%}confirmed{%elif p.entity.proposal.status == p.entity.proposal.DELETED%}deleted{%else%}waiting for confirmation{%endif%})</li>
+{% empty %}
+<li>none
 {% endfor %}
 </ul>
 </div>

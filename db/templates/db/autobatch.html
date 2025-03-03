@@ -5,7 +5,7 @@
 
 Automatically add proposals to batch "{{ batch.name }}"
 
-<form method="POST" action="{% url 'db-autoBatchRun' %}" name="batchform">
+<form method="POST" enctype="multipart/form-data" action="{% url 'db-autoBatchRun' %}" name="batchform">
 {% csrf_token %}
 <input type="hidden" name="batch_id" value="{{ batch.id }}" />
 
