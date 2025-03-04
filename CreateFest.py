@@ -55,5 +55,7 @@ for p in proposalInfo:
     u = dju.bifuser
     fi = FormInfo(showType=name, festival=f, description=name, defaultContact=u, defaultBatch=b)
     fi.save()
+from db.makeforminfo import *
+makeFormInfo_all()
 
 print("done")
